@@ -1,8 +1,9 @@
 import {Menu} from "antd";
 import styles from "./header.less";
 import configs from "../../utils/configs";
+import HeaderUserInfo from "./userInfo.header";
 
-const Header = function(){
+const Header = function({navList,userInfo}){
     console.log(process);
     return (
         <div>
@@ -12,13 +13,17 @@ const Header = function(){
             <Menu
                 theme="dark"
                 mode="horizontal"
-                defaultSelectedKeys={['2']}
-                style={{ lineHeight: '64px' }}
+                defaultSelectedKeys={['1']}
+                style={{ lineHeight: '48px',marginLeft:"30%",height:"50px" }}
+                id="navBar"
             >
-                <Menu.Item key="1">nav 1</Menu.Item>
-                <Menu.Item key="2">nav 2</Menu.Item>
-                <Menu.Item key="3">nav 3</Menu.Item>
+                {navList.map((val,index)=>{
+                    return (
+                        <Menu.Item key={index+1} className="navBar">{val}</Menu.Item>
+                    );
+                })}
             </Menu>
+            {userInfo && <HeaderUserInfo userInfo={userInfo} />}
         </div>
     );
 }

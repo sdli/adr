@@ -10,8 +10,8 @@ class MainLayout extends Component{
     }
 
     render(){
-        const {type,header,sider,content,footer,collapsed,onCollapse,mode,height} = this.props;
-        const props = {header,sider,content,footer};
+        const {type,header,sider,content,footer,collapsed,onCollapse,mode,height,menuList} = this.props;
+        const props = {header,sider,content,footer,menuList};
         const param = {collapsed,onCollapse,mode,height};
         switch (type){
             case "fullContent": return(

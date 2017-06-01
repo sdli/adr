@@ -6,48 +6,24 @@ const {SubMenu} = Menu;
 export default function({components,param}){
     return(
           <Layout>
-                <Header className="header">
+                <Header className="header" style={{position:"fixed",top:0,left:0,width:"100%",zIndex:9999}}>
                     {components.header}
                 </Header>
-                <Layout>
-                <Sider  
-                    collapsible
-                    collapsed={param.collapsed}
-                    onCollapse={param.onCollapse}
-                    width={240}
-                    style={{ height: param.height,backgroundColor: "#fff" }}
-                >
-                    <Menu
-                        mode={param.mode}
-                        defaultSelectedKeys={['1']}
-                        defaultOpenKeys={['sub1']}
-                        
+                <Layout style={{marginTop:50}} key="1">
+                    <Sider
+                        collapsible
+                        collapsed={param.collapsed}
+                        onCollapse={param.onCollapse}
+                        width={240}
+                        style={{ height: "100%",backgroundColor: "#fff",paddingTop:64,position:"fixed",top:0,left:0,zIndex:10 }}
                     >
-                    <SubMenu key="sub1" title={<span><Icon type="user" /></span>}>
-                        <Menu.Item key="1">option1</Menu.Item>
-                        <Menu.Item key="2">option2</Menu.Item>
-                        <Menu.Item key="3">option3</Menu.Item>
-                        <Menu.Item key="4">option4</Menu.Item>
-                    </SubMenu>
-                    <SubMenu key="sub2" title={<span><Icon type="laptop" />subnav 2</span>}>
-                        <Menu.Item key="5">option5</Menu.Item>
-                        <Menu.Item key="6">option6</Menu.Item>
-                        <Menu.Item key="7">option7</Menu.Item>
-                        <Menu.Item key="8">option8</Menu.Item>
-                    </SubMenu>
-                    <SubMenu key="sub3" title={<span><Icon type="notification" />subnav 3</span>}>
-                        <Menu.Item key="9">option9</Menu.Item>
-                        <Menu.Item key="10">option10</Menu.Item>
-                        <Menu.Item key="11">option11</Menu.Item>
-                        <Menu.Item key="12">option12</Menu.Item>
-                    </SubMenu>
-                    </Menu>
-                </Sider>
-                <Layout style={{ padding: '16px' }}>
-                    <Content style={{ background: '#fff', padding: 24, margin: 0, minHeight: 3000 }}>
-                    Content
-                    </Content>
-                </Layout>
+                        {components.menuList}
+                    </Sider>
+                    <Layout style={{ padding: '16px',paddingLeft:!param.collapsed?256:80 }} >
+                        <Content style={{ background: '#fff', padding: 16, margin: 0, minHeight: 3000 }}>
+                           {components.content}
+                        </Content>
+                    </Layout>
                 </Layout>
                 <Footer>{components.footer}</Footer>
             </Layout>
