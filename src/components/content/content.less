@@ -1,0 +1,46 @@
+.loginContent{
+    margin: 16px;
+    background: #fff;
+    border-radius: @border-radius-base;
+    padding: 64px 0;
+}
+.loginFormForgot {
+  float: right;
+}
+.loginFormButton {
+  width: 100%;
+}
+.loginFormDiv{
+    background: #fff;
+    max-width: 320px;
+    margin: 16px auto;
+    padding: 32px 16px 0 16px;
+    border: @border-sharp;
+    border-radius: @border-radius-base;
+    box-shadow: 0 0 3px #e3e3e3;
+}
+.validateCode{
+    width: 80%;
+    border: @border-sharp;
+    height: 32px;
+    float: right;
+    cursor: pointer;
+}
+.loginCollapse{
+    max-width: 640px;
+    margin: 44px auto;
+    padding: 16px;
+}
+.loginDeviceAlert{
+    display: none;
+}
+
+@media screen and (max-width:480px){
+    .loginDeviceAlert{
+        display: block;
+        margin: 16px auto;
+    }
+    .loginFormDiv{
+        display: none;
+    }
+}

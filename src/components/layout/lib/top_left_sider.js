@@ -5,7 +5,7 @@ import QueueAnim from 'rc-queue-anim';
 export default function({components}){
     return(
         <Layout>
-            <Sider>{components.sider}</Sider>
+            <Sider className="header">{components.sider}</Sider>
             <Layout>
                 <QueueAnim delay={300}>
                     <Header key="1">{components.header}</Header>

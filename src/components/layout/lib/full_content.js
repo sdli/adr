@@ -6,9 +6,9 @@ export default function({components}){
     return(
         
         <Layout>
-            <Header>{components.header}</Header>
+            <Header className="header">{components.header}</Header>
             <QueueAnim delay={300}>
-                <Content key="1">{components.header}</Content>
+                <Content key="1">{components.content}</Content>
             </QueueAnim>
             <Footer key="2">{components.footer}</Footer>
         </Layout>

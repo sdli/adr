@@ -1,7 +1,11 @@
+import configs from "../../utils/configs"; 
+
 const footerContent = function(){
     return (
-        <div>
-            这是页脚
+        <div style={{textAlign:"center"}}>
+            {configs.footerTitle}
+            <br />
+            {configs.footerSubtitle}
         </div>
     );
 };

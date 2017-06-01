@@ -5,7 +5,8 @@ import session from "express-session";
 import captchapng from 'captchapng';
 import cookieParser from "cookie-parser";
 
-const app = (new express())();
+const app = new express();
+const port  = configs.apiPort;
 app.use(cookieParser());
 app.use(session({
   secret: 'sessiontest',
@@ -26,26 +27,16 @@ app.post('/login',function(req,res,next){
     }else{
         sess.count =1;
     }
-    if(username == 'steven' && password == 'lishudong123'){
+    if(username == '123' && password == '123'){
 
-        //加密返回sha1加密token，过期时间未永不过期。
-        //但用户离线后自动清除token。
-        const crypto = require('crypto');
-        const config = require('./lib/config');
-        const hash = crypto.createHash('sha1');
-        const expire = Date.parse(new Date())/1000+7200;
-        hash.update(username+password+config.key+expire);
         const result = {
             status: 1,
             code: '1',
             msg: 'succ',
             count: sess.count,
-            token: hash.digest("hex"),
-            expire: expire
         };
         sess.status = 1;
         sess.username = username;
-        sess.expire = expire;
         res.setHeader("Content-Type","application/json");
         res.json(result);
         sess.save();
@@ -80,7 +71,7 @@ app.post('/loadAuth',function(req,res,next){
         username: "steven?",
         msg : 'no auth!'
     };
-      res.setHeader("Access-Control-Allow-Origin","*");
+    res.setHeader("Access-Control-Allow-Origin","*");
     res.setHeader("Content-Type","application/json");
     res.json(result);
   }

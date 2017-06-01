@@ -10,27 +10,28 @@ class MainLayout extends Component{
     }
 
     render(){
-        const {type,header,sider,content,footer} = this.props;
+        const {type,header,sider,content,footer,collapsed,onCollapse,mode,height} = this.props;
         const props = {header,sider,content,footer};
+        const param = {collapsed,onCollapse,mode,height};
         switch (type){
             case "fullContent": return(
-                <FullContentLayout components={...props} />
+                <FullContentLayout components={{...props}} />
             );
             case "leftSider":
                 return (
-                    <LeftSiderLayout components={...props} />
+                    <LeftSiderLayout components={{...props}} param={{...param}}/>
                 );
             case "RightSider":
                 return (
-                    <RightSiderLayout components={...props} />
+                    <RightSiderLayout components={{...props}} />
                 );
             case "TopLeftSider":
                 return (
-                    <TopLeftSiderLayout components={...props} />
+                    <TopLeftSiderLayout components={{...props}} />
                 );
             default :
                 return (
-                    <FullContentLayout components={...props}/>
+                    <FullContentLayout components={{...props}}/>
                 );
         }
     }
