@@ -4,9 +4,8 @@ import configs from "../../utils/configs";
 import HeaderUserInfo from "./userInfo.header";
 
 const Header = function({navList,userInfo}){
-    console.log(process);
     return (
-        <div>
+        <div id="header">
             <div className={styles.logo} >
                 <p>{configs.logoTitle || "请在 /utils/configs.js 配置此LOGO"}</p>
             </div>

@@ -4,9 +4,11 @@ import Layout from "../components/layout/main.layout";
 import Header from "../components/header/login.header";
 import Content from "../components/content/login.content";
 import Footer from "../components/footer";
+import {message} from "antd";
 
-function IndexPage({dispatch,login}) {
+function IndexPage({dispatch,login,loading}) {
 
+  console.log(login);
   const handleSubmit = (values) => {
     dispatch({type:"login/login",loginInfo:values});
   }
@@ -15,7 +17,7 @@ function IndexPage({dispatch,login}) {
     <Layout
       type="fullContent"
       header={<Header />}
-      content={<Content handleSubmit={handleSubmit} />}
+      content={<Content handleSubmit={handleSubmit} alert={login.alert} dispatch={dispatch} loading={loading.global} status={login.status} />}
       footer={<Footer />}
     />
   );
@@ -23,4 +25,4 @@ function IndexPage({dispatch,login}) {
 
 IndexPage.propTypes = {};
 
-export default connect(({login})=>{return {login};})(IndexPage);
+export default connect(({login,loading})=>{return {login,loading};})(IndexPage);

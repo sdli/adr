@@ -14,13 +14,13 @@ export default function({components,param}){
                         collapsible
                         collapsed={param.collapsed}
                         onCollapse={param.onCollapse}
-                        width={240}
+                        width={200}
                         style={{ height: "100%",backgroundColor: "#fff",paddingTop:64,position:"fixed",top:0,left:0,zIndex:10 }}
                     >
                         {components.menuList}
                     </Sider>
-                    <Layout style={{ padding: '16px',paddingLeft:!param.collapsed?256:80 }} >
-                        <Content style={{ background: '#fff', padding: 16, margin: 0, minHeight: 3000 }}>
+                    <Layout style={{ padding: '16px',paddingLeft:!param.collapsed?216:80 }} >
+                        <Content style={{ backgroundColor: '#fff', padding: 16, margin: 0, minHeight: 800 }}>
                            {components.content}
                         </Content>
                     </Layout>

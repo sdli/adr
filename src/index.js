@@ -1,3 +1,4 @@
+import "babel-polyfill";
 import './theme/index.less';
 import dva from 'dva';
 import createLoading from 'dva-loading';

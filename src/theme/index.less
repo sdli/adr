@@ -1,6 +1,6 @@
 *{
     padding:0;
-    margin: 0;
+    margin: 0 ;
     box-sizing: border-box;
 }
 :global(.center){
@@ -8,13 +8,6 @@
 }
 :global(.ant-form-extra){
     font-size: 12px;
-}
-:global(.ant-layout ){
-    flex-wrap: nowrap;
-}
-:global(.ant-layout-header),
-:global(.ant-layout-footer) {
-    flex: 0 1 auto;
 }
 :global(.ant-layout-header){
     height: 50px !important;
@@ -24,4 +17,18 @@
 }
 :global(.navBar){
     line-height: 46px !important;
+}
+:global(.ant-table-small .ant-table-header > table),
+:global(.ant-table-small .ant-table-body > table){
+  border: 0;
+  padding: 0 !important;
+}
+:global(.ant-table-small .ant-table-thead > tr > th){
+    background: #f7f7f7 !important;
+}
+:global(.ant-layout-header){
+    padding: 0 24px !important;
+}
+:global(.header .ant-menu-horizontal){
+    border-bottom: 0 !important;
 }

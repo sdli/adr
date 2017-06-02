@@ -4,17 +4,39 @@ import IndexTable from "../tables/index.table";
 
 const options = [{
   value: 'henan',
-  label: '河南',
+  label: '河南省',
   children: [{
     value: 'luohe',
     label: '漯河市',
-    children: [{
-      value: 'huiyuanqu',
-      label: '源汇区',
-    },{
-      value: 'shaolingqu',
-      label: '召陵区',
-    }],
+    children: [
+        {
+            value: 'all',
+            label: '全部'
+        },{
+            value: 'huiyuanqu',
+            label: '源汇区',
+            children:[
+                {
+                    value:"all",
+                    label: '全部'    
+                },
+                {
+                    value:"fenghuang",
+                    label: '凤凰镇'    
+                },
+                {
+                    value:"fenghuang",
+                    label: '凤凰镇'    
+                },
+                {
+                    value:"fenghuang",
+                    label: '凤凰镇'    
+                }
+            ]
+        },{
+            value: 'shaolingqu',
+            label: '万县'
+        }],
   }],
 }, {
   value: 'jiangsu',
@@ -35,7 +57,7 @@ function onChange(value) {
 
 const CityPicker= function(){
     return(
-        <Cascader defaultValue={['henan', 'luohe', 'shaolingqu']} options={options} onChange={onChange} size="small" />
+        <Cascader defaultValue={['henan', 'luohe', 'huiyuanqu',"all"]} options={options} onChange={onChange} size="small" style={{width:"300px"}} />
     );
 };
 
@@ -45,6 +67,7 @@ const indexContent = function(){
     return (
         <div>
             <div className={styles.aboveFunctions}>
+                <span>当前地区：</span>
                 <CityPicker />
                 <div style={{float:"right"}}>
                     <Button type="primary" icon="download">
@@ -52,7 +75,7 @@ const indexContent = function(){
                     </Button>
                 </div>
             </div>
-            <div>
+            <div style={{padding:"16px 0"}}>
                 <IndexTable />
             </div>
         </div>

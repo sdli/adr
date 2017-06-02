@@ -1,7 +1,8 @@
-import { Form, Icon, Input, Button, Checkbox,Row, Col,Collapse,Alert } from 'antd';
+import { Form, Icon, Input, Button, Checkbox,Row, Col,Collapse,Alert,Spin } from 'antd';
 import React from "react";
 import styles from "./content.less";
 import configs from "../../utils/configs";
+import {message} from "antd";
 
 const Panel = Collapse.Panel;
 
@@ -61,12 +62,19 @@ class NormalLoginForm extends React.Component {
   }
 
   componentDidMount(){
-        const height = window.screen.height?window.screen.height:640;
-        this.setState({
-            height: height-300
-        });
+    const height = window.screen.height?window.screen.height:640;
+    this.setState({
+        height: height-300
+    });
   }
 
+  componentWillUnmount(){
+      console.log(this.props);
+      console.log("即将离开！");
+      if(this.props.status){
+          message.success("登陆成功！");
+      }
+  }
   formItemLayout = {
         labelCol: {
         xs: { span: 24 },
@@ -80,56 +88,60 @@ class NormalLoginForm extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const {handleSubmit} = this.props;
+    const {handleSubmit,alert,loading} = this.props;
     return (
         <div className={styles.loginContent} style={{minHeight: this.state.height+"px"}}>
             <h2 className="center">登录{configs.logoTitle}</h2>
             <div className={styles.loginFormDiv}>
-                <Form onSubmit={this.submit(handleSubmit)}>
-                    <FormItem>
-                    {getFieldDecorator('username', {
-                        rules: [{ required: true, message: '请输入用户名' }],
-                    })(
-                        <Input prefix={<Icon type="user" style={{ fontSize: 13 }} />} placeholder="用户名" />
-                    )}
-                    </FormItem>
-                    <FormItem>
-                    {getFieldDecorator('password', {
-                        rules: [{ required: true, message: '请输入密码' }],
-                    })(
-                        <Input prefix={<Icon type="lock" style={{ fontSize: 13 }} />} type="password" placeholder="密码" />
-                    )}
-                    </FormItem>
-                    <FormItem
-                        extra="点击图片可刷新验证码"
-                    >
-                        <Row gutter={8}>
-                            <Col span={12}>
-                            {getFieldDecorator('code', {
-                                rules: [{ required: true, message: '请输入右侧验证码!' }],
-                            })(
-                                <Input prefix={<Icon type="message" fontSize={13} />} type="text" placeholder="验证码" />
-                            )}
-                            </Col>
-                            <Col span={12}>
-                                <img src={"/api/img?code="+ this.state.code} className={styles.validateCode} onClick={this.changeImg} />
-                            </Col>
-                        </Row>
-                    </FormItem>
-                    <FormItem>
-                    {getFieldDecorator('remember', {
-                        valuePropName: 'checked',
-                        initialValue: true,
-                    })(
-                        <Checkbox>记住我</Checkbox>
-                    )}
-                    <a className={styles.loginFormForgot} href="">忘记密码？</a>
-                    <Button type="primary" htmlType="submit" className={styles.loginFormButton} >
-                       提交
-                    </Button>
-                    或 <a href="">提交信息注册</a>
-                    </FormItem>
-                </Form>
+                <Spin spinning={loading}>
+                    <Form onSubmit={this.submit(handleSubmit)}>
+                        <FormItem>
+                        {getFieldDecorator('username', {
+                            rules: [{ required: true, message: '请输入用户名' }],
+                        })(
+                            <Input prefix={<Icon type="user" style={{ fontSize: 13 }} />} placeholder="用户名" />
+                        )}
+                        </FormItem>
+                        <FormItem>
+                        {getFieldDecorator('password', {
+                            rules: [{ required: true, message: '请输入密码' }],
+                        })(
+                            <Input prefix={<Icon type="lock" style={{ fontSize: 13 }} />} type="password" placeholder="密码" />
+                        )}
+                        </FormItem>
+                        <FormItem
+                            extra="点击图片可刷新验证码"
+                        >
+                            <Row gutter={8}>
+                                <Col span={12}>
+                                {getFieldDecorator('code', {
+                                    rules: [{ required: true, message: '请输入右侧验证码!' }],
+                                })(
+                                    <Input prefix={<Icon type="message" fontSize={13} />} type="text" placeholder="验证码" />
+                                )}
+                                </Col>
+                                <Col span={12}>
+                                    <img src={"/api/img?code="+ this.state.code} className={styles.validateCode} onClick={this.changeImg} />
+                                </Col>
+                            </Row>
+                        </FormItem>
+                        <FormItem>
+                        {getFieldDecorator('remember', {
+                            valuePropName: 'checked',
+                            initialValue: true,
+                        })(
+                            <Checkbox>记住我</Checkbox>
+                        )}
+                        <a className={styles.loginFormForgot} href="">忘记密码？</a>
+                        <Button type="primary" htmlType="submit" className={styles.loginFormButton} >
+                        提交
+                        </Button>
+                        或 <a href="">提交信息注册</a>
+                        </FormItem>
+                    </Form>
+                </Spin>
+
+                <Alert message="用户名或密码不正确" type="error" showIcon style={{display:alert,marginBottom:"16px"}} />
             </div>
             <Instruction />
         </div>
@@ -137,5 +149,15 @@ class NormalLoginForm extends React.Component {
   }
 }
 
-const WrappedNormalLoginForm = Form.create()(NormalLoginForm);
+const WrappedNormalLoginForm = Form.create(
+    {
+        //如果用户开始修改登录信息，则删除提示。
+        onFieldsChange: (props,field)=>{
+            if(props.alert === "block"){
+                props.dispatch({type:"login/loginWaiting"});
+            }
+        }
+    }
+)(NormalLoginForm);
+
 export default WrappedNormalLoginForm;

@@ -10,16 +10,16 @@ import MenuList from "../components/menu/index.menu";
 class IndexPage extends React.Component{
   constructor(props){
     super(props);
+    console.log(props);
     this.state={
       collapsed: false,
       mode: "inline",
       height: 640,
       menuList:[
-        {text:"市级管理页",icon:"contacts"},
-        {text:"县（区）级管理页面",icon:"flag"},
-        {text:"镇级管理页",icon:"edit"}
+        {text:"地区（街道）列表",icon:"contacts"},
+        {text:"人员列表",icon:"flag"},
       ],
-      navList:["采集审核","保障评估","绩效考核"]
+      navList:["资料审核","资料审核","账户信息"]
     }
   }
   onCollapse = (collapsed) => {
@@ -39,6 +39,7 @@ class IndexPage extends React.Component{
   }
 
   render(){
+    if(typeof this.props.loading.models.login === "undefined") return null;
     return (
       <Layout
         type="leftSider"
@@ -59,4 +60,4 @@ class IndexPage extends React.Component{
 
 IndexPage.propTypes = {};
 
-export default connect(({login})=>{return {login};})(IndexPage);
+export default connect(({login,loading})=>{return {login,loading};})(IndexPage);

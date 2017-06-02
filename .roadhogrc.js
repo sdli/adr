@@ -1,4 +1,5 @@
-{
+
+export default {
   "entry": "src/index.js",
   "disableCSSModules": false,
   "publicPath": "/",
@@ -7,14 +8,7 @@
     "transform-runtime",
     ["import", { "libraryName": "antd", "style": true }]
   ],
-  "theme": {
-    "@primary-color": "#108EE9",
-    "@link-color": "#108EE9",
-    "@border-radius-base": "4px",
-    "@font-size-base": "14px",
-    "@header-background-color": "#000",
-    "@border-sharp": "1px solid #f0f0f0"
-  },
+  "theme": "./src/theme/default.theme.js",
   "env": {
     "development": {
       "extraBabelPlugins": [
@@ -29,4 +23,4 @@
       "pathRewrite": { "^/api" : "" }
     }
   }
-}
+};

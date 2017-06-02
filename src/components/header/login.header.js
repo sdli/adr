@@ -3,9 +3,8 @@ import styles from "./header.less";
 import configs from "../../utils/configs";
 
 const Header = function(){
-    console.log(process);
     return (
-        <div>
+        <div id="#header">
             <div className={styles.logo} >
                 <p>{configs.logoTitle || "请配置此LOGO"}</p>
             </div>

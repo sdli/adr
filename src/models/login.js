@@ -24,41 +24,26 @@ const LoginFetch = {
             credentials: 'include'
         });
 
-        console.log(data);
         //成功后返回effects yield结果
         switch(parseInt(data.data.code)){
               case 1: return true;break;
               case 0: return false;break;
               default : return false;
         }
-    },
-    getShopList: function*(){
-      let data = yield request('/api/getShopList', {
-          method: 'POST',
-          headers: {
-              "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" 
-          },
-          credentials: 'include'
-      });
-      console.log(data);
-      //成功后返回effects yield结果
-      switch(parseInt(data.data.code)){
-            case 200: return data;break;
-            case 400: return false;break;
-            default : return false;
-        }
-      },
+    }
 };
 export default {
   namespace: 'login',
   state: {
       token: "",
       tel: "",
-      alert: 'none'
-  },
+      alert: 'none',
+      loading: false,
+      status: false
+    },
   reducers: {
     loginOK(state,{token,tel}) {
-      return {token:token,tel:tel};
+      return {token:token,tel:telm,status:true};
     },
     loginFail(){
       return {alert: 'block'};
@@ -69,7 +54,6 @@ export default {
   },
   effects: {
     *login({loginInfo},{put,call}){
-        console.log('登录信息:',loginInfo);
         const data = yield call(LoginFetch.login,loginInfo);
         if(data){
            yield put({ type: 'loginOK',token:data.token,tel:data.tel});
@@ -84,7 +68,7 @@ export default {
     },
     *checkAuthLogin({},{put,call,select}){
         const auth = yield call(LoginFetch.check);
-        if(!auth) yield put(routerRedux.push("/"));
+        if(auth) yield put(routerRedux.push("/"));
     }
   },
   subscriptions: {
@@ -96,7 +80,7 @@ export default {
       });
       history.listen(({pathname})=>{
         if(pathname === '/login'){
-          dispatch({type:"getAuthLogin"});
+          dispatch({type:"checkAuthLogin"});
         }
       });
     },
