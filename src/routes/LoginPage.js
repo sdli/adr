@@ -8,7 +8,7 @@ import {message} from "antd";
 
 function IndexPage({dispatch,login,loading}) {
 
-  console.log(login);
+  console.log(loading);
   const handleSubmit = (values) => {
     dispatch({type:"login/login",loginInfo:values});
   }

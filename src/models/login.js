@@ -5,14 +5,14 @@ import configs from "../utils/configs";
 
 const LoginFetch = {
   check: function*(){
-      let data = yield request('/api/loadAuth', {
-            method: 'POST',
-            headers: {
-                "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" 
-            },
-            credentials: 'include'
-        });
-        return data.data.code >0?true:false;
+        let data = yield request('/api/loadAuth', {
+              method: 'POST',
+              headers: {
+                  "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" 
+              },
+              credentials: 'include'
+          });
+        return data.data.code >0?true:false;   
   },
   login:function*(loginInfo){
         let data = yield request('/api/login', {
@@ -26,8 +26,8 @@ const LoginFetch = {
 
         //成功后返回effects yield结果
         switch(parseInt(data.data.code)){
-              case 1: return true;break;
-              case 0: return false;break;
+              case 1: return true;
+              case 0: return false;
               default : return false;
         }
     }
@@ -42,8 +42,8 @@ export default {
       status: false
     },
   reducers: {
-    loginOK(state,{token,tel}) {
-      return {token:token,tel:telm,status:true};
+    loginOK(state) {
+      return {status:true};
     },
     loginFail(){
       return {alert: 'block'};
@@ -56,15 +56,19 @@ export default {
     *login({loginInfo},{put,call}){
         const data = yield call(LoginFetch.login,loginInfo);
         if(data){
-           yield put({ type: 'loginOK',token:data.token,tel:data.tel});
+           yield put({ type: 'loginOK'});
            yield put(routerRedux.push('/'));
         }else{
            yield put({ type: 'loginFail'});
         }
     },
     *getAuth({},{put,call}){
-        const auth = yield call(LoginFetch.check);
-        if(!auth) yield put(routerRedux.push("/login"));
+        try{
+          const auth = yield call(LoginFetch.check);
+          if(!auth) yield put(routerRedux.push("/login"));
+        }catch(err){
+          yield put(routerRedux.push("/error"));
+        }
     },
     *checkAuthLogin({},{put,call,select}){
         const auth = yield call(LoginFetch.check);

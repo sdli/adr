@@ -39,7 +39,8 @@ class IndexPage extends React.Component{
   }
 
   render(){
-    if(typeof this.props.loading.models.login === "undefined") return null;
+    console.log(this.props);
+    if(this.props.login.status === false) return null;
     return (
       <Layout
         type="leftSider"
