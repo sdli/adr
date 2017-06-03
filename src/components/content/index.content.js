@@ -1,6 +1,8 @@
-import { Icon,Button,Select,Cascader } from 'antd';
+import { Icon,Button,Select,Cascader,Modal } from 'antd';
 import styles from "./content.less";
 import IndexTable from "../tables/index.table";
+import QueueAnim from 'rc-queue-anim';
+import React from "react";
 
 const options = [{
   value: 'henan',
@@ -61,25 +63,62 @@ const CityPicker= function(){
     );
 };
 
-
-
-const indexContent = function(){
-    return (
-        <div>
-            <div className={styles.aboveFunctions}>
-                <span>当前地区：</span>
-                <CityPicker />
-                <div style={{float:"right"}}>
-                    <Button type="primary" icon="download">
-                        导出表格
-                    </Button>
-                </div>
-            </div>
-            <div style={{padding:"16px 0"}}>
-                <IndexTable />
-            </div>
-        </div>
+const ExportModal = function({handleOk,visible,handleCancel,confirmLoading}){
+    return(
+        <Modal
+          title="导出表格"
+          visible={visible}
+          onOk={handleOk}
+          onCancel={handleCancel}
+          confirmLoading={confirmLoading}
+        >
+          <p><span style={{lineHeight:"32px"}}>选择城市/地区进行下载</span><br/><CityPicker /></p>
+        </Modal>
     );
+};
+class indexContent extends React.Component{
+    constructor(props){
+        super(props);
+        this.state={
+            visible: false,
+            confirmLoading:false
+        }
+    }
+
+    handleExport= ()=>{
+        this.setState({
+            visible:true
+        });
+    }
+    handleCancel=()=>{
+        this.setState(
+            {visible:false}
+        );
+    }
+    handleOk=()=>{
+        console.log("点击了下载按钮");
+    }
+    render(){
+        return (
+            <div>
+                <div className={styles.aboveFunctions} key="1">
+                    <span>当前地区：</span>
+                    <CityPicker />
+                    <div style={{float:"right"}}>
+                        <Button type="primary" icon="download" onClick={this.handleExport}>
+                            导出表格
+                        </Button>
+                    </div>
+                </div>
+                <QueueAnim delay={200}>
+                    <div style={{padding:"16px 0"}} key="2">
+                        <IndexTable />
+                    </div>
+                </QueueAnim>
+                <ExportModal  handleOk={this.handleOk} visible={this.state.visible} handleCancel={this.handleCancel}/>
+           </div>
+        );
+    }
 };
 
 export default indexContent;

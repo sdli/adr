@@ -3,6 +3,7 @@ import FullContentLayout from "./lib/full_content.js";
 import LeftSiderLayout from "./lib/left_sider.js";
 import RightSiderLayout from "./lib/right_sider.js";
 import TopLeftSiderLayout from "./lib/top_left_sider.js" 
+import { browserHistory } from 'react-router';
 
 class MainLayout extends Component{
     constructor(props){
@@ -10,9 +11,9 @@ class MainLayout extends Component{
     }
 
     render(){
-        const {type,header,sider,content,footer,collapsed,onCollapse,mode,height,menuList} = this.props;
-        const props = {header,sider,content,footer,menuList};
-        const param = {collapsed,onCollapse,mode,height};
+        const {type,header,sider,content,footer,collapsed,onCollapse,mode,height,menuList,children,path} = this.props;
+        const props = {header,sider,content,footer,menuList,children};
+        const param = {collapsed,onCollapse,mode,height,path};
         switch (type){
             case "fullContent": return(
                 <FullContentLayout components={{...props}} />

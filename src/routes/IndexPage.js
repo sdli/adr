@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'dva';
 import Layout from "../components/layout/main.layout";
 import Header from "../components/header/index.header";
-import Sider from "../components/sider/index.sider";
 import Content from "../components/content/index.content";
 import Footer from "../components/footer";
 import MenuList from "../components/menu/index.menu";
@@ -16,8 +15,8 @@ class IndexPage extends React.Component{
       mode: "inline",
       height: 640,
       menuList:[
-        {text:"地区（街道）列表",icon:"contacts"},
-        {text:"人员列表",icon:"flag"},
+        {text:"地区（街道）列表",icon:"contacts",link:"/"},
+        {text:"人员列表",icon:"flag",link:"/country/all"},
       ],
       navList:["资料审核","资料审核","账户信息"]
     }
@@ -39,21 +38,22 @@ class IndexPage extends React.Component{
   }
 
   render(){
-    console.log(this.props);
+    console.log(this.props,'寻找！！！');
     if(this.props.login.status === false) return null;
+    const path = (typeof this.props.location.pathname !== "undefined")?this.props.location.pathname.split('\/'):["","/"];
     return (
       <Layout
         type="leftSider"
         header={<Header navList={this.state.navList} userInfo={1} />}
-        sider={<Sider />}
-        content={<Content />}
         footer={<Footer />}
         menuList={<MenuList menuList={this.state.menuList} mode={this.state.mode} collapsed={this.state.collapsed} />}
         mode={this.state.mode}
         collapsed={this.state.collapsed}
         onCollapse={this.onCollapse}
         height={this.state.height}
+        path={path[1]}
       >
+           {this.props.children}
       </Layout>
     );
   }

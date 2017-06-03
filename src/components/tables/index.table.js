@@ -1,108 +1,119 @@
 import { Table } from 'antd';
+import tableUtils from "./lib";
 
 const columns = [{
   title: '编号',
   dataIndex: 'code',
-  key: 'code'
+  key: 'code',
 },
 {
-  title: '区/县',
+  title: '村名',
   dataIndex: 'name',
   key: 'name'
 },  
 {
-  title: '地区信息1',
+  title: '孤儿',
   dataIndex: 'info1',
   key: 'info1'
 },  
 {
-  title: '地区信息2',
+  title: '特困儿童',
   dataIndex: 'info2',
   key: 'info2',
 },  
 {
-  title: '地区信息3',
+  title: '重病重残',
   dataIndex: 'info3',
   key: 'info3',
 },  
 {
-  title: '地区信息4',
+  title: '其他困境',
   dataIndex: 'info4',
   key: 'info4',
 },  
 {
-  title: '地区信息5',
+  title: '合计',
   dataIndex: 'info5',
   key: 'info5',
 },  
 {
-  title: '综合1',
+  title: '基本生活保障',
   children: [{
-    title: '综合1-1',
+    title: '已保',
     dataIndex: 'group11',
     key: 'group11'
   }, {
-    title: '综合1-2',
+    title: '未保',
     dataIndex: "group12",
     key:"group12",
   }],
 },
 {
-  title: '综合2',
+  title: '教育保障',
   children: [{
-    title: '综合2-1',
+    title: '已保',
     dataIndex: 'group21',
     key: 'group21'
   }, {
-    title: '综合2-2',
+    title: '未保',
     dataIndex: "group22",
     key:"group22",
   }],
 },
 {
-  title: '综合3',
+  title: '基本医疗保障',
   children: [{
-    title: '综合3-1',
+    title: '已保',
     dataIndex: 'group31',
     key: 'group31'
   }, {
-    title: '综合3-2',
+    title: '未保',
     dataIndex: "group32",
     key:"group32",
   }],
 },
 {
-  title: '综合4',
+  title: '落实监护责任',
   children: [{
-    title: '综合4-1',
+    title: '已保',
     dataIndex: 'group41',
     key: 'group41'
   }, {
-    title: '综合4-2',
+    title: '未保',
     dataIndex: "group42",
     key:"group42"
   }],
 },
 {
-  title: '综合5',
+  title: '残疾儿童福利',
   children: [{
-    title: '综合5-1',
+    title: '已保',
     dataIndex: 'group51',
     key: 'group51'
   }, {
-    title: '综合5-2',
+    title: '未保',
     dataIndex: "group52",
     key:"group52"
   }],
 },
 {
-  title: '状态',
-  dataIndex: 'status',
-  key: 'status',
+  title: '状态/操作',
+  dataIndex: 'funcs',
+  key: 'funcs',
   width: 100
 }
 ];
 
+const buttonOptions = {
+   href:"/country",
+   icon:"file",
+   size: "small"
+};
+const classes = {
+    column: "countryColumn",
+    func: "functionColumn"
+};
+const FinalOptions = tableUtils.filterWithClassName(columns,classes,buttonOptions);
 const data = [];
 for (let i = 0; i < 100; i++) {
   data.push({
@@ -123,13 +134,14 @@ for (let i = 0; i < 100; i++) {
     group42: 'Lake Park',
     group51: 'Lake Park',
     group52: 'Lake Park',
-    status: 'C'
+    funcs: '0',
+    id:"E343534519195"
   });
 }
 
 const IndexTable = function(){
   return (<Table
-    columns={columns}
+    columns={FinalOptions}
     dataSource={data}
     size="small"
     pagination={{

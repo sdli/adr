@@ -65,7 +65,8 @@ export default {
     *getAuth({},{put,call}){
         try{
           const auth = yield call(LoginFetch.check);
-          if(!auth) yield put(routerRedux.push("/login"));
+          if(!auth){yield put(routerRedux.push("/login"));}
+          else{yield put({type:"loginOK"})};
         }catch(err){
           yield put(routerRedux.push("/error"));
         }
