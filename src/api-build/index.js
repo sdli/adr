@@ -120,5 +120,6 @@ app.listen(port, function (error) {
     } else {
         console.info("==> 🌎  API listening on port %s. Open up http://localhost:%s/ in your browser.", port, port);
     }
+    next();
 });
 //# sourceMappingURL=index.js.map
