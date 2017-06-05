@@ -1,4 +1,4 @@
-FROM daocloud.io/node:5  
+FROM node:latest  
 MAINTAINER me@yanbingbing.com
 
 
