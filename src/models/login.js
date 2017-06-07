@@ -15,6 +15,7 @@ const LoginFetch = {
         return data.data.code >0?true:false;   
   },
   login:function*(loginInfo){
+        console.log(loginInfo);
         let data = yield request('/api/login', {
             method: 'POST',
             headers: {
@@ -26,9 +27,24 @@ const LoginFetch = {
 
         //成功后返回effects yield结果
         switch(parseInt(data.data.code)){
-              case 1: return true;
-              case 0: return false;
+              case 200: return data;
+              case 400: return false;
               default : return false;
+        }
+    },
+    logout: function*(){
+        let data = yield request("/api/logout",{
+          method: "GET",
+          headers:{
+                "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" 
+          },
+          body: null,
+          credentials: "include"
+        });
+        switch(parseInt(data.data.code)){
+            case 1: return true;
+            case 0: return false;
+            default: return false;
         }
     }
 };
@@ -57,6 +73,7 @@ export default {
         const data = yield call(LoginFetch.login,loginInfo);
         if(data){
            yield put({ type: 'loginOK'});
+           yield put({type: "data/setOrganInfo",organId:data.data.orgId,level:data.data.orgLevel})
            yield put(routerRedux.push('/'));
         }else{
            yield put({ type: 'loginFail'});
@@ -74,6 +91,10 @@ export default {
     *checkAuthLogin({},{put,call,select}){
         const auth = yield call(LoginFetch.check);
         if(auth) yield put(routerRedux.push("/"));
+    },
+    *logout({},{put,call}){
+       const logoutAuth  = yield call(LoginFetch.logout);
+       if(logoutAuth) yield put(routerRedux.push("/login"));
     }
   },
   subscriptions: {
@@ -81,6 +102,9 @@ export default {
       history.listen(({ pathname }) => {
         if (!configs.authException.some((val)=>val===pathname)) {
           dispatch({type:"getAuth"});
+        }
+        if(pathname === "/"){
+          dispatch({type: "data/getCountryList"})
         }
       });
       history.listen(({pathname})=>{

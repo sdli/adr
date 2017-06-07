@@ -29,6 +29,11 @@ class IndexPage extends React.Component{
     });
   }
 
+  onLogout=()=>{
+    console.log("我要等出！");
+    this.props.dispatch({type:'login/logout'});
+  }
+
   componentDidMount(){
     console.log( window.screen.availHeight,window.screen.height);
       const height = window.screen.availHeight?window.screen.availHeight:640;
@@ -38,13 +43,12 @@ class IndexPage extends React.Component{
   }
 
   render(){
-    console.log(this.props,'寻找！！！');
     if(this.props.login.status === false) return null;
     const path = (typeof this.props.location.pathname !== "undefined")?this.props.location.pathname.split('\/'):["","/"];
     return (
       <Layout
         type="leftSider"
-        header={<Header navList={this.state.navList} userInfo={1} />}
+        header={<Header navList={this.state.navList} userInfo={1} handleLogout={this.onLogout} />}
         footer={<Footer />}
         menuList={<MenuList menuList={this.state.menuList} mode={this.state.mode} collapsed={this.state.collapsed} />}
         mode={this.state.mode}

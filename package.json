@@ -2,6 +2,7 @@
   "private": true,
   "scripts": {
     "start": "npm run build-api && npm run build && npm run start-all",
+    "dev": "set PORT=3000&&roadhog server",
     "build": "roadhog build",
     "lint": "eslint --ext .js src test",
     "build-api": "babel ./src/api/ -d ./src/api-build --source-maps",

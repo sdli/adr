@@ -4,12 +4,12 @@ const config = {
         server:ServerConfig.server,
         apiPort: ServerConfig.apiPort,
         serverPort: ServerConfig.serverPort,
-        remoteServer: "http://120.76.100.12",//http://192.168.1.129:9300/ http://183.234.63.50
-        remotePort: "9300",
+        remoteServer: "http://120.76.204.189",//http://192.168.1.129:9300/ http://183.234.63.50
+        remotePort: "9900",
         apiPort: "3060",
         remoteApis:{
             login: "/api/user/login",
-            stores: "/api/user/store",
+            countryList: "/api/organ/detail/",
             goods: "/api/cashier/findByGoodsExport",
             orders: "/api/order/findGoodsExport",
             cashiers: "/api/cashier/findBycashierExport"

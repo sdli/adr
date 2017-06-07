@@ -4,6 +4,7 @@ import configs from "./utils/configs";
 import session from "express-session";
 import captchapng from 'captchapng';
 import cookieParser from "cookie-parser";
+import apis from "./lib/";
 
 const app = new express();
 const port  = configs.apiPort;
@@ -17,65 +18,14 @@ app.use(session({
 
 app.use(bodyParser.urlencoded({ extended: false}));
 
-// setResponse(app);
-app.post('/login',function(req,res,next){
-    let sess = req.session;
-    let username = req.body.username;
-    let password = req.body.password;
-    if(sess.count){
-        sess.count++;
-    }else{
-        sess.count =1;
-    }
-    if(username == '123' && password == '123'){
+// 登录接口
+app.post('/login', apis.loginStart);
 
-        const result = {
-            status: 1,
-            code: '1',
-            msg: 'succ',
-            count: sess.count,
-        };
-        sess.status = 1;
-        sess.username = username;
-        res.setHeader("Content-Type","application/json");
-        res.json(result);
-        sess.save();
-    }else{
-        const result = {
-            status: 0,
-            code: '0',
-            msg: 'fail',
-            count: sess.count,
-            username: username
-        };
-        sess.status = 0;
-        res.setHeader("Content-Type","application/json");
-        res.json(result);
-    }
-});
+// 加载权限
+app.post('/loadAuth',apis.loadAuth);
 
-app.post('/loadAuth',function(req,res,next){
-  let loginStatus = (typeof req.session.status === "undefined")?false:req.session.status;
-  if(loginStatus){
-      let result = {
-          code : '1',
-          username: req.session.username,
-          msg : 'login auth OK!'
-      };
-      res.setHeader("Access-Control-Allow-Origin","*");
-      res.setHeader("Content-Type","application/json");
-      res.json(result);
-  }else{
-    let result = {
-        code : '0',
-        username: "steven?",
-        msg : 'no auth!'
-    };
-    res.setHeader("Access-Control-Allow-Origin","*");
-    res.setHeader("Content-Type","application/json");
-    res.json(result);
-  }
-});
+// 加载镇级别列表
+app.post("/countryList",apis.countryList);
 
 app.get('/img',function(req,res,next){
     var pngNum = parseInt(Math.random()*9000+1000);
@@ -93,10 +43,14 @@ app.get('/img',function(req,res,next){
     next();
 });
 
-app.listen(port,function(error) {
-  if (error) {
-    console.error(error)
-  } else {
-    console.info("==> 🌎  API listening on port %s. Open up http://localhost:%s/ in your browser.", port, port)
-  }
+app.listen(port,apis.listen);
+
+app.get('/logout',function(req,res,next){
+    req.session.username = null;
+    req.session.password = null;
+    let result = {
+        "code":1,
+        "msg": "logout succ"
+    };
+    res.json(result);
 });

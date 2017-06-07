@@ -8,7 +8,7 @@ const app = dva(createLoading());
 
 // 2. Model
 app.model(require('./models/login'));
-// app.model(require('./models/check'));
+app.model(require('./models/data'));
 
 // 3. Router
 app.router(require('./router'));

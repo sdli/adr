@@ -33,7 +33,7 @@ class UserInfo extends Component{
         });
     }
     render(){
-        const {userInfo} =this.props;
+        const {userInfo,handleLogout} =this.props;
         const text="用户信息";
         const content = (
             <div style={{padding: '0'}}>
@@ -47,7 +47,7 @@ class UserInfo extends Component{
                         </a>
                     </li>
                     <li key="userinfo3">
-                        <a href="">
+                        <a onClick={handleLogout}>
                             <span>
                                 <Icon type="poweroff" />
                             </span>

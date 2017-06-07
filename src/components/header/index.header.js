@@ -3,7 +3,7 @@ import styles from "./header.less";
 import configs from "../../utils/configs";
 import HeaderUserInfo from "./userInfo.header";
 
-const Header = function({navList,userInfo}){
+const Header = function({navList,userInfo,handleLogout}){
     return (
         <div id="header">
             <div className={styles.logo} >
@@ -22,7 +22,7 @@ const Header = function({navList,userInfo}){
                     );
                 })}
             </Menu>
-            {userInfo && <HeaderUserInfo userInfo={userInfo} />}
+            {userInfo && <HeaderUserInfo userInfo={userInfo} handleLogout={handleLogout} />}
         </div>
     );
 }
