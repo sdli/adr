@@ -3,7 +3,6 @@ import { hashHistory } from 'react-router';
 
 export default {
     filterWithClassName:function(arr,className,buttonOptions){
-        console.log(buttonOptions,"未检测到options");
         return arr.map((val,index)=>{
             if(val.key!="code" && val.key!="funcs"){
                 val.className = className.column;

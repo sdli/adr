@@ -12,10 +12,10 @@ const LoginFetch = {
               },
               credentials: 'include'
           });
-        return data.data.code >0?true:false;   
+         return data.data.code != 0 ?data.data.userInfo:false;   
   },
   login:function*(loginInfo){
-        console.log(loginInfo);
+        console.log(loginInfo,"用户登录传参");
         let data = yield request('/api/login', {
             method: 'POST',
             headers: {
@@ -59,7 +59,7 @@ export default {
     },
   reducers: {
     loginOK(state) {
-      return {status:true};
+      return {status:true,alert:"none"};
     },
     loginFail(){
       return {alert: 'block'};
@@ -71,26 +71,33 @@ export default {
   effects: {
     *login({loginInfo},{put,call}){
         const data = yield call(LoginFetch.login,loginInfo);
+        console.log(data,"用户登录信息");
         if(data){
            yield put({ type: 'loginOK'});
-           yield put({type: "data/setOrganInfo",organId:data.data.orgId,level:data.data.orgLevel})
-           yield put(routerRedux.push('/'));
+           yield put(routerRedux.push('/data/'+data.data.data.orgId));
         }else{
            yield put({ type: 'loginFail'});
         }
     },
-    *getAuth({},{put,call}){
+    *getAuth({pathname},{put,call}){
         try{
           const auth = yield call(LoginFetch.check);
+          console.log("检测到auth，",auth,pathname);
           if(!auth){yield put(routerRedux.push("/login"));}
-          else{yield put({type:"loginOK"})};
+          else{
+            yield put({type:"loginOK"});
+            if(pathname === "/"){
+              yield put(routerRedux.push("/data/"+ auth.orgId));
+            }
+          };
         }catch(err){
           yield put(routerRedux.push("/error"));
         }
     },
     *checkAuthLogin({},{put,call,select}){
+        console.log("进行登录页验证");
         const auth = yield call(LoginFetch.check);
-        if(auth) yield put(routerRedux.push("/"));
+        if(auth) yield put(routerRedux.push("/data/"+auth.orgId));
     },
     *logout({},{put,call}){
        const logoutAuth  = yield call(LoginFetch.logout);
@@ -101,10 +108,7 @@ export default {
     setup({ dispatch, history }) {
       history.listen(({ pathname }) => {
         if (!configs.authException.some((val)=>val===pathname)) {
-          dispatch({type:"getAuth"});
-        }
-        if(pathname === "/"){
-          dispatch({type: "data/getCountryList"})
+          dispatch({type:"getAuth",pathname:pathname});
         }
       });
       history.listen(({pathname})=>{

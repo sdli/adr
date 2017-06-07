@@ -3,7 +3,7 @@ import { connect } from 'dva';
 import Layout from "../components/layout/main.layout";
 import Header from "../components/header/login.header";
 import Footer from "../components/footer";
-import {message,Alert} from "antd";
+import {Alert} from "antd";
 
 const Content = function(){
     return (

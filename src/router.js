@@ -5,12 +5,14 @@ import LoginPage from "./routes/LoginPage";
 import ErrorPage from "./routes/ErrorPage";
 import Contents from "./components/content/";
 import CountryContent from "./routes/CountryPage";
+import IndexContent from "./routes/IndexContentPage";
 
 function RouterConfig({ history }) {
   return (
     <Router history={history}>
-      <Router path="/" component={IndexPage}>
-          <IndexRoute component={Contents.indexContent} />
+      <Router path="/" />
+      <Router path="/data/:id" component={IndexPage}>
+          <IndexRoute component={IndexContent} />
           <Route path="/country/:id" component={CountryContent} />
           <Route path="/details/:id" component={Contents.detailsContent} />
       </Router>

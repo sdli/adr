@@ -31,7 +31,7 @@ function loginStart(req, res,next) {
                 sess.username = username;
                 sess.password = password;
                 sess.token = result.data.tokenInfo.token;
-                sess.userId = result.data.id;
+                sess.userInfo = result.data;
                 sess.expire = Date.parse(new Date()) / 1000 + 10;
                 res.json(result);
             }
@@ -76,9 +76,10 @@ const InitFetch = function(met,url,vali) {
                         "Content-type": "application/json;charset=UTF-8"
                     }
                 });
-                if (result.data.code == "200") {
+
+                if (result.code == "200") {
                     sess.token = result.data.tokenInfo.token;
-                    sess.userId = result.data.id;
+                    sess.userInfo = result.data;
                     sess.expire = Date.parse(new Date()) / 1000 + 10;
                     realToken = sess.token;
                 }
@@ -103,7 +104,7 @@ const InitFetch = function(met,url,vali) {
                     }
                 });
             }else{
-                console.log(url);
+                console.log(url+req.body.organId);
                 request({
                     mothod: "GET",
                     url: url+req.body.organId,
@@ -135,7 +136,7 @@ function loadAuth(req, res, next) {
     if (loginStatus) {
         let result = {
             code: '1',
-            username: req.session.username,
+            userInfo: req.session.userInfo,
             msg: 'login auth OK!'
         };
         res.setHeader("Access-Control-Allow-Origin", "*");
@@ -144,7 +145,6 @@ function loadAuth(req, res, next) {
     } else {
         let result = {
             code: '0',
-            username: "steven?",
             msg: 'no auth!'
         };
         res.setHeader("Access-Control-Allow-Origin", "*");

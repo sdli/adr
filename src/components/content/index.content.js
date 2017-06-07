@@ -1,67 +1,37 @@
-import { Icon,Button,Select,Cascader,Modal } from 'antd';
+import { Icon,Button,Select,Cascader,Modal,Input } from 'antd';
 import styles from "./content.less";
 import IndexTable from "../tables/index.table";
 import QueueAnim from 'rc-queue-anim';
 import React from "react";
 
-const options = [{
-  value: 'henan',
-  label: '河南省',
-  children: [{
-    value: 'luohe',
-    label: '漯河市',
-    children: [
-        {
-            value: 'all',
-            label: '全部'
-        },{
-            value: 'huiyuanqu',
-            label: '源汇区',
-            children:[
-                {
-                    value:"all",
-                    label: '全部'    
-                },
-                {
-                    value:"fenghuang",
-                    label: '凤凰镇'    
-                },
-                {
-                    value:"fenghuang",
-                    label: '凤凰镇'    
-                },
-                {
-                    value:"fenghuang",
-                    label: '凤凰镇'    
-                }
-            ]
-        },{
-            value: 'shaolingqu',
-            label: '万县'
-        }],
-  }],
-}, {
-  value: 'jiangsu',
-  label: '江苏',
-  children: [{
-    value: 'nanjing',
-    label: '南京',
-    children: [{
-      value: 'zhonghuamen',
-      label: '中华门',
-    }],
-  }],
-}];
 
 function onChange(value) {
   console.log(value);
 }
 
-const CityPicker= function(){
-    return(
-        <Cascader defaultValue={['henan', 'luohe', 'huiyuanqu',"all"]} options={options} onChange={onChange} size="small" style={{width:"300px"}} />
-    );
-};
+class CityPicker extends React.Component{
+    constructor(props){
+        super(props);
+    }
+    render(){
+        const {options,defaultValues,defaultAreaInput} = this.props;
+        console.log(defaultAreaInput,"看到了这个");
+        return(
+            <Cascader options={options} onChange={onChange} size="small" style={{width:"300px"}} >
+                <Input
+                    prefix={<Icon type="environment" />} 
+                    value={defaultAreaInput} 
+                    size="small"
+                    style={{
+                        float: "left",
+                        width: "300px",
+                        cursor:"pointer"
+                    }} 
+                />
+            </Cascader>
+        )
+    }
+}
 
 const ExportModal = function({handleOk,visible,handleCancel,confirmLoading}){
     return(
@@ -98,12 +68,18 @@ class indexContent extends React.Component{
     handleOk=()=>{
         console.log("点击了下载按钮");
     }
+    componentDidMount(){
+        console.log(this.props);
+        this.props.dispatch({type:"data/getCountryList",orgId:this.props.id});
+    }
     render(){
+        const {defaultValues,options,defaultInput} = this.props;
+        console.log(defaultInput,"hehe");
         return (
             <div>
                 <div className={styles.aboveFunctions} key="1">
-                    <span>当前地区：</span>
-                    <CityPicker />
+                    <span style={{float: "left"}}>当前地区：</span>
+                    {options && <CityPicker options={options} defaultValue={defaultValues} defaultAreaInput={defaultInput} />}
                     <div style={{float:"right"}}>
                         <Button type="primary" icon="download" onClick={this.handleExport}>
                             导出表格

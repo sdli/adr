@@ -4,7 +4,6 @@ import Layout from "../components/layout/main.layout";
 import Header from "../components/header/login.header";
 import Content from "../components/content/login.content";
 import Footer from "../components/footer";
-import {message} from "antd";
 
 function IndexPage({dispatch,login,loading}) {
 
