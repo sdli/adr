@@ -9,28 +9,22 @@ function onChange(value) {
   console.log(value);
 }
 
-class CityPicker extends React.Component{
-    constructor(props){
-        super(props);
-    }
-    render(){
-        const {options,defaultValues,defaultAreaInput} = this.props;
-        console.log(defaultAreaInput,"看到了这个");
-        return(
-            <Cascader options={options} onChange={onChange} size="small" style={{width:"300px"}} >
-                <Input
-                    prefix={<Icon type="environment" />} 
-                    value={defaultAreaInput} 
-                    size="small"
-                    style={{
-                        float: "left",
-                        width: "300px",
-                        cursor:"pointer"
-                    }} 
-                />
-            </Cascader>
-        )
-    }
+function CityPicker({options,defaultValues,defaultAreaInput}){
+    console.log(defaultAreaInput,"看到了这个");
+    return(
+        <Cascader options={options} onChange={onChange} size="small" style={{width:"300px"}} >
+            <Input
+                prefix={<Icon type="environment" />} 
+                value={defaultAreaInput} 
+                size="small"
+                style={{
+                    float: "left",
+                    width: "300px",
+                    cursor:"pointer"
+                }} 
+            />
+        </Cascader>
+    );
 }
 
 const ExportModal = function({handleOk,visible,handleCancel,confirmLoading}){
@@ -71,10 +65,11 @@ class indexContent extends React.Component{
     componentDidMount(){
         console.log(this.props);
         this.props.dispatch({type:"data/getCountryList",orgId:this.props.id});
+        this.props.dispatch({type:"data/getCountryReport",orgId:this.props.id});
     }
     render(){
-        const {defaultValues,options,defaultInput} = this.props;
-        console.log(defaultInput,"hehe");
+        const {defaultValues,options,defaultInput,countryReport} = this.props;
+        console.log(options);
         return (
             <div>
                 <div className={styles.aboveFunctions} key="1">
@@ -88,7 +83,7 @@ class indexContent extends React.Component{
                 </div>
                 <QueueAnim delay={200}>
                     <div style={{padding:"16px 0"}} key="2">
-                        <IndexTable />
+                        <IndexTable data={countryReport} />
                     </div>
                 </QueueAnim>
                 <ExportModal  handleOk={this.handleOk} visible={this.state.visible} handleCancel={this.handleCancel}/>

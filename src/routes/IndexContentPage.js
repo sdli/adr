@@ -10,6 +10,7 @@ function IndexContentPage({dispatch,data,loading,params}) {
       options={data.areaOptions || null} 
       defaultValues={data.defaultAreaValues || null}
       defaultInput = {data.defaultAreaInput || null}
+      countryReport = {data.countryReport || null}
     />
   );
 }

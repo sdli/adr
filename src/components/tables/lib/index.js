@@ -4,7 +4,7 @@ import { hashHistory } from 'react-router';
 export default {
     filterWithClassName:function(arr,className,buttonOptions){
         return arr.map((val,index)=>{
-            if(val.key!="code" && val.key!="funcs"){
+            if(val.key!="code" && val.key!="status"){
                 val.className = className.column;
                 if(typeof val.children !== "undefined"){
                     this.filterWithClassName(val.children,className.column);
@@ -18,12 +18,12 @@ export default {
                     };
                 }
             }else{
-                if(val.key=="funcs"){
+                if(val.key=="status"){
                     val.className= className.func;
                     val.render = function(text,record,index){
                         let textChange = "";
                         let type="";
-                        switch (record.funcs){
+                        switch (record.status){
                             case "1": textChange = "待审核";type="primary";break;
                             case "2": textChange = "已通过";type="dashed";break;
                             case "3": textChange = "已驳回";type="danger";break;
@@ -35,8 +35,8 @@ export default {
                                 type={type}
                                 onClick={
                                     function(){
-                                        console.log(buttonOptions.href+"/"+record.id);
-                                        hashHistory.push(buttonOptions.href+"/"+record.id);
+                                        console.log(buttonOptions.href+"/"+record.orgId);
+                                        hashHistory.push(buttonOptions.href+"/"+record.orgId);
                                     }
                             }>
                                 {textChange}

@@ -13,8 +13,8 @@ function RouterConfig({ history }) {
       <Router path="/" />
       <Router path="/data/:id" component={IndexPage}>
           <IndexRoute component={IndexContent} />
-          <Route path="/country/:id" component={CountryContent} />
-          <Route path="/details/:id" component={Contents.detailsContent} />
+          <Route path="/country/:cid" component={CountryContent} />
+          <Route path="/details/:did" component={Contents.detailsContent} />
       </Router>
       <Route path="/login" component={LoginPage} />
       <Route path="/error" component={ErrorPage} />

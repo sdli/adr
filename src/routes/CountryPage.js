@@ -2,12 +2,19 @@ import React from 'react';
 import { connect } from 'dva';
 import CountryDetails from "../components/content/country.content";
 
-function CountryPage({dispatch,login,loading}) {
+function CountryPage({dispatch,data,loading,params}) {
   return (
-    <CountryDetails loginInfo={login}/>
+    <CountryDetails
+      dispatch={dispatch}
+      id={params.id}
+      options={data.villageOptions || null}
+      defaultValues={data.defaultVillageValues || null}
+      defaultInput = {data.defaultVillageInput || null}
+      villageReport = {data.villageReport || null}
+    />
   );
 }
 
 CountryPage.propTypes = {};
 
-export default connect(({login,loading})=>{return {login,loading};})(CountryPage);
+export default connect(({data,loading})=>{return {data,loading};})(CountryPage);

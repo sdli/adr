@@ -6,11 +6,11 @@ const config = {
         serverPort: ServerConfig.serverPort,
         remoteServer: "http://120.76.204.189",//http://192.168.1.129:9300/ http://183.234.63.50
         remotePort: "9900",
-        apiPort: "3060",
         remoteApis:{
             login: "/api/user/login",
             countryList: "/api/organ/detail/",
-            goods: "/api/cashier/findByGoodsExport",
+            countryReport: "/api/report/applyReportList/",
+            villageReport: "/api/roster/datlstsbyorgid",
             orders: "/api/order/findGoodsExport",
             cashiers: "/api/cashier/findBycashierExport"
         },

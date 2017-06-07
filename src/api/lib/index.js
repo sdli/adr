@@ -2,6 +2,7 @@ import config from "../utils/configs";
 import fetchRequest from "../utils/request";
 import date from "../utils/date";
 import request from "request";
+import captchapng from 'captchapng';
 import co from 'co';
 
 var port = config.apiPort;
@@ -34,6 +35,8 @@ function loginStart(req, res,next) {
                 sess.userInfo = result.data;
                 sess.expire = Date.parse(new Date()) / 1000 + 10;
                 res.json(result);
+            }else{
+                res.json(config.reloadResponse);
             }
         });
     } else {
@@ -166,15 +169,50 @@ function listen(error) {
     }
 }
 
+function loadImg(req,res,next){
+    var pngNum = parseInt(Math.random()*9000+1000);
+    req.session.pngNum = pngNum;
+    var p = new captchapng(80,30,parseInt(Math.random()*9000+1000)); // width,height,numeric captcha 
+    p.color(0, 0, 0, 0);  // First color: background (red, green, blue, alpha) 
+    p.color(80, 80, 80, 255); // Second color: paint (red, green, blue, alpha) 
+
+    var img = p.getBase64();
+    var imgbase64 = new Buffer(img,'base64');
+    res.writeHead(200, {
+        'Content-Type': 'image/png'
+    });
+    res.end(imgbase64);
+    next();
+}
+
+/**
+ * 请求登出
+ * @param {请求内容} req 
+ * @param {返回内容} res 
+ * @param {传递方法} next 
+ */
+function logout(req,res,next){
+    req.session.username = null;
+    req.session.password = null;
+    let result = {
+        "code":1,
+        "msg": "logout succ"
+    };
+    res.json(result);
+}
 /**
  * export整合
  */
 const funcs = {
     countryList: fetchUrl("get","countryList"),
+    countryReport: fetchUrl("get","countryReport"),
+    villageReport: fetchUrl("get","villageReport"),
     loginStart: loginStart,
     initFetch: InitFetch,
     loadAuth: loadAuth,
-    listen: listen
+    listen: listen,
+    loadImg: loadImg,
+    logout: logout
 };
 
 module.exports = funcs;
