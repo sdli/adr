@@ -107,10 +107,20 @@ const InitFetch = function(met,url,vali) {
                     }
                 });
             }else{
-                console.log(url+req.body.organId);
+                let requestUrl = "";
+                switch (req.body.type){
+                    case "village":
+                        requestUrl = url+"?orgId="+req.body.organId+"&currPage=1&pageSize=100";
+                        break;
+                    case "childDetails":
+                        requestUrl = url+"?childId="+req.body.childId;
+                        break;
+                    default:
+                        requestUrl = url+req.body.organId;
+                }
                 request({
                     mothod: "GET",
-                    url: url+req.body.organId,
+                    url: requestUrl,
                     headers:{
                         "authorization": realToken
                     }
@@ -207,6 +217,8 @@ const funcs = {
     countryList: fetchUrl("get","countryList"),
     countryReport: fetchUrl("get","countryReport"),
     villageReport: fetchUrl("get","villageReport"),
+    getChildDetails: fetchUrl("get","getChildDetails"),
+    shenhe: fetchUrl("post","shenhe"),
     loginStart: loginStart,
     initFetch: InitFetch,
     loadAuth: loadAuth,

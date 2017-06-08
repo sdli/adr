@@ -10,7 +10,6 @@ function onChange(value) {
 }
 
 function CityPicker({options,defaultValues,defaultAreaInput}){
-    console.log(defaultAreaInput,"看到了这个");
     return(
         <Cascader options={options} onChange={onChange} size="small" style={{width:"300px"}} >
             <Input

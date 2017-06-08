@@ -11,8 +11,8 @@ const config = {
             countryList: "/api/organ/detail/",
             countryReport: "/api/report/applyReportList/",
             villageReport: "/api/roster/datlstsbyorgid",
-            orders: "/api/order/findGoodsExport",
-            cashiers: "/api/cashier/findBycashierExport"
+            getChildDetails: "/api/roster/detail",
+            shenhe:"/api/audit/audit"
         },
         reloadResponse:{
             code:0,

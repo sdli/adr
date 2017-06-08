@@ -2,57 +2,53 @@ import { Table } from 'antd';
 import tableUtils from "./lib";
 
 const columns = [{
-  title: '编号',
-  dataIndex: 'code',
-  key: 'code'
-},{
   title: '姓名',
-  dataIndex: 'name',
-  key: 'name'
+  dataIndex: 'childName',
+  key: 'childName'
 },{
   title: '性别',
-  dataIndex: 'info1',
-  key: 'info1'
+  dataIndex: 'childSex',
+  key: 'childSex'
 },{
   title: '出生年月',
-  dataIndex: 'info2',
-  key: 'info2',
+  dataIndex: 'childBornTime',
+  key: 'childBornTime',
 },{
   title: '联系方式',
-  dataIndex: 'info3',
-  key: 'info3',
+  dataIndex: 'guaTelNum',
+  key: 'guaTelNum',
 },{
   title: '住所',
-  dataIndex: 'info4',
-  key: 'info4',
+  dataIndex: 'address',
+  key: 'address',
 },{
   title: '困境类型',
-  dataIndex: 'info6',
-  key: 'info6',
+  dataIndex: 'dilemmaCategoryTitle',
+  key: 'dilemmaCategoryTitle',
 },{
   title: '生活保障',
-  dataIndex: 'info7',
-  key: 'info7',
+  dataIndex: 'basicLifeHappeningTitle',
+  key: 'basicLifeHappeningTitle',
 },{
   title: '教育保障',
-  dataIndex: 'info11',
-  key: 'info11',
+  dataIndex: 'educationHappeningTitle',
+  key: 'educationHappeningTitle',
 },{
   title: '医疗保障',
-  dataIndex: 'info8',
-  key: 'info8',
+  dataIndex: 'medicalHappeningTitle',
+  key: 'medicalHappeningTitle',
 },{
   title: '监护保障',
-  dataIndex: 'info9',
-  key: 'info9',
+  dataIndex: 'guaHappeningTitle',
+  key: 'guaHappeningTitle',
 },{
   title: '残疾儿童服务',
-  dataIndex: 'info10',
-  key: 'info10',
+  dataIndex: 'welfareHappeningTitle',
+  key: 'welfareHappeningTitle',
 },{
   title: '操作',
-  dataIndex: 'funcs',
-  key: 'funcs',
+  dataIndex: 'status',
+  key: 'status',
 }
 ];
 const buttonOptions = {
@@ -65,28 +61,8 @@ const classes = {
     func: "functionColumn"
 };
 const FinalOptions = tableUtils.filterWithClassName(columns,classes,buttonOptions);
-const data = [];
-for (let i = 0; i < 100; i++) {
-  data.push({
-    code: i,
-    name: 'John Brown',
-    info1: i + 1,
-    info2: i + 1,
-    info3: "深圳市福田区高新大道9897号12398区",
-    info4: i + 1,
-    info5: i + 1,
-    info6: i + 1,
-    info7: i + 1,
-    info8: i + 1,
-    info9: i + 1,
-    info10: i + 1,
-    info11: i + 1,
-    funcs:(Math.random()*10>5)?"1":"2",
-    id:"2391720ur"
-  });
-}
 
-const CountryTable = function(){
+const CountryTable = function({data}){
   return (<Table
     columns={FinalOptions}
     dataSource={data}

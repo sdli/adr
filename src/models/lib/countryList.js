@@ -3,9 +3,10 @@ const countryList = function(obj){
     if(typeof obj !== "object"){
         return false;
     }else{
-        switch (obj.orgLevel){
-            case "3": return changeIntoLevel3(obj);
-            case "4": return changeIntoLevel4(obj);
+        console.log(obj.orgLevel);
+        switch (parseInt(obj.orgLevel)){
+            case 3: return changeIntoLevel3(obj);
+            case 4: return changeIntoLevel4(obj);
             default : return changeIntoLevel3(obj);
         }
     }
@@ -43,14 +44,14 @@ const changeIntoLevel3 = function(obj){
     };
 };
 
-const changeIntoLevel4 = function(){
+const changeIntoLevel4 = function(obj){
     let tempProObj = {
         value: "henan",
         label: "河南省",
         children:[
             {
                 value: obj.parentOrgan.parentOrgan.parentOrgan.orgId,
-                label: obj.parentOrgan.parentOrgan.orgName,
+                label: obj.parentOrgan.parentOrgan.parentOrgan.orgName,
                 children:[
                     {
                         value: obj.parentOrgan.parentOrgan.orgId,
@@ -76,8 +77,14 @@ const changeIntoLevel4 = function(){
 
     return {
         options: [tempProObj],
-        defaultValues: ["henan",obj.parentOrgan.parentOrgan.parentOrgan.orgId,obj.parentOrgan.parentOrgan.orgId,obj.parentOrgan.orgId,obj.orgId],
-        defaultInput: "河南省"+"/"+obj.parentOrgan.parentOrgan.parentOrgan.orgId+"/"+obj.parentOrgan.parentOrgan.orgName+"/"+obj.parentOrgan.orgName+"/"+obj.orgName
+        defaultValues: [
+            "henan",
+            obj.parentOrgan.parentOrgan.parentOrgan.orgId,
+            obj.parentOrgan.parentOrgan.orgId,
+            obj.parentOrgan.orgId,
+            obj.orgId
+        ],
+        defaultInput: "河南省"+"/"+obj.parentOrgan.parentOrgan.parentOrgan.orgName+"/"+obj.parentOrgan.parentOrgan.orgName+"/"+obj.parentOrgan.orgName+"/"+obj.orgName
     };
 }
 

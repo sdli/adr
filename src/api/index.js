@@ -33,11 +33,26 @@ app.post("/countryList",apis.countryList);
 // 加载镇级别报告
 app.post("/countryReport",apis.countryReport);
 
-// 加载镇级别报告
+// 加载村别报告
 app.post("/villageReport",apis.villageReport);
+
+// 加载儿童详情
+app.post("/getChildDetails",apis.getChildDetails);
 
 // 加载验证码
 app.get('/img',apis.loadImg);
+
+// 审核报告接口
+app.post("/shenhe",function(req,res,next){
+    apis.shenhe(req,res,{
+        action:req.body.action,
+        applyId:req.body.applyId,
+        level:req.body.level,
+        operatorId:req.body.operatorId,
+        remark:req.body.remark
+      }
+    );
+});
 
 // 监听端口
 app.listen(port,apis.listen);

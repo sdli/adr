@@ -45,10 +45,18 @@ class IndexPage extends React.Component{
   render(){
     if(this.props.login.status === false) return null;
     const path = (typeof this.props.location.pathname !== "undefined")?this.props.location.pathname.split('\/'):["","/"];
+    const {dispatch} = this.props;
     return (
       <Layout
         type="leftSider"
-        header={<Header navList={this.state.navList} userInfo={1} handleLogout={this.onLogout} />}
+        header={<Header 
+          navList={this.state.navList} 
+          userInfo={this.props.login.loginData} 
+          handleLogout={this.onLogout} 
+          dispatch={dispatch}
+          changePassword={this.props.data.changePassword}
+          />
+        }
         footer={<Footer />}
         menuList={<MenuList menuList={this.state.menuList} mode={this.state.mode} collapsed={this.state.collapsed} />}
         mode={this.state.mode}
@@ -65,4 +73,4 @@ class IndexPage extends React.Component{
 
 IndexPage.propTypes = {};
 
-export default connect(({login,loading})=>{return {login,loading};})(IndexPage);
+export default connect(({login,data,loading})=>{return {login,data,loading};})(IndexPage);

@@ -55,17 +55,18 @@ export default {
       tel: "",
       alert: 'none',
       loading: false,
-      status: false
+      status: false,
+      loginData:{}
     },
   reducers: {
-    loginOK(state) {
-      return {status:true,alert:"none"};
+    loginOK(state,{loginData}) {
+      return {...state,status:true,alert:"none",loginData:loginData};
     },
-    loginFail(){
-      return {alert: 'block'};
+    loginFail(state){
+      return {...state,alert: 'block'};
     },
-    loginWaiting(){
-      return {alert: 'none'};
+    loginWaiting(state){
+      return {...state,alert: 'none'};
     }
   },
   effects: {
@@ -73,7 +74,7 @@ export default {
         const data = yield call(LoginFetch.login,loginInfo);
         console.log(data,"用户登录信息");
         if(data){
-           yield put({ type: 'loginOK'});
+           yield put({type: 'loginOK',loginData:data.data.data});
            yield put(routerRedux.push('/data/'+data.data.data.orgId));
         }else{
            yield put({ type: 'loginFail'});
@@ -82,10 +83,9 @@ export default {
     *getAuth({pathname},{put,call}){
         try{
           const auth = yield call(LoginFetch.check);
-          console.log("检测到auth，",auth,pathname);
           if(!auth){yield put(routerRedux.push("/login"));}
           else{
-            yield put({type:"loginOK"});
+            yield put({type:"loginOK",loginData:auth});
             if(pathname === "/"){
               yield put(routerRedux.push("/data/"+ auth.orgId));
             }

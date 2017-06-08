@@ -35,8 +35,9 @@ export default {
                                 type={type}
                                 onClick={
                                     function(){
-                                        console.log(buttonOptions.href+"/"+record.orgId);
-                                        hashHistory.push(buttonOptions.href+"/"+record.orgId);
+                                        const link = (typeof record.orgId !== "undefined")?record.orgId:record.childId;
+                                        const bindLink = buttonOptions.href+"/"+link;
+                                        hashHistory.push(bindLink);
                                     }
                             }>
                                 {textChange}

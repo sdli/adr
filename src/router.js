@@ -6,6 +6,7 @@ import ErrorPage from "./routes/ErrorPage";
 import Contents from "./components/content/";
 import CountryContent from "./routes/CountryPage";
 import IndexContent from "./routes/IndexContentPage";
+import DetailsContent from "./routes/DetailsPage";
 
 function RouterConfig({ history }) {
   return (
@@ -13,8 +14,12 @@ function RouterConfig({ history }) {
       <Router path="/" />
       <Router path="/data/:id" component={IndexPage}>
           <IndexRoute component={IndexContent} />
-          <Route path="/country/:cid" component={CountryContent} />
-          <Route path="/details/:did" component={Contents.detailsContent} />
+      </Router>
+      <Router path="/country/:id" component={IndexPage}>
+          <IndexRoute component={CountryContent} />
+      </Router>
+      <Router path="/details/:id" component={IndexPage}>
+          <IndexRoute component={DetailsContent} />
       </Router>
       <Route path="/login" component={LoginPage} />
       <Route path="/error" component={ErrorPage} />

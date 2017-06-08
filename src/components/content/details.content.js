@@ -1,10 +1,12 @@
-import { Icon,Button,Select,Cascader,Modal,Breadcrumb,Steps,Popover} from 'antd';
+import { Icon,Button,Select,Cascader,Modal,Breadcrumb,Steps,Popover,Layout} from 'antd';
 import styles from "./content.less";
 import IndexTable from "../tables/index.table";
 import DetailWells from "../well/details.well";
 import QueueAnim from 'rc-queue-anim';
 import React from "react";
 import {hashHistory} from "react-router";
+import FixedBottom from "../well/feedBack.well";
+
 const Step = Steps.Step;
 
 const ExportModal = function({handleOk,visible,handleCancel,confirmLoading}){
@@ -21,26 +23,21 @@ const ExportModal = function({handleOk,visible,handleCancel,confirmLoading}){
     );
 };
 
-const StepsDiv = function(){
+const StepsDiv = function({current,status,descriptions}){
     const customDot = (dot, { status, index }) => (
         <Popover content={<span>step {index} status: {status}</span>}>
             {dot}
         </Popover>);
 
     return (
-        <Steps current={1} status="success">
-            <Step title="村/社区" description="采集完成" />
-            <Step title="乡镇/街道" description="审核通过" />
-            <Step title="县/区" description="待审核" />
-            <Step title="市" description="待审核" />
+        <Steps current={current} status={status}>
+            <Step title="村/社区" description={descriptions.villageStatus.text} />
+            <Step title="乡镇/街道" description={descriptions.townStatus.text} />
+            <Step title="县/区" description={descriptions.countyStatus.text} />
+            <Step title="市" description={descriptions.cityStatus.text} />
         </Steps>
     );
 }
-
-const UserData = {
-    name:"王小贱",
-    id:"12398179709797234"
-};
 
 class DetailsContent extends React.Component{
     constructor(props){
@@ -67,7 +64,45 @@ class DetailsContent extends React.Component{
     goCountryPage=()=>{
         hashHistory.goBack();
     }
+    getCurrentStep=(obj)=>{
+        let step = 0;
+        let status = "";
+        let text = "";
+        let tempStatus = "";
+        let descriptions={};
+        for(let x in obj){
+            switch (obj.x){
+                case 1: status = "wait"; text="待审核";break;
+                case 2: status = "process"; text="已提交";break;
+                case 3: status = "process"; text="审核中";break;
+                case 4: status = "error"; text="被驳回";break;
+                case 5: status = "finish"; text="已通过";break;
+                default: status = "error"; text="被驳回";
+            }
+            descriptions[x] = {status:status,text:text};
+            if(obj.x != 1){step++;}else{tempStatus=status;}
+        }
+        return {
+            step: step,
+            status: tempStatus,
+            descriptions: descriptions
+        };
+    }
+    componentDidMount(){
+        this.props.dispatch({type:"data/getChildDetails",childId:this.props.id});
+    }
+
+    shenheHandler = (action)=>{
+        const applyId = this.props.id;
+        const dispatch = this.props.dispatch;
+        return function(remark){
+            dispatch({type:"data/shenhe",action:action,applyId:applyId,remark:remark});
+        }
+    }
     render(){
+        const {childDetails} = this.props;
+        const {villageStatus,townStatus,countyStatus,cityStatus} = childDetails;
+        const status = this.getCurrentStep({villageStatus,townStatus,countyStatus,cityStatus});
         return (
             <div>
                 <div className={styles.aboveFunctions} key="1">
@@ -89,16 +124,19 @@ class DetailsContent extends React.Component{
                     </div>
                 </div>
                 <div style={{padding:"32px 20%"}}>
-                    <StepsDiv />
+                    <StepsDiv current={status.step} status={status.status} descriptions={status.descriptions}/>
                 </div>
                 <QueueAnim delay={200}>
                     <div style={{padding:"16px 15%"}} key="2">
                         <DetailWells 
-                            {...UserData}
+                            {...childDetails}
                         />
                     </div>
                 </QueueAnim>
                 <ExportModal  handleOk={this.handleOk} visible={this.state.visible} handleCancel={this.handleCancel}/>
+                <Layout style={{width:"100%",marginTop:"36px",marginBottom:"64px",overflow:"hidden"}}>
+                    <FixedBottom key="1" shenheHandler={this.shenheHandler}/>    
+                </Layout>
            </div>
         );
     }

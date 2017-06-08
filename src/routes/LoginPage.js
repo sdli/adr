@@ -7,7 +7,6 @@ import Footer from "../components/footer";
 
 function IndexPage({dispatch,login,loading}) {
 
-  console.log(loading);
   const handleSubmit = (values) => {
     dispatch({type:"login/login",loginInfo:values});
   }

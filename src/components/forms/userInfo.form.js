@@ -3,30 +3,6 @@ import React , {Component} from "react";
 const FormItem = Form.Item;
 const Option = Select.Option;
 
-const residences = [{
-  value: 'guangdong',
-  label: "广东省",
-  children: [{
-    value: 'shenzhen',
-    label: '深圳市',
-    children: [{
-      value: 'nanshan',
-      label: '南山区',
-    }],
-  }],
-}, {
-  value: 'shandong',
-  label: '山东省',
-  children: [{
-    value: 'dezhou',
-    label: '德州市',
-    children: [{
-      value: 'pingyuan',
-      label: '平原县',
-    }],
-  }],
-}];
-
 class RegistrationForm extends Component {
   state = {
     autoCompleteResult: [],
@@ -44,19 +20,11 @@ class RegistrationForm extends Component {
 
   checkPassword = (rule, value, callback) => {
     const form = this.props.form;
-    if (value && value !== form.getFieldValue('password')) {
-      callback('Two passwords that you enter is inconsistent!');
+    if (value && value !== form.getFieldValue('passwordnew1')) {
+      callback('两次密码不一致！');
     } else {
       callback();
     }
-  }
-
-  checkConfirm = (rule, value, callback) => {
-    const form = this.props.form;
-    if (value ) {
-      form.validateFields(['confirm'], { force: true });
-    }
-    callback();
   }
 
   handleWebsiteChange = (value) => {
@@ -69,10 +37,22 @@ class RegistrationForm extends Component {
     this.setState({ autoCompleteResult });
   }
 
+  componentWillUpdate(nextProps,nextState){
+      if(nextProps.changePassword){
+        this.props.form.validateFieldsAndScroll((err, values) => {
+          if (!err) {
+            console.log('Received values of form: ', values);
+          }
+        });
+        this.props.dispatch({type:"data/closeChangePassword"});
+      }
+  }
+
   render() {
     const { getFieldDecorator } = this.props.form;
     const { autoCompleteResult } = this.state;
-
+    const { phone,changePassword} = this.props;
+    console.log(this.props);
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -111,21 +91,26 @@ class RegistrationForm extends Component {
           >
             {getFieldDecorator('phone', {
               rules: [{ required: true, message: '请输入电话号码' }],
+              initialValue: phone
             })(
-              <Input addonBefore={prefixSelector} />
+              <Input addonBefore={prefixSelector} disabled />
             )}
         </FormItem>
         <FormItem
           {...formItemLayout}
           label={(
             <span>
-              初始密码：
+              初始密码
             </span>
           )}
           hasFeedback
         >
-          {getFieldDecorator('password', {
-            rules: [{ required: true, message: '请输入密码', whitespace: true }],
+          {getFieldDecorator('passwordold', {
+            rules: [
+              { required: true, message: '请输入密码', whitespace: true },
+              { max:16,message:"最大不超过16位",whitespace: true},
+              { min:6,message:"最低不能少于8位"}            
+            ],
           })(
             <Input />
           )}
@@ -134,15 +119,39 @@ class RegistrationForm extends Component {
           {...formItemLayout}
           label={(
             <span>
-              修改密码：
+              修改密码
             </span>
           )}
           hasFeedback
         >
-          {getFieldDecorator('password', {
-            rules: [{ required: true, message: '请输入密码', whitespace: true }],
+          {getFieldDecorator('passwordnew1', {
+            rules: [
+              { required: true, message: '请输入密码', whitespace: true },
+              { max:16,message:"最大不超过16位",whitespace: true},
+              { min:6,message:"最低不能少于8位"}
+            ],
           })(
-            <Input />
+            <Input type={"password"} />
+          )}
+        </FormItem>
+        <FormItem
+          {...formItemLayout}
+          label={(
+            <span>
+              再次输入
+            </span>
+          )}
+          hasFeedback
+        >
+          {getFieldDecorator('passwordnew2', {
+            rules: [
+              { required: true, message: '请输入密码', whitespace: true },
+              { max:16,message:"最大不超过16位",whitespace: true},
+              { min:6,message:"最低不能少于8位"},
+              {validator:this.checkPassword}
+            ],
+          })(
+            <Input type={"password"}/>
           )}
         </FormItem>
       </Form>

@@ -10,7 +10,6 @@ function onChange(value) {
 }
 
 function CityPicker({options,defaultValues,defaultAreaInput}){
-    console.log(defaultAreaInput,"看到了这个");
     return(
         <Cascader options={options} onChange={onChange} size="small" style={{width:"300px"}} >
             <Input
@@ -33,14 +32,15 @@ class countryContent extends React.Component{
     }
     componentDidMount(){
         this.props.dispatch({type:"data/getVillageList",orgId:this.props.id});
-        this.props.dispatch({type:"data/getCountryReport",orgId:this.props.id});
+        this.props.dispatch({type:"data/getVillageReport",orgId:this.props.id});
     }
     render(){
-        const {defaultValues,options,defaultInput,villageList} = this.props;
+        const {defaultValues,options,defaultInput,villageReport} = this.props;
+        console.log(villageReport);
         return (
             <div>
                 <div className={styles.aboveFunctions}>
-                    <span>当前地区：</span>
+                    <span style={{float:"left"}}>当前地区： </span>
                     {options && <CityPicker options={options} defaultValue={defaultValues} defaultAreaInput={defaultInput} />}                    <div style={{float:"right"}}>
                         <Button type="primary" icon="download">
                             导出表格
@@ -49,7 +49,7 @@ class countryContent extends React.Component{
                 </div>
                 <QueueAnim delay={200}>
                     <div style={{padding:"16px 0"}} key="1">
-                        <CountryTable data={villageList} />
+                        <CountryTable data={villageReport} />
                     </div>
                 </QueueAnim>
             </div>

@@ -25,15 +25,6 @@ export default function({components,param}){
                            {components.children}
                         </Content>
                     </Layout>
-                    {param.path=="details" &&
-                        <Layout style={{position:"fixed",height:"98px",width:"100%",bottom:0,right:0,paddingLeft:!param.collapsed?216:80,overflow:"hidden"}}>
-                            {
-                                <QueueAnim delay={500} type={['bottom', 'top']} leaveReverse>
-                                    <FixedBottom key="1" />    
-                                </QueueAnim>
-                            }
-                        </Layout>
-                    }
                 </Layout>
                 <Footer>{components.footer}</Footer>
             </Layout>
