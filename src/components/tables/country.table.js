@@ -60,11 +60,13 @@ const classes = {
     column: "countryColumn",
     func: "functionColumn"
 };
-const FinalOptions = tableUtils.filterWithClassName(columns,classes,buttonOptions);
+const FinalOptions = function(level){
+  return tableUtils.filterWithClassName(columns,classes,buttonOptions,level);
+}
 
-const CountryTable = function({data}){
+const CountryTable = function({data,level}){
   return (<Table
-    columns={FinalOptions}
+    columns={FinalOptions(level)}
     dataSource={data}
     size="small"
     pagination={{

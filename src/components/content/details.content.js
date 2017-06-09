@@ -65,29 +65,27 @@ class DetailsContent extends React.Component{
         hashHistory.goBack();
     }
     getCurrentStep=(obj)=>{
-        let step = 0;
-        let status = "";
-        let text = "";
-        let tempStatus = "";
-        let descriptions={};
+        let step = 1;
         for(let x in obj){
-            switch (obj.x){
-                case 1: status = "wait"; text="待审核";break;
-                case 2: status = "process"; text="已提交";break;
-                case 3: status = "process"; text="审核中";break;
-                case 4: status = "error"; text="被驳回";break;
-                case 5: status = "finish"; text="已通过";break;
-                default: status = "error"; text="被驳回";
+            if(obj.x == 3 && obj.x==4){
+                return step;
+            }else{
+                step++;
             }
-            descriptions[x] = {status:status,text:text};
-            if(obj.x != 1){step++;}else{tempStatus=status;}
         }
-        return {
-            step: step,
-            status: tempStatus,
-            descriptions: descriptions
-        };
+        return 4;
     }
+    getStepStatus=(obj)=>{
+        switch(step){
+            case 1: return 
+        }
+    }
+    getStatusFilter=(status)=>{
+        switch(status){
+            case 1: return "";
+        }
+    }
+
     componentDidMount(){
         this.props.dispatch({type:"data/getChildDetails",childId:this.props.id});
     }
@@ -100,9 +98,9 @@ class DetailsContent extends React.Component{
         }
     }
     render(){
-        const {childDetails} = this.props;
+        const {childDetails,level} = this.props;
         const {villageStatus,townStatus,countyStatus,cityStatus} = childDetails;
-        const status = this.getCurrentStep({villageStatus,townStatus,countyStatus,cityStatus});
+        const step = this.getCurrentStep({villageStatus,townStatus,countyStatus,cityStatus});
         return (
             <div>
                 <div className={styles.aboveFunctions} key="1">
@@ -124,7 +122,7 @@ class DetailsContent extends React.Component{
                     </div>
                 </div>
                 <div style={{padding:"32px 20%"}}>
-                    <StepsDiv current={status.step} status={status.status} descriptions={status.descriptions}/>
+                    <StepsDiv current={status} status={status.status} descriptions={status.descriptions}/>
                 </div>
                 <QueueAnim delay={200}>
                     <div style={{padding:"16px 15%"}} key="2">

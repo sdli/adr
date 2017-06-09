@@ -35,7 +35,7 @@ class countryContent extends React.Component{
         this.props.dispatch({type:"data/getVillageReport",orgId:this.props.id});
     }
     render(){
-        const {defaultValues,options,defaultInput,villageReport} = this.props;
+        const {defaultValues,options,defaultInput,villageReport,level} = this.props;
         console.log(villageReport);
         return (
             <div>
@@ -49,7 +49,7 @@ class countryContent extends React.Component{
                 </div>
                 <QueueAnim delay={200}>
                     <div style={{padding:"16px 0"}} key="1">
-                        <CountryTable data={villageReport} />
+                        <CountryTable data={villageReport} level={level}/>
                     </div>
                 </QueueAnim>
             </div>

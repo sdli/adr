@@ -1,8 +1,18 @@
 import {Tooltip,Button} from "antd";
 import { hashHistory } from 'react-router';
 
+const getButtonType=function(status){
+    switch(status){
+        case "1":return "dash";
+        case "2":return "default";
+        case "3":return "primary";
+        case "4":return "danger";
+        case "5":return "default";
+        default: return "default";
+    }
+}
 export default {
-    filterWithClassName:function(arr,className,buttonOptions){
+    filterWithClassName:function(arr,className,buttonOptions,level=null){
         return arr.map((val,index)=>{
             if(val.key!="code" && val.key!="status"){
                 val.className = className.column;
@@ -23,10 +33,10 @@ export default {
                     val.render = function(text,record,index){
                         let textChange = "";
                         let type="";
-                        switch (record.status){
-                            case "1": textChange = "待审核";type="primary";break;
-                            case "2": textChange = "已通过";type="dashed";break;
-                            case "3": textChange = "已驳回";type="danger";break;
+                        switch (level){
+                            case 1: textChange = record.cityStatusTitle;type=getButtonType(record.cityStatus);break;
+                            case 2: textChange = record.countyStatusTitle;type=getButtonType(record.countyStatus);break;
+                            case 3: textChange = record.townStatusTitle;type=getButtonType(record.townStatus);break;
                             default: textChange= "查看";type="default";break;
                         }
                         return (
