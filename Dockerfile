@@ -1,5 +1,5 @@
 FROM node:latest  
-MAINTAINER me@yanbingbing.com
+MAINTAINER lisd199001@gmail.com
 
 
 COPY . /data/noderoot/adr  
