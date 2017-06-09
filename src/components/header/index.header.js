@@ -3,7 +3,7 @@ import styles from "./header.less";
 import configs from "../../utils/configs";
 import HeaderUserInfo from "./userInfo.header";
 
-const Header = function({navList,userInfo,handleLogout,dispatch,changePassword}){
+const Header = function({navList,userInfo,handleLogout,dispatch,changePassword,alertMsg}){
     return (
         <div id="header">
             <div className={styles.logo} >
@@ -13,7 +13,7 @@ const Header = function({navList,userInfo,handleLogout,dispatch,changePassword})
                 theme="dark"
                 mode="horizontal"
                 defaultSelectedKeys={['1']}
-                style={{ lineHeight: '48px',marginLeft:"30%",height:"50px" }}
+                style={{ lineHeight: '48px',marginLeft:"200px",height:"50px" }}
                 id="navBar"
             >
                 {navList.map((val,index)=>{
@@ -22,7 +22,7 @@ const Header = function({navList,userInfo,handleLogout,dispatch,changePassword})
                     );
                 })}
             </Menu>
-            <HeaderUserInfo userInfo={userInfo} handleLogout={handleLogout} dispatch={dispatch} changePassword={changePassword}/>
+            <HeaderUserInfo userInfo={userInfo} handleLogout={handleLogout} dispatch={dispatch} changePassword={changePassword} alertMsg={alertMsg}/>
         </div>
     );
 }

@@ -88,6 +88,7 @@ const InitFetch = function(met,url,vali) {
                 }
             }
             if(method.toLowerCase() == "post"){
+                console.log(initData);
                 request.post(Object.assign({body:JSON.stringify(initData)},{
                     headers: {
                         "Content-type": "application/json",
@@ -96,6 +97,7 @@ const InitFetch = function(met,url,vali) {
                     url: url
                 }),function(err,response,body){
                     let result = JSON.parse(body);
+                    console.log(result);
                     if(result.code == "200"){
                         if(validator){
                             validator(result,req,res);
@@ -219,6 +221,7 @@ const funcs = {
     villageReport: fetchUrl("get","villageReport"),
     getChildDetails: fetchUrl("get","getChildDetails"),
     shenhe: fetchUrl("post","shenhe"),
+    changePassword: fetchUrl("post","changePassword"),
     loginStart: loginStart,
     initFetch: InitFetch,
     loadAuth: loadAuth,

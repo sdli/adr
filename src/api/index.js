@@ -39,6 +39,18 @@ app.post("/villageReport",apis.villageReport);
 // 加载儿童详情
 app.post("/getChildDetails",apis.getChildDetails);
 
+// 修改密码
+app.post("/changePassword",function(req,res,next){
+      apis.changePassword(req,res,
+          {
+            "newPwd": req.body.passwordnew1,
+            "newPwdConfirm": req.body.passwordnew2,
+            "oldPwd": req.body.passwordold,
+            "userId": req.body.userId
+          }
+      );
+});
+
 // 加载验证码
 app.get('/img',apis.loadImg);
 

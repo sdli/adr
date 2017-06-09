@@ -12,7 +12,8 @@ const config = {
             countryReport: "/api/report/applyReportList/",
             villageReport: "/api/roster/datlstsbyorgid",
             getChildDetails: "/api/roster/detail",
-            shenhe:"/api/audit/audit"
+            shenhe:"/api/audit/audit",
+            changePassword:"/api/user/modifyPwd"
         },
         reloadResponse:{
             code:0,

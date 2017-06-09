@@ -5,6 +5,7 @@ import Header from "../components/header/index.header";
 import Content from "../components/content/index.content";
 import Footer from "../components/footer";
 import MenuList from "../components/menu/index.menu";
+import {message} from "antd";
 
 class IndexPage extends React.Component{
   constructor(props){
@@ -14,11 +15,7 @@ class IndexPage extends React.Component{
       collapsed: false,
       mode: "inline",
       height: 640,
-      menuList:[
-        {text:"地区（街道）列表",icon:"contacts",link:"/"},
-        {text:"人员列表",icon:"flag",link:"/country/all"},
-      ],
-      navList:["资料审核","资料审核","账户信息"]
+      navList:["资料审核"]
     }
   }
   onCollapse = (collapsed) => {
@@ -42,10 +39,42 @@ class IndexPage extends React.Component{
       });
   }
 
+  componentWillReceiveProps(nextProps){
+    console.log(nextProps.data.changePasswordMessageAlert,"检查data");
+    if(nextProps.data.changePasswordMessageAlert && nextProps.data.changePasswordMessageAlert != this.props.data.changePasswordMessageAlert){
+        switch(nextProps.data.changePasswordMessageType){
+          case "success":
+            message.success(nextProps.data.changePasswordMessageText);
+            const logout = this.onLogout;
+            setTimeout(function(){logout();},1000);
+            break;
+          case "error":
+            message.error(nextProps.data.changePasswordMessageText);
+            break;
+          default:
+            return true;
+        }
+        this.props.dispatch({type:"data/closeMessage",alertType:"changePassword"});
+    }
+    return true;
+  }
+
+  getMenuLink = (loginData)=>{
+    switch(loginData.orgLevel){
+      case 1: return "/city/"+loginData.orgId;
+      case 2: return "/area/"+loginData.orgId;
+      case 3: return "/data/"+loginData.orgId;
+      default: return "/";
+    }
+  }
+  
   render(){
     if(this.props.login.status === false) return null;
     const path = (typeof this.props.location.pathname !== "undefined")?this.props.location.pathname.split('\/'):["","/"];
     const {dispatch} = this.props;
+    const menuList=[
+        {text:"总列表",icon:"contacts",link:this.getMenuLink(this.props.login.loginData)}
+    ];
     return (
       <Layout
         type="leftSider"
@@ -58,7 +87,7 @@ class IndexPage extends React.Component{
           />
         }
         footer={<Footer />}
-        menuList={<MenuList menuList={this.state.menuList} mode={this.state.mode} collapsed={this.state.collapsed} />}
+        menuList={<MenuList menuList={menuList} mode={this.state.mode} collapsed={this.state.collapsed} />}
         mode={this.state.mode}
         collapsed={this.state.collapsed}
         onCollapse={this.onCollapse}

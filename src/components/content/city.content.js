@@ -1,6 +1,6 @@
 import { Icon,Button,Select,Cascader,Modal,Input } from 'antd';
 import styles from "./content.less";
-import IndexTable from "../tables/index.table";
+import IndexTable from "../tables/city.table";
 import QueueAnim from 'rc-queue-anim';
 import React from "react";
 
@@ -72,7 +72,7 @@ class indexContent extends React.Component{
         return (
             <div>
                 <div className={styles.aboveFunctions} key="1">
-                    <span style={{float: "left"}}>当前乡镇/街道：</span>
+                    <span style={{float: "left"}}>当前市/地区：</span>
                     {options && <CityPicker options={options} defaultValue={defaultValues} defaultAreaInput={defaultInput} />}
                     <div style={{float:"right"}}>
                         <Button type="primary" icon="download" onClick={this.handleExport}>

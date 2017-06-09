@@ -14,7 +14,7 @@ const ExportModal = function({phone,visible,handleCancel,handleOk,changePassword
             <UserForm 
                 phone={phone} 
                 changePassword={changePassword} 
-                dispatch={dispatch} 
+                dispatch={dispatch}
             />
         </Modal>
     );
@@ -51,7 +51,7 @@ class UserInfo extends Component{
         });
     }
     render(){
-        const {userInfo,handleLogout,dispatch,changePassword} =this.props;
+        const {userInfo,handleLogout,dispatch,changePassword,alertMsg} =this.props;
         console.log(userInfo,'header中的userInfo');
         const text="用户信息";
         const content = (

@@ -40,7 +40,7 @@ class countryContent extends React.Component{
         return (
             <div>
                 <div className={styles.aboveFunctions}>
-                    <span style={{float:"left"}}>当前地区： </span>
+                    <span style={{float:"left"}}>当前村/社区： </span>
                     {options && <CityPicker options={options} defaultValue={defaultValues} defaultAreaInput={defaultInput} />}                    <div style={{float:"right"}}>
                         <Button type="primary" icon="download">
                             导出表格

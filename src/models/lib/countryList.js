@@ -5,6 +5,8 @@ const countryList = function(obj){
     }else{
         console.log(obj.orgLevel);
         switch (parseInt(obj.orgLevel)){
+            case 1: return changeIntoLevel1(obj);
+            case 2: return changeIntoLevel2(obj);
             case 3: return changeIntoLevel3(obj);
             case 4: return changeIntoLevel4(obj);
             default : return changeIntoLevel3(obj);
@@ -12,6 +14,27 @@ const countryList = function(obj){
     }
 }
 
+const changeIntoLevel1 = function(obj){
+        let tempProObj = {
+            value: "henan",
+            label: "河南省",
+            children:[
+                {
+                    value: obj.orgId,
+                    label: obj.orgName 
+                }
+            ]
+        };
+
+        return {
+            options: [tempProObj],
+            defaultValues: [
+                "henan",
+                obj.orgId,
+            ],
+            defaultInput: "河南省"+"/"+obj.orgName
+        };
+}
 const changeIntoLevel3 = function(obj){
     let tempProObj = {
         value: "henan",
@@ -44,6 +67,35 @@ const changeIntoLevel3 = function(obj){
     };
 };
 
+const changeIntoLevel2= function(obj){
+    let tempProObj = {
+        value: "henan",
+        label: "河南省",
+        children:[
+            {
+                value: obj.parentOrgan.orgId,
+                label: obj.parentOrgan.orgName,
+                children:[
+                    {
+                        value: obj.orgId,
+                        label: obj.orgName
+                    }
+
+                ] 
+            }
+        ]
+    };
+
+    return {
+        options: [tempProObj],
+        defaultValues: [
+            "henan",
+            obj.parentOrgan.orgId,
+            obj.orgId,
+        ],
+        defaultInput: "河南省"+"/"+obj.parentOrgan.orgName+"/"+ obj.orgName
+    };
+}
 const changeIntoLevel4 = function(obj){
     let tempProObj = {
         value: "henan",
@@ -89,3 +141,4 @@ const changeIntoLevel4 = function(obj){
 }
 
 export default countryList;
+

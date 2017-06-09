@@ -3,6 +3,7 @@ import request from "../utils/request";
 import objToQuery from '../utils/objToQuery';
 import configs from "../utils/configs";
 import countryList from "./lib/countryList";
+import {message} from "antd";
 
 const dataFetch = {
   countryList: function*(organId){
@@ -66,26 +67,51 @@ const dataFetch = {
             body:"action="+action+"&operatorId="+operatorId+"&applyId="+applyId+"&remark="+remark,
             credentials: 'include'
         });
-        console.log(data,"获取儿童信息");
+        console.log(data,"获取审核信息");
         return data.data.code == "200"?data:false;  
-  }
+  },changePassword: function*(pwdInfo){
+        let data = yield request("/api/changePassword",{
+          method: "POST",
+          headers:{
+                "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" 
+          },
+          body: objToQuery(pwdInfo),
+          credentials: "include"
+        });
+        console.log(data);
+        switch(parseInt(data.data.code)){
+            case 200: return true;
+            case 0: return false;
+            default: return false;
+        }
+    }
 };
 
+const messageHandler = function({type,msg}){
+    switch(type){
+        case "success": message.success(msg); break;
+        case "error": message.error(msg);break;
+        default: message.error(msg);break;
+    }
+};
 export default {
   namespace: 'data',
   state: {
-      organId: "",
-      organLevel: "",
-      areaOptions : {},
-      defaultAreaValues: {},
-      defaultAreaInput: "",
-      countryReport: [],
-      villageOptions: {},
-      defaultVillageValues: {},
-      defaultVillageInput: "",
-      villageReport: [],
-      childDetails:{},
-      changePassword: false
+        organId: "",
+        organLevel: "",
+        areaOptions : {},
+        defaultAreaValues: {},
+        defaultAreaInput: "",
+        countryReport: [],
+        villageOptions: {},
+        defaultVillageValues: {},
+        defaultVillageInput: "",
+        villageReport: [],
+        childDetails:{},
+        changePassword: false,
+        changePasswordMessageAlert:false,
+        changePasswordMessageType: "",
+        changePasswordMessageText: ""
     },
   reducers: {
     updateCountryList(state,{data}){
@@ -133,6 +159,38 @@ export default {
             ...state,
             changePassword: false
         }
+    },
+    giveMessage(state,{alertType,msgType,msgText}){
+        switch (alertType){
+            case "changePassword": 
+                return{
+                    ...state,
+                    changePasswordMessageAlert:true,
+                    changePasswordMessageType: msgType,
+                    changePasswordMessageText: msgText
+                };
+            default:
+                return{
+                    ...state,
+                    changePasswordMessageAlert:true,
+                    changePasswordMessageType: msgType,
+                    changePasswordMessageText: msgText
+                };
+        }
+    },
+    closeMessage(state,{alertType}){
+        switch (alertType){
+            case "changePassword":
+                return{
+                    ...state,
+                    changePasswordMessageAlert:false
+                }
+            default:
+                return{
+                    ...state,
+                    changePasswordMessageAlert:false
+                }
+        }
     }
   },
   effects: {
@@ -161,6 +219,17 @@ export default {
         const operatorId = yield select(state=>state.login.loginData.id);
         const result = yield call(dataFetch.shenhe,{action,remark,applyId,operatorId});
         console.log(result);
+    },
+    *changePasswordEffect({passwordold,passwordnew1,passwordnew2},{select,put,call}){
+        const userId = yield select(state=>state.login.loginData.id);
+        const pwdInfo = {passwordold,passwordnew1,passwordnew2,userId};
+        console.log(pwdInfo,"修改密码");
+        const changeResult = yield call(dataFetch.changePassword,pwdInfo);
+        if(changeResult){
+            yield put({type:"giveMessage",alertType:"changePassword",msgType:"success",msgText:"修改成功,请重新登录"});
+        }else{
+            yield put({type:"giveMessage",alertType:"changePassword",msgType:"error",msgText:"修改失败，请检查密码！"});
+        }
     }
   }
 };

@@ -75,7 +75,12 @@ export default {
         console.log(data,"用户登录信息");
         if(data){
            yield put({type: 'loginOK',loginData:data.data.data});
-           yield put(routerRedux.push('/data/'+data.data.data.orgId));
+           switch (data.data.data.orgLevel){
+             case 1: yield put(routerRedux.push('/city/'+data.data.data.orgId));break;
+             case 2: yield put(routerRedux.push('/area/'+data.data.data.orgId));break;
+             case 3: yield put(routerRedux.push('/data/'+data.data.data.orgId));break;
+             default: return null;
+           }
         }else{
            yield put({ type: 'loginFail'});
         }
@@ -95,7 +100,6 @@ export default {
         }
     },
     *checkAuthLogin({},{put,call,select}){
-        console.log("进行登录页验证");
         const auth = yield call(LoginFetch.check);
         if(auth) yield put(routerRedux.push("/data/"+auth.orgId));
     },

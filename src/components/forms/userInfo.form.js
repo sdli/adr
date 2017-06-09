@@ -17,7 +17,6 @@ class RegistrationForm extends Component {
     });
   }
 
-
   checkPassword = (rule, value, callback) => {
     const form = this.props.form;
     if (value && value !== form.getFieldValue('passwordnew1')) {
@@ -37,21 +36,23 @@ class RegistrationForm extends Component {
     this.setState({ autoCompleteResult });
   }
 
-  componentWillUpdate(nextProps,nextState){
-      if(nextProps.changePassword){
+  componentWillReceiveProps(nextProps){
+      console.log(nextProps,"检查props");
+      if(typeof nextProps.changePassword !=="undefined" && nextProps.changePassword && nextProps.changePassword != this.props.changePassword ){
         this.props.form.validateFieldsAndScroll((err, values) => {
           if (!err) {
-            console.log('Received values of form: ', values);
+            this.props.dispatch({type:"data/closeChangePassword"});
+            console.log(values);
+            this.props.dispatch({type:"data/changePasswordEffect",...values});
           }
         });
-        this.props.dispatch({type:"data/closeChangePassword"});
       }
   }
 
   render() {
     const { getFieldDecorator } = this.props.form;
     const { autoCompleteResult } = this.state;
-    const { phone,changePassword} = this.props;
+    const { phone} = this.props;
     console.log(this.props);
     const formItemLayout = {
       labelCol: {

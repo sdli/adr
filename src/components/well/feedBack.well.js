@@ -25,7 +25,7 @@ class FeedBack extends Component{
                         <Input 
                             placeholder="请输入评语" 
                             style={{height:"82px",width:"100%"}} 
-                            ref={(input) => { this.textInput = input; }} />
+                            ref={(input) => { this.textInput = input; }}
                         />
                     </Col>
                     <Col span={4}>
