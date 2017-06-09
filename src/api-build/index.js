@@ -1,5 +1,7 @@
 "use strict";
 
+require("babel-polyfill");
+
 var _express = require("express");
 
 var _express2 = _interopRequireDefault(_express);
@@ -16,110 +18,77 @@ var _expressSession = require("express-session");
 
 var _expressSession2 = _interopRequireDefault(_expressSession);
 
-var _captchapng = require("captchapng");
-
-var _captchapng2 = _interopRequireDefault(_captchapng);
-
 var _cookieParser = require("cookie-parser");
 
 var _cookieParser2 = _interopRequireDefault(_cookieParser);
 
+var _lib = require("./lib/");
+
+var _lib2 = _interopRequireDefault(_lib);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+// express库
 var app = new _express2.default();
 var port = _configs2.default.apiPort;
+
+// 配置传输session和cookie
 app.use((0, _cookieParser2.default)());
 app.use((0, _expressSession2.default)({
-    secret: 'sessiontest',
-    resave: true,
-    saveUninitialized: false,
-    cookie: { secure: false }
-}));
+  secret: 'sessiontest',
+  resave: true,
+  saveUninitialized: false,
+  cookie: { secure: false //不设置过期时间
+  } }));
 
+//配置解析工具
 app.use(_bodyParser2.default.urlencoded({ extended: false }));
 
-// setResponse(app);
-app.post('/login', function (req, res, next) {
-    var sess = req.session;
-    var username = req.body.username;
-    var password = req.body.password;
-    if (sess.count) {
-        sess.count++;
-    } else {
-        sess.count = 1;
-    }
-    if (username == '123' && password == '123') {
+// 登录接口
+app.post('/login', _lib2.default.loginStart);
 
-        var result = {
-            status: 1,
-            code: '1',
-            msg: 'succ',
-            count: sess.count
-        };
-        sess.status = 1;
-        sess.username = username;
-        res.setHeader("Content-Type", "application/json");
-        res.json(result);
-        sess.save();
-    } else {
-        var _result = {
-            status: 0,
-            code: '0',
-            msg: 'fail',
-            count: sess.count,
-            username: username
-        };
-        sess.status = 0;
-        res.setHeader("Content-Type", "application/json");
-        res.json(_result);
-    }
+// 加载权限
+app.post('/loadAuth', _lib2.default.loadAuth);
+
+// 加载镇级别列表
+app.post("/countryList", _lib2.default.countryList);
+
+// 加载镇级别报告
+app.post("/countryReport", _lib2.default.countryReport);
+
+// 加载村别报告
+app.post("/villageReport", _lib2.default.villageReport);
+
+// 加载儿童详情
+app.post("/getChildDetails", _lib2.default.getChildDetails);
+
+// 修改密码
+app.post("/changePassword", function (req, res, next) {
+  _lib2.default.changePassword(req, res, {
+    "newPwd": req.body.passwordnew1,
+    "newPwdConfirm": req.body.passwordnew2,
+    "oldPwd": req.body.passwordold,
+    "userId": req.body.userId
+  });
 });
 
-app.post('/loadAuth', function (req, res, next) {
-    var loginStatus = typeof req.session.status === "undefined" ? false : req.session.status;
-    if (loginStatus) {
-        var result = {
-            code: '1',
-            username: req.session.username,
-            msg: 'login auth OK!'
-        };
-        res.setHeader("Access-Control-Allow-Origin", "*");
-        res.setHeader("Content-Type", "application/json");
-        res.json(result);
-    } else {
-        var _result2 = {
-            code: '0',
-            username: "steven?",
-            msg: 'no auth!'
-        };
-        res.setHeader("Access-Control-Allow-Origin", "*");
-        res.setHeader("Content-Type", "application/json");
-        res.json(_result2);
-    }
+// 加载验证码
+app.get('/img', _lib2.default.loadImg);
+
+// 审核报告接口
+app.post("/shenhe", function (req, res, next) {
+  _lib2.default.shenhe(req, res, {
+    action: req.body.action,
+    applyId: req.body.applyId,
+    level: req.body.level,
+    operatorId: req.body.operatorId,
+    remark: req.body.remark
+  });
 });
 
-app.get('/img', function (req, res, next) {
-    var pngNum = parseInt(Math.random() * 9000 + 1000);
-    req.session.pngNum = pngNum;
-    var p = new _captchapng2.default(80, 30, parseInt(Math.random() * 9000 + 1000)); // width,height,numeric captcha 
-    p.color(0, 0, 0, 0); // First color: background (red, green, blue, alpha) 
-    p.color(80, 80, 80, 255); // Second color: paint (red, green, blue, alpha) 
+// 监听端口
+app.listen(port, _lib2.default.listen);
 
-    var img = p.getBase64();
-    var imgbase64 = new Buffer(img, 'base64');
-    res.writeHead(200, {
-        'Content-Type': 'image/png'
-    });
-    res.end(imgbase64);
-    next();
-});
-
-app.listen(port, function (error) {
-    if (error) {
-        console.error(error);
-    } else {
-        console.info("==> 🌎  API listening on port %s. Open up http://localhost:%s/ in your browser.", port, port);
-    }
-    next();
-});
+// 登出操作
+app.get('/logout', _lib2.default.logout);
 //# sourceMappingURL=index.js.map

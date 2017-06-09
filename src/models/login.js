@@ -15,7 +15,6 @@ const LoginFetch = {
          return data.data.code != 0 ?data.data.userInfo:false;   
   },
   login:function*(loginInfo){
-        console.log(loginInfo,"用户登录传参");
         let data = yield request('/api/login', {
             method: 'POST',
             headers: {
@@ -72,7 +71,6 @@ export default {
   effects: {
     *login({loginInfo},{put,call}){
         const data = yield call(LoginFetch.login,loginInfo);
-        console.log(data,"用户登录信息");
         if(data){
            yield put({type: 'loginOK',loginData:data.data.data});
            switch (data.data.data.orgLevel){

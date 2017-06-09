@@ -27,12 +27,10 @@ class IndexPage extends React.Component{
   }
 
   onLogout=()=>{
-    console.log("我要等出！");
     this.props.dispatch({type:'login/logout'});
   }
 
   componentDidMount(){
-    console.log( window.screen.availHeight,window.screen.height);
       const height = window.screen.availHeight?window.screen.availHeight:640;
       this.setState({
           height: height-300

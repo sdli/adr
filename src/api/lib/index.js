@@ -27,7 +27,6 @@ function loginStart(req, res,next) {
             }
         }, function(err, httpResponse, body) {
             let result = JSON.parse(body);
-            console.log(result);
             if (result.code == "200") {
                 sess.username = username;
                 sess.password = password;
@@ -88,7 +87,6 @@ const InitFetch = function(met,url,vali) {
                 }
             }
             if(method.toLowerCase() == "post"){
-                console.log(initData);
                 request.post(Object.assign({body:JSON.stringify(initData)},{
                     headers: {
                         "Content-type": "application/json",
@@ -97,7 +95,6 @@ const InitFetch = function(met,url,vali) {
                     url: url
                 }),function(err,response,body){
                     let result = JSON.parse(body);
-                    console.log(result);
                     if(result.code == "200"){
                         if(validator){
                             validator(result,req,res);

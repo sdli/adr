@@ -3,7 +3,6 @@ const countryList = function(obj){
     if(typeof obj !== "object"){
         return false;
     }else{
-        console.log(obj.orgLevel);
         switch (parseInt(obj.orgLevel)){
             case 1: return changeIntoLevel1(obj);
             case 2: return changeIntoLevel2(obj);

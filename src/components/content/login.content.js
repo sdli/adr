@@ -69,8 +69,6 @@ class NormalLoginForm extends React.Component {
   }
 
   componentWillUnmount(){
-      console.log(this.props);
-      console.log("即将离开！");
   }
   formItemLayout = {
         labelCol: {

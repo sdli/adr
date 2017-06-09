@@ -37,12 +37,10 @@ class RegistrationForm extends Component {
   }
 
   componentWillReceiveProps(nextProps){
-      console.log(nextProps,"检查props");
       if(typeof nextProps.changePassword !=="undefined" && nextProps.changePassword && nextProps.changePassword != this.props.changePassword ){
         this.props.form.validateFieldsAndScroll((err, values) => {
           if (!err) {
             this.props.dispatch({type:"data/closeChangePassword"});
-            console.log(values);
             this.props.dispatch({type:"data/changePasswordEffect",...values});
           }
         });
@@ -53,7 +51,6 @@ class RegistrationForm extends Component {
     const { getFieldDecorator } = this.props.form;
     const { autoCompleteResult } = this.state;
     const { phone} = this.props;
-    console.log(this.props);
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },

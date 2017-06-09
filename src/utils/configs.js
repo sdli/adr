@@ -1,5 +1,6 @@
 var config ={
-    server:"http://47.93.224.216",
+    // server:"http://47.93.224.216",
+    server:"http://localhost",
     apiPort: "3060",
     serverPort: "8000",
     authException: ['/login','/help',"/error"],

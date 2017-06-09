@@ -6,7 +6,6 @@ import React from "react";
 
 
 function onChange(value) {
-  console.log(value);
 }
 
 function CityPicker({options,defaultValues,defaultAreaInput}){
@@ -36,7 +35,6 @@ class countryContent extends React.Component{
     }
     render(){
         const {defaultValues,options,defaultInput,villageReport,level} = this.props;
-        console.log(villageReport);
         return (
             <div>
                 <div className={styles.aboveFunctions}>

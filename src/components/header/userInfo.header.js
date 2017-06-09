@@ -52,7 +52,6 @@ class UserInfo extends Component{
     }
     render(){
         const {userInfo,handleLogout,dispatch,changePassword,alertMsg} =this.props;
-        console.log(userInfo,'header中的userInfo');
         const text="用户信息";
         const content = (
             <div style={{padding: '0'}}>

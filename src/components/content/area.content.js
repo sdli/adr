@@ -6,7 +6,6 @@ import React from "react";
 
 
 function onChange(value) {
-  console.log(value);
 }
 
 function CityPicker({options,defaultValues,defaultAreaInput}){
@@ -59,10 +58,8 @@ class indexContent extends React.Component{
         );
     }
     handleOk=()=>{
-        console.log("点击了下载按钮");
     }
     componentDidMount(){
-        console.log(this.props);
         this.props.dispatch({type:"data/getCountryList",orgId:this.props.id});
         this.props.dispatch({type:"data/getCountryReport",orgId:this.props.id});
     }

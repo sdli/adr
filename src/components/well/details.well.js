@@ -62,7 +62,6 @@ const selectOptions = {
 }
 const CollapseInfos = function(props){
     const data = {...props};
-    console.log("监护情况:"+data.guaHappening);
     if(typeof data.dilemmaCategory === "undefined") return null;
     
     return (

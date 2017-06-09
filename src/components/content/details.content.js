@@ -54,13 +54,11 @@ class DetailsContent extends React.Component{
         );
     }
     handleOk=()=>{
-        console.log("点击了下载按钮");
     }
     goCountryPage=()=>{
         hashHistory.goBack();
     }
     getCurrentStep=(arr)=>{
-        console.log(arr,'检查一下这个object');
         let step = 1;
         for(let x=0;x<arr.length;x++){
             if(parseInt(arr[x]) == 3 || parseInt(arr[x])==4){
