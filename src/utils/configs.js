@@ -5,7 +5,7 @@ var config ={
     authException: ['/login','/help',"/error"],
     logoTitle: "审核系统",
     footerTitle: "审核系统登录",
-    footerSubtitle: "@CopyRight 2016~2018 深圳前海云东家科技 备案号：[粤 009237985-1]"
+    footerSubtitle: "@CopyRight 2016~2018 深圳345科技 备案号：[粤 009237985-1]"
 };
 
 module.exports = config;

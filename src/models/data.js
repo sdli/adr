@@ -57,19 +57,20 @@ const dataFetch = {
         console.log(data,"获取儿童信息");
         return data.data.code == "200"?data:false;  
   },
-  shenhe: function*({action,operatorId,applyId,remark}){
+  shenhe: function*({action,operatorId,applyId,remark,level}){
       console.log("action="+action+"&operatorId="+operatorId+"&applyId"+applyId+"&remark="+remark);
         let data = yield request('/api/shenhe', {
             method: 'POST',
             headers: {
                 "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" 
             },
-            body:"action="+action+"&operatorId="+operatorId+"&applyId="+applyId+"&remark="+remark,
+            body:"action="+action+"&operatorId="+operatorId+"&applyId="+applyId+"&remark="+remark+"&level="+level,
             credentials: 'include'
         });
         console.log(data,"获取审核信息");
-        return data.data.code == "200"?data:false;  
-  },changePassword: function*(pwdInfo){
+        return data.data.code == "200"?true:false;  
+  },
+  changePassword: function*(pwdInfo){
         let data = yield request("/api/changePassword",{
           method: "POST",
           headers:{
@@ -217,8 +218,15 @@ export default {
     },
     *shenhe({action,remark,applyId},{put,call,select}){
         const operatorId = yield select(state=>state.login.loginData.id);
-        const result = yield call(dataFetch.shenhe,{action,remark,applyId,operatorId});
-        console.log(result);
+        const level = yield select(state=>state.login.loginData.orgLevel);
+        const result = yield call(dataFetch.shenhe,{action,remark,applyId,operatorId,level});
+        if(result){
+            alert("审批成功！");
+            window.location.reload();
+        }else{
+            alert("审核失败，请稍后再试！");
+            window.location.reload();
+        }
     },
     *changePasswordEffect({passwordold,passwordnew1,passwordnew2},{select,put,call}){
         const userId = yield select(state=>state.login.loginData.id);

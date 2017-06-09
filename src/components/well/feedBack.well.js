@@ -38,7 +38,6 @@ class FeedBack extends Component{
             </div>
         );
     }
-
 }
 
 export default FeedBack;

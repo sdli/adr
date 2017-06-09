@@ -15,4 +15,4 @@ function DetailsPage({dispatch,data,loading,params,login}) {
 
 DetailsPage.propTypes = {};
 
-export default connect(({data,loading})=>{return {data,loading};})(DetailsPage);
+export default connect(({data,login,loading})=>{return {data,login,loading};})(DetailsPage);

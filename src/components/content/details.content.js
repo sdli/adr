@@ -23,18 +23,13 @@ const ExportModal = function({handleOk,visible,handleCancel,confirmLoading}){
     );
 };
 
-const StepsDiv = function({current,status,descriptions}){
-    const customDot = (dot, { status, index }) => (
-        <Popover content={<span>step {index} status: {status}</span>}>
-            {dot}
-        </Popover>);
-
+const StepsDiv = function({current,descriptions}){
     return (
-        <Steps current={current} status={status}>
-            <Step title="村/社区" description={descriptions.villageStatus.text} />
-            <Step title="乡镇/街道" description={descriptions.townStatus.text} />
-            <Step title="县/区" description={descriptions.countyStatus.text} />
-            <Step title="市" description={descriptions.cityStatus.text} />
+        <Steps current={current}>
+            <Step title="村/社区" description={descriptions.step1.description} status={descriptions.step1.status} />
+            <Step title="乡镇/街道" description={descriptions.step2.description} status={descriptions.step2.status} />
+            <Step title="县/区" description={descriptions.step3.description} status={descriptions.step3.status} />
+            <Step title="市" description={descriptions.step4.description} status={descriptions.step4.status} />
         </Steps>
     );
 }
@@ -64,25 +59,46 @@ class DetailsContent extends React.Component{
     goCountryPage=()=>{
         hashHistory.goBack();
     }
-    getCurrentStep=(obj)=>{
+    getCurrentStep=(arr)=>{
+        console.log(arr,'检查一下这个object');
         let step = 1;
-        for(let x in obj){
-            if(obj.x == 3 && obj.x==4){
-                return step;
+        for(let x=0;x<arr.length;x++){
+            if(parseInt(arr[x]) == 3 || parseInt(arr[x])==4){
+                return step++;
             }else{
                 step++;
             }
         }
         return 4;
     }
-    getStepStatus=(obj)=>{
-        switch(step){
-            case 1: return 
+    getStepStatus=(childDetails)=>{
+        return {
+            step1:{
+                description:childDetails.villageStatusTitle,
+                status: this.getStatusFilter(childDetails.villageStatus)
+            },
+            step2:{
+                description:childDetails.townStatusTitle,
+                status: this.getStatusFilter(childDetails.townStatus) 
+            },
+            step3:{
+                description:childDetails.countyStatusTitle,
+                status: this.getStatusFilter(childDetails.countyStatus)
+            },
+            step4:{
+                description:childDetails.cityStatusTitle,
+                status: this.getStatusFilter(childDetails.cityStatus)
+            }
         }
     }
     getStatusFilter=(status)=>{
         switch(status){
-            case 1: return "";
+            case 1: return "wait";
+            case 2: return "process";
+            case 3: return "process";
+            case 4: return "error";
+            case 5: return "finish";
+            default: return "process";
         }
     }
 
@@ -100,7 +116,9 @@ class DetailsContent extends React.Component{
     render(){
         const {childDetails,level} = this.props;
         const {villageStatus,townStatus,countyStatus,cityStatus} = childDetails;
-        const step = this.getCurrentStep({villageStatus,townStatus,countyStatus,cityStatus});
+        const step = this.getCurrentStep([villageStatus,townStatus,countyStatus,cityStatus]);
+        const descriptions = this.getStepStatus(childDetails);
+        console.log(step,level,"等级和步骤");
         return (
             <div>
                 <div className={styles.aboveFunctions} key="1">
@@ -122,7 +140,7 @@ class DetailsContent extends React.Component{
                     </div>
                 </div>
                 <div style={{padding:"32px 20%"}}>
-                    <StepsDiv current={status} status={status.status} descriptions={status.descriptions}/>
+                    <StepsDiv current={step}  descriptions={descriptions}/>
                 </div>
                 <QueueAnim delay={200}>
                     <div style={{padding:"16px 15%"}} key="2">
@@ -132,9 +150,9 @@ class DetailsContent extends React.Component{
                     </div>
                 </QueueAnim>
                 <ExportModal  handleOk={this.handleOk} visible={this.state.visible} handleCancel={this.handleCancel}/>
-                <Layout style={{width:"100%",marginTop:"36px",marginBottom:"64px",overflow:"hidden"}}>
+                {(5-parseInt(step))==parseInt(level) &&<Layout style={{width:"100%",marginTop:"36px",marginBottom:"64px",overflow:"hidden"}}>
                     <FixedBottom key="1" shenheHandler={this.shenheHandler}/>    
-                </Layout>
+                </Layout>}
            </div>
         );
     }
