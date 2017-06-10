@@ -32,7 +32,7 @@ function loginStart(req, res,next) {
                 sess.password = password;
                 sess.token = result.data.tokenInfo.token;
                 sess.userInfo = result.data;
-                sess.expire = Date.parse(new Date()) / 1000 + 10;
+                sess.expire = Date.parse(new Date()) / 1000 + result.data.tokenInfo.token - 300;
                 res.json(result);
             }else{
                 res.json(config.reloadResponse);
@@ -78,11 +78,11 @@ const InitFetch = function(met,url,vali) {
                         "Content-type": "application/json;charset=UTF-8"
                     }
                 });
-
-                if (result.code == "200") {
-                    sess.token = result.data.tokenInfo.token;
-                    sess.userInfo = result.data;
-                    sess.expire = Date.parse(new Date()) / 1000 + 10;
+                console.log(result.data.data.tokenInfo.token,"refresh token");
+                if (result.data.code == "200") {
+                    sess.token = result.data.data.tokenInfo.token;
+                    sess.userInfo = result.data.data;
+                    sess.expire = Date.parse(new Date()) / 1000 + result.data.data.tokenInfo.expireTime;
                     realToken = sess.token;
                 }
             }
