@@ -70,6 +70,11 @@ class DetailsContent extends React.Component{
         }
         return 4;
     }
+
+    getCurrentStatus=(arr,level)=>{
+        return arr[4-level];
+    }
+
     getStepStatus=(childDetails)=>{
         return {
             step1:{
@@ -116,6 +121,7 @@ class DetailsContent extends React.Component{
         const {childDetails,level,id} = this.props;
         const {villageStatus,townStatus,countyStatus,cityStatus} = childDetails;
         const step = this.getCurrentStep([villageStatus,townStatus,countyStatus,cityStatus]);
+        const currentStatus = this.getCurrentStatus([villageStatus,townStatus,countyStatus,cityStatus],level);
         const descriptions = this.getStepStatus(childDetails);
         console.log(step,level,"等级和步骤");
         return (
@@ -149,7 +155,7 @@ class DetailsContent extends React.Component{
                     </div>
                 </QueueAnim>
                 <ExportModal  handleOk={this.handleOk} visible={this.state.visible} handleCancel={this.handleCancel}/>
-                {(5-parseInt(step))==parseInt(level) &&<Layout style={{width:"100%",marginTop:"36px",marginBottom:"64px",overflow:"hidden"}}>
+                {parseInt(currentStatus)==3 &&<Layout style={{width:"100%",marginTop:"36px",marginBottom:"64px",overflow:"hidden"}}>
                     <FixedBottom key="1" shenheHandler={this.shenheHandler}/>    
                 </Layout>}
            </div>

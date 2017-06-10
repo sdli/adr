@@ -78,7 +78,6 @@ const InitFetch = function(met,url,vali) {
                         "Content-type": "application/json;charset=UTF-8"
                     }
                 });
-                console.log(result.data.data.tokenInfo.token,"refresh token");
                 if (result.data.code == "200") {
                     sess.token = result.data.data.tokenInfo.token;
                     sess.userInfo = result.data.data;
@@ -95,7 +94,6 @@ const InitFetch = function(met,url,vali) {
                     url: url
                 }),function(err,response,body){
                     let result = JSON.parse(body);
-                    console.log(result);
                     if(result.code == "200"){
                         if(validator){
                             validator(result,req,res);
@@ -108,7 +106,6 @@ const InitFetch = function(met,url,vali) {
                 });
             }else{
                 let requestUrl = "";
-                console.log();
                 switch (req.body.type){
                     case "village":
                         requestUrl = url+"?orgId="+req.body.organId+"&currPage=1&pageSize=100&currLevel="+req.body.level;
@@ -131,7 +128,6 @@ const InitFetch = function(met,url,vali) {
                     default:
                         requestUrl = url + "?orgId="+req.body.organId + "&currLevel="+req.body.level
                 }
-                console.log(requestUrl);
                 request({
                     mothod: "GET",
                     url: requestUrl,
@@ -230,7 +226,6 @@ function logout(req,res,next){
  */
 function download(req,res){
     let type = req.body.type;
-    console.log(type);
     switch (type){
         case "byRosterId":  fetchUrl("get","downloadChild")(req,res) ;break;
         case "byVillageId":  fetchUrl("get","downloadCountry")(req,res); break;
