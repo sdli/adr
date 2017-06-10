@@ -9,11 +9,14 @@ const config = {
         remoteApis:{
             login: "/api/user/login",
             countryList: "/api/organ/detail/",
-            countryReport: "/api/report/applyReportList/",
+            countryReport: "/api/report/applyReportList",
             villageReport: "/api/roster/datlstsbyorgid",
             getChildDetails: "/api/roster/detail",
             shenhe:"/api/audit/audit",
-            changePassword:"/api/user/modifyPwd"
+            changePassword:"/api/user/modifyPwd",
+            downloadChild: "/api/export/rosterInfo",
+            downloadCountry:"/api/export/rosterLsts",
+            downloadOrg: "/api/export/statistical"
         },
         reloadResponse:{
             code:0,

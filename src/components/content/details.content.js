@@ -54,6 +54,7 @@ class DetailsContent extends React.Component{
         );
     }
     handleOk=()=>{
+        this.props.dispatch({type:"data/download",downloadType:"byRosterId",id:this.props.id});
     }
     goCountryPage=()=>{
         hashHistory.goBack();
@@ -112,7 +113,7 @@ class DetailsContent extends React.Component{
         }
     }
     render(){
-        const {childDetails,level} = this.props;
+        const {childDetails,level,id} = this.props;
         const {villageStatus,townStatus,countyStatus,cityStatus} = childDetails;
         const step = this.getCurrentStep([villageStatus,townStatus,countyStatus,cityStatus]);
         const descriptions = this.getStepStatus(childDetails);

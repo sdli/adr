@@ -15,7 +15,9 @@ class IndexPage extends React.Component{
       collapsed: false,
       mode: "inline",
       height: 640,
-      navList:["资料审核"]
+      navList:["资料审核"],
+      downloadUrl: "",
+      alert:""
     }
   }
   onCollapse = (collapsed) => {
@@ -37,22 +39,56 @@ class IndexPage extends React.Component{
       });
   }
 
-  componentWillReceiveProps(nextProps){
-    console.log(nextProps.data.changePasswordMessageAlert,"检查data");
-    if(nextProps.data.changePasswordMessageAlert && nextProps.data.changePasswordMessageAlert != this.props.data.changePasswordMessageAlert){
+  checkIfNeedAlert(nextProps,preProps){
+    if(nextProps.data.changePasswordMessageAlert && nextProps.data.changePasswordMessageAlert != preProps.data.changePasswordMessageAlert){
         switch(nextProps.data.changePasswordMessageType){
           case "success":
             message.success(nextProps.data.changePasswordMessageText);
             const logout = this.onLogout;
+            this.setState({
+              alert:"success"
+            });
             setTimeout(function(){logout();},1000);
             break;
           case "error":
             message.error(nextProps.data.changePasswordMessageText);
+            this.setState({
+              alert:"success"
+            });
             break;
           default:
             return true;
         }
+    }
+    return true;
+  }
+  checkIfNeedDownload(nextProps,preProps){
+    if(nextProps.data.downloadUrl == preProps.data.downloadUrl){
+      return false;
+    }
+    return true;
+  }
+  componentWillReceiveProps(nextProps){
+    console.log(nextProps.data.changePasswordMessageAlert,"检查data");
+    if(nextProps.data.changePasswordMessageAlert){
+      if(this.checkIfNeedAlert(nextProps,this.props)){
         this.props.dispatch({type:"data/closeMessage",alertType:"changePassword"});
+        return true;
+      }else{
+        return false;
+      }
+    }
+    
+    if(nextProps.data.downloadUrl != ""){
+      if(this.checkIfNeedDownload(nextProps,this.props)){
+        console.log("需要下载",nextProps.data.downloadUrl);
+        this.props.dispatch({type:"data/closeDownload"});
+        this.setState({
+          downloadUrl:nextProps.data.downloadUrl
+        });
+      }else{
+        return false;
+      }
     }
     return true;
   }
@@ -70,6 +106,8 @@ class IndexPage extends React.Component{
     if(this.props.login.status === false) return null;
     const path = (typeof this.props.location.pathname !== "undefined")?this.props.location.pathname.split('\/'):["","/"];
     const {dispatch} = this.props;
+    const url = this.state.downloadUrl;
+    console.log(url);
     const menuList=[
         {text:"总列表",icon:"contacts",link:this.getMenuLink(this.props.login.loginData)}
     ];
@@ -82,6 +120,7 @@ class IndexPage extends React.Component{
           handleLogout={this.onLogout} 
           dispatch={dispatch}
           changePassword={this.props.data.changePassword}
+          applyStatusReport={this.props.login.loginData.applyStatusReport}
           />
         }
         footer={<Footer />}
@@ -91,8 +130,9 @@ class IndexPage extends React.Component{
         onCollapse={this.onCollapse}
         height={this.state.height}
         path={path[1]}
-      >
-           {this.props.children}
+      > 
+          <iframe style={{display:"none"}} src={url} ></iframe>
+          {this.props.children}
       </Layout>
     );
   }

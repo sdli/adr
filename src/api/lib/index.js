@@ -95,6 +95,7 @@ const InitFetch = function(met,url,vali) {
                     url: url
                 }),function(err,response,body){
                     let result = JSON.parse(body);
+                    console.log(result);
                     if(result.code == "200"){
                         if(validator){
                             validator(result,req,res);
@@ -107,16 +108,30 @@ const InitFetch = function(met,url,vali) {
                 });
             }else{
                 let requestUrl = "";
+                console.log();
                 switch (req.body.type){
                     case "village":
-                        requestUrl = url+"?orgId="+req.body.organId+"&currPage=1&pageSize=100";
+                        requestUrl = url+"?orgId="+req.body.organId+"&currPage=1&pageSize=100&currLevel="+req.body.level;
                         break;
                     case "childDetails":
                         requestUrl = url+"?childId="+req.body.childId;
                         break;
+                    case "byRosterId":
+                        requestUrl = url+ "?rosterId="+req.body.id;
+                        break;
+                    case "byVillageId":
+                        requestUrl = url+ "?villId=" + req.body.id;
+                        break;
+                    case "byOrgId":
+                        requestUrl = url + "?orgId=" + req.body.id+"&currLevel="+ req.body.level;
+                        break;
+                    case "tableList":
+                        requestUrl = url + req.body.organId;
+                        break;
                     default:
-                        requestUrl = url+req.body.organId;
+                        requestUrl = url + "?orgId="+req.body.organId + "&currLevel="+req.body.level
                 }
+                console.log(requestUrl);
                 request({
                     mothod: "GET",
                     url: requestUrl,
@@ -209,6 +224,21 @@ function logout(req,res,next){
     };
     res.json(result);
 }
+
+/**
+ * 下载接口
+ */
+function download(req,res){
+    let type = req.body.type;
+    console.log(type);
+    switch (type){
+        case "byRosterId":  fetchUrl("get","downloadChild")(req,res) ;break;
+        case "byVillageId":  fetchUrl("get","downloadCountry")(req,res); break;
+        case "byOrgId":  fetchUrl("get","downloadOrg")(req,res);break;
+        default:  res.json(config.reloadResponse);
+    }
+}
+
 /**
  * export整合
  */
@@ -219,6 +249,7 @@ const funcs = {
     getChildDetails: fetchUrl("get","getChildDetails"),
     shenhe: fetchUrl("post","shenhe"),
     changePassword: fetchUrl("post","changePassword"),
+    download: download,
     loginStart: loginStart,
     initFetch: InitFetch,
     loadAuth: loadAuth,

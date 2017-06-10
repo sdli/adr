@@ -7,7 +7,7 @@ const {SubMenu} = Menu;
 export default function({components,param}){
     return(
           <Layout>
-                <Header className="header" style={{position:"fixed",top:0,left:0,width:"100%",zIndex:9999}}>
+                <Header className="header" style={{position:"fixed",top:0,left:0,width:"100%",zIndex:11}}>
                     {components.header}
                 </Header>
                 <Layout style={{marginTop:50}} key="1">

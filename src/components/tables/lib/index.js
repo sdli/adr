@@ -3,11 +3,11 @@ import { hashHistory } from 'react-router';
 
 const getButtonType=function(status){
     switch(status){
-        case "1":return "dash";
-        case "2":return "default";
-        case "3":return "primary";
-        case "4":return "danger";
-        case "5":return "default";
+        case 1:return "dash";
+        case 2:return "default";
+        case 3:return "primary";
+        case 4:return "danger";
+        case 5:return "default";
         default: return "default";
     }
 }

@@ -3,7 +3,38 @@ import styles from "./header.less";
 import configs from "../../utils/configs";
 import HeaderUserInfo from "./userInfo.header";
 
-const Header = function({navList,userInfo,handleLogout,dispatch,changePassword,alertMsg}){
+const Statistic= function({obj}){
+    let list = [{
+            title: "已通过",
+            value: obj.inAuditCount
+        },{
+            title: "未提交",
+            value: obj.notAuditCount
+        },
+        {
+            title:"已通过",
+            value:obj.passCount
+        },{
+            title:"被驳回",
+            value:obj.refuseCount
+        }
+        ];
+    return (
+        <div className={styles.static}>
+            <ul>
+                {list.map((val,index)=>{
+                    return (
+                        <li>
+                            <p>{val.value}</p>
+                            <p>{val.title}</p>
+                        </li>
+                    );
+                })}
+            </ul>
+        </div>
+    );
+}
+const Header = function({navList,userInfo,handleLogout,dispatch,changePassword,alertMsg,applyStatusReport}){
     return (
         <div id="header">
             <div className={styles.logo} >
@@ -22,6 +53,7 @@ const Header = function({navList,userInfo,handleLogout,dispatch,changePassword,a
                     );
                 })}
             </Menu>
+            <Statistic obj={applyStatusReport} /> 
             <HeaderUserInfo userInfo={userInfo} handleLogout={handleLogout} dispatch={dispatch} changePassword={changePassword} alertMsg={alertMsg}/>
         </div>
     );

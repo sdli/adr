@@ -9,7 +9,7 @@ class FeedBack extends Component{
     shenheController(func){
         let that = this;
         return function(){
-            let remark = that.textInput.value;
+            let remark = that.textInput.refs.input.value;
             func(remark);
         }
     }

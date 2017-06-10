@@ -35,7 +35,7 @@ const ExportModal = function({handleOk,visible,handleCancel,confirmLoading}){
           onCancel={handleCancel}
           confirmLoading={confirmLoading}
         >
-          <p><span style={{lineHeight:"32px"}}>选择城市/地区进行下载</span><br/><CityPicker /></p>
+          <p>您确认要到处当前地区的报表？</p>
         </Modal>
     );
 };
@@ -59,7 +59,7 @@ class indexContent extends React.Component{
         );
     }
     handleOk=()=>{
-        console.log("点击了下载按钮");
+        this.props.dispatch({type:"data/download",downloadType:"byOrgId",id:this.props.id});
     }
     componentDidMount(){
         console.log(this.props);

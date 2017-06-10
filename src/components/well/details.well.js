@@ -111,7 +111,7 @@ const CollapseInfos = function(props){
                     </Col>
                     <Col span={8}>
                         <div style={{padding:"8px 15%"}}>
-                            <img src={data.headImg } style={{maxWidth:"150px"}} />
+                            <img src={data.headImgPath+data.headImg} style={{maxWidth:"150px"}} />
                         </div>
                     </Col>
                 </Row>

@@ -72,7 +72,7 @@ const CountryTable = function({data,level}){
     pagination={{
       total:data.length,
       pageSize:15,
-      showTotal:(total,range) => `当前${range[0]-1}-${range[1]-1} , 共计 ${total} 条数据`,
+      showTotal:(total,range) => `当前${range[0]}-${range[1]} , 共计 ${total} 条数据`,
       defaultCurrent:1
     }}
     />

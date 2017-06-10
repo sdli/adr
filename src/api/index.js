@@ -1,4 +1,4 @@
-import "babel-polyfill";
+// import "babel-polyfill";
 import express from 'express';
 import bodyParser from "body-parser";
 import configs from "./utils/configs"; 
@@ -50,6 +50,12 @@ app.post("/changePassword",function(req,res,next){
             "userId": req.body.userId
           }
       );
+});
+
+// 下载excel
+app.post("/download",function(req,res,next){
+      console.log(typeof apis.download);
+      apis.download(req,res);
 });
 
 // 加载验证码

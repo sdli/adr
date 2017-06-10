@@ -13,33 +13,32 @@ const dataFetch = {
               headers: {
                   "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" 
               },
-              body:"organId="+organId,
+              body:"type=tableList&organId="+organId,
               credentials: 'include'
           });
         console.log(data,"拿到了城市列表");
         let list = countryList(data.data.data);
         return data.data.code == "200"?list:false;   
   },
-  countryReport: function*(organId){
-    console.log(organId);
+  countryReport: function*({orgId,level}){
         let data = yield request('/api/countryReport', {
               method: 'POST',
               headers: {
                   "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" 
               },
-              body:"organId="+organId,
+              body:"organId="+orgId +"&level="+level,
               credentials: 'include'
           });
         console.log(data,"获得村镇列表");
         return data.data.code == "200"?data:false;   
   },
-  villageReport: function*(organId){
+  villageReport: function*({orgId,level}){
         let data = yield request('/api/villageReport', {
               method: 'POST',
               headers: {
                   "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" 
               },
-              body:"organId="+organId+"&currPage=1&pageSize=100&type=village",
+              body:"organId="+orgId+"&currPage=1&pageSize=100&type=village&level="+level,
               credentials: 'include'
           });
         console.log(data,"获得村镇列表");
@@ -85,6 +84,23 @@ const dataFetch = {
             case 0: return false;
             default: return false;
         }
+    },
+    download: function*({downloadType,id,level}){
+        console.log(downloadType,id);
+        let data = yield request("/api/download",{
+          method: "POST",
+          headers:{
+                "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" 
+          },
+          body: "type="+downloadType+"&id="+id+"&level="+level,
+          credentials: "include"
+        });
+        console.log(data,data.data.code);
+        switch(parseInt(data.data.code)){
+            case 200: return data;
+            case 0: return false;
+            default: return false;
+        }
     }
 };
 
@@ -112,7 +128,8 @@ export default {
         changePassword: false,
         changePasswordMessageAlert:false,
         changePasswordMessageType: "",
-        changePasswordMessageText: ""
+        changePasswordMessageText: "",
+        downloadUrl: ""
     },
   reducers: {
     updateCountryList(state,{data}){
@@ -192,6 +209,19 @@ export default {
                     changePasswordMessageAlert:false
                 }
         }
+    },
+    downloadExcel(state,{downloadUrl}){
+        console.log(downloadUrl,"更新 state");
+        return {
+            ...state,
+            downloadUrl: downloadUrl
+        }
+    },
+    closeDownload(state){
+        return {
+            ...state,
+            downloadUrl: ""
+        }
     }
   },
   effects: {
@@ -200,7 +230,8 @@ export default {
         yield put({type:"updateCountryList",data:list});
     },
     *getCountryReport({orgId},{put,call,select}){
-        const list = yield call(dataFetch.countryReport,orgId);
+        const level = yield select(state=>state.login.loginData.orgLevel);
+        const list = yield call(dataFetch.countryReport,{orgId,level});
         yield put({type:"updateCountryReport",data:list.data.data});
     },
     *getVillageList({orgId},{put,call,select}){
@@ -209,7 +240,9 @@ export default {
         yield put({type:"updateVillageList",data:list});
     },
     *getVillageReport({orgId},{put,call,select}){
-        const list = yield call(dataFetch.villageReport,orgId);
+        const level = yield select(state=>state.login.loginData.orgLevel);
+        const list = yield call(dataFetch.villageReport,{orgId,level});
+        console.log(list);
         yield put({type:"updateVillageReport",data:list.data.data});
     },
     *getChildDetails({childId},{put,call,select}){
@@ -238,6 +271,13 @@ export default {
         }else{
             yield put({type:"giveMessage",alertType:"changePassword",msgType:"error",msgText:"修改失败，请检查密码！"});
         }
+    },
+    *download({downloadType,id},{select,put,call}){
+        const level = yield select(state=>state.login.loginData.orgLevel);
+        const data = yield call(dataFetch.download,{downloadType,id,level});
+        const url = data?"http://"+data.data.data.url:null;
+        console.log(url);
+        yield put({type:"downloadExcel",downloadUrl:url});
     }
   }
 };
