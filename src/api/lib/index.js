@@ -51,7 +51,6 @@ function loginStart(req, res,next) {
             res.json(config.reloadResponse);
         }
     }
-  
 }
 
 
@@ -75,84 +74,85 @@ const InitFetch = function(met,url,vali) {
             }
         };
         return function(req,res,initData){
-            try{
-                co(function*(){
+            co(function*(){
+                try{
                     var realToken = tryToken(req);
                     var sess = req.session;
                     if (!realToken) {
-                        var result = yield fetchRequest(config.getServerUrl('login'), {
-                            body: JSON.stringify({
-                                phone: req.session.username,
-                                password: req.session.password
-                            }),
-                            method: 'POST',
-                            header: {
-                                "Content-type": "application/json;charset=UTF-8"
-                            }
-                        });
-                        if (result.data.code == "200") {
-                            sess.token = result.data.data.tokenInfo.token;
-                            sess.userInfo = result.data.data;
-                            sess.expire = Date.parse(new Date()) / 1000 + result.data.data.tokenInfo.expireTime;
-                            realToken = sess.token;
-                        }
-                    }
-                    if(method.toLowerCase() == "post"){
-                        request.post(Object.assign({body:JSON.stringify(initData)},{
-                            headers: {
-                                "Content-type": "application/json",
-                                "authorization": realToken
-                            },
-                            url: url
-                        }),function(err,response,body){
-                            let result = JSON.parse(body);
-                            if(result.code == "200"){
-                                if(validator){
-                                    validator(result,req,res);
-                                }else{
-                                    res.json(result);
+                            var result = yield fetchRequest(config.getServerUrl('login'), {
+                                body: JSON.stringify({
+                                    phone: req.session.username,
+                                    password: req.session.password
+                                }),
+                                method: 'POST',
+                                header: {
+                                    "Content-type": "application/json;charset=UTF-8"
                                 }
-                            }else{
-                                res.json(config.reloadResponse);
+                            });
+                            if (result.data.code == "200") {
+                                sess.token = result.data.data.tokenInfo.token;
+                                sess.userInfo = result.data.data;
+                                sess.expire = Date.parse(new Date()) / 1000 + result.data.data.tokenInfo.expireTime;
+                                realToken = sess.token;
                             }
-                        });
-                    }else{
-                        let requestUrl = "";
-                        switch (req.body.type){
-                            case "village":
-                                requestUrl = url+"?orgId="+req.body.organId+"&currPage=1&pageSize=100&currLevel="+req.body.level+"&loginUserId="+req.body.loginUserId;
-                                break;
-                            case "childDetails":
-                                requestUrl = url+"?childId="+req.body.childId;
-                                break;
-                            case "byRosterId":
-                                requestUrl = url+ "?rosterId="+req.body.id;
-                                break;
-                            case "byVillageId":
-                                requestUrl = url+ "?villId=" + req.body.id+"&currLevel=" + req.body.level;
-                                break;
-                            case "byOrgId":
-                                requestUrl = url + "?orgId=" + req.body.id+"&currLevel="+ req.body.level;
-                                break;
-                            case "tableList":
-                                requestUrl = url + req.body.organId;
-                                break;
-                            default:
-                                requestUrl = url + "?orgId="+req.body.organId + "&currLevel="+req.body.level
                         }
-                        request({
-                            mothod: "GET",
-                            url: requestUrl,
-                            headers:{
-                                "authorization": realToken
+                    if(method.toLowerCase() == "post"){
+                            request.post(Object.assign({body:JSON.stringify(initData)},{
+                                headers: {
+                                    "Content-type": "application/json",
+                                    "authorization": realToken
+                                },
+                                url: url
+                            }),function(err,response,body){
+                                let result = JSON.parse(body);
+                                if(result.code == "200"){
+                                    if(validator){
+                                        validator(result,req,res);
+                                    }else{
+                                        res.json(result);
+                                    }
+                                }else{
+                                    res.json(config.reloadResponse);
+                                }
+                            });
+                        }else{
+                            let requestUrl = "";
+                            switch (req.body.type){
+                                case "village":
+                                    requestUrl = url+"?orgId="+req.body.organId+"&currPage=1&pageSize=100&currLevel="+req.body.level+"&loginUserId="+req.body.loginUserId;
+                                    break;
+                                case "childDetails":
+                                    requestUrl = url+"?childId="+req.body.childId;
+                                    break;
+                                case "byRosterId":
+                                    requestUrl = url+ "?rosterId="+req.body.id;
+                                    break;
+                                case "byVillageId":
+                                    requestUrl = url+ "?villId=" + req.body.id+"&currLevel=" + req.body.level;
+                                    break;
+                                case "byOrgId":
+                                    requestUrl = url + "?orgId=" + req.body.id+"&currLevel="+ req.body.level;
+                                    break;
+                                case "tableList":
+                                    requestUrl = url + req.body.organId;
+                                    break;
+                                default:
+                                    requestUrl = url + "?orgId="+req.body.organId + "&currLevel="+req.body.level
                             }
-                        }).pipe(res);
-                }});
-            }catch(err){
-                if(err){
-                    res.json(config.reloadResponse);
+                            request({
+                                mothod: "GET",
+                                url: requestUrl,
+                                headers:{
+                                    "authorization": realToken
+                                }
+                            }).pipe(res);
+                    }   
+                }catch(err){
+                    if(err){
+                        res.json(config.reloadResponse);
+                    }
                 }
-            }
+        });
     }
 }
 
