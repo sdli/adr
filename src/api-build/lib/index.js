@@ -37,8 +37,13 @@ function loginStart(req, res, next) {
     var sess = req.session;
     var _req$body = req.body,
         username = _req$body.username,
-        password = _req$body.password;
+        password = _req$body.password,
+        code = _req$body.code;
 
+    if (parseInt(code) != parseInt(sess.pngNum)) {
+        res.json(_configs2.default.codeErrorResponse);
+        return true;
+    }
     if (username && password) {
         _request4.default.post({
             url: _configs2.default.getServerUrl('login'),
@@ -50,17 +55,22 @@ function loginStart(req, res, next) {
                 "Content-type": "application/json;charset=UTF-8"
             }
         }, function (err, httpResponse, body) {
-            var result = JSON.parse(body);
-            console.log(result);
-            if (result.code == "200") {
-                sess.username = username;
-                sess.password = password;
-                sess.token = result.data.tokenInfo.token;
-                sess.userInfo = result.data;
-                sess.expire = Date.parse(new Date()) / 1000 + 10;
-                res.json(result);
-            } else {
-                res.json(_configs2.default.reloadResponse);
+            try {
+                var result = JSON.parse(body);
+                if (result.code == "200") {
+                    sess.username = username;
+                    sess.password = password;
+                    sess.token = result.data.tokenInfo.token;
+                    sess.userInfo = result.data;
+                    sess.expire = Date.parse(new Date()) / 1000 + result.data.tokenInfo.token - 300;
+                    res.json(result);
+                } else {
+                    res.json(_configs2.default.reloadResponse);
+                }
+            } catch (err) {
+                if (err) {
+                    res.json(_configs2.default.reloadResponse);
+                }
             }
         });
     } else {
@@ -98,15 +108,16 @@ var InitFetch = function InitFetch(met, url, vali) {
                 while (1) {
                     switch (_context.prev = _context.next) {
                         case 0:
+                            _context.prev = 0;
                             realToken = tryToken(req);
                             sess = req.session;
 
                             if (realToken) {
-                                _context.next = 7;
+                                _context.next = 8;
                                 break;
                             }
 
-                            _context.next = 5;
+                            _context.next = 6;
                             return (0, _request2.default)(_configs2.default.getServerUrl('login'), {
                                 body: JSON.stringify({
                                     phone: req.session.username,
@@ -118,24 +129,22 @@ var InitFetch = function InitFetch(met, url, vali) {
                                 }
                             });
 
-                        case 5:
+                        case 6:
                             result = _context.sent;
 
-
-                            if (result.code == "200") {
-                                sess.token = result.data.tokenInfo.token;
-                                sess.userInfo = result.data;
-                                sess.expire = Date.parse(new Date()) / 1000 + 10;
+                            if (result.data.code == "200") {
+                                sess.token = result.data.data.tokenInfo.token;
+                                sess.userInfo = result.data.data;
+                                sess.expire = Date.parse(new Date()) / 1000 + result.data.data.tokenInfo.expireTime;
                                 realToken = sess.token;
                             }
 
-                        case 7:
+                        case 8:
                             if (!(method.toLowerCase() == "post")) {
                                 _context.next = 12;
                                 break;
                             }
 
-                            console.log(initData);
                             _request4.default.post(Object.assign({ body: JSON.stringify(initData) }, {
                                 headers: {
                                     "Content-type": "application/json",
@@ -144,7 +153,6 @@ var InitFetch = function InitFetch(met, url, vali) {
                                 url: url
                             }), function (err, response, body) {
                                 var result = JSON.parse(body);
-                                console.log(result);
                                 if (result.code == "200") {
                                     if (validator) {
                                         validator(result, req, res);
@@ -155,27 +163,43 @@ var InitFetch = function InitFetch(met, url, vali) {
                                     res.json(_configs2.default.reloadResponse);
                                 }
                             });
-                            _context.next = 22;
+                            _context.next = 30;
                             break;
 
                         case 12:
                             requestUrl = "";
                             _context.t0 = req.body.type;
-                            _context.next = _context.t0 === "village" ? 16 : _context.t0 === "childDetails" ? 18 : 20;
+                            _context.next = _context.t0 === "village" ? 16 : _context.t0 === "childDetails" ? 18 : _context.t0 === "byRosterId" ? 20 : _context.t0 === "byVillageId" ? 22 : _context.t0 === "byOrgId" ? 24 : _context.t0 === "tableList" ? 26 : 28;
                             break;
 
                         case 16:
-                            requestUrl = url + "?orgId=" + req.body.organId + "&currPage=1&pageSize=100";
-                            return _context.abrupt("break", 21);
+                            requestUrl = url + "?orgId=" + req.body.organId + "&currPage=1&pageSize=100&currLevel=" + req.body.level + "&loginUserId=" + req.body.loginUserId;
+                            return _context.abrupt("break", 29);
 
                         case 18:
                             requestUrl = url + "?childId=" + req.body.childId;
-                            return _context.abrupt("break", 21);
+                            return _context.abrupt("break", 29);
 
                         case 20:
-                            requestUrl = url + req.body.organId;
+                            requestUrl = url + "?rosterId=" + req.body.id;
+                            return _context.abrupt("break", 29);
 
-                        case 21:
+                        case 22:
+                            requestUrl = url + "?villId=" + req.body.id + "&currLevel=" + req.body.level;
+                            return _context.abrupt("break", 29);
+
+                        case 24:
+                            requestUrl = url + "?orgId=" + req.body.id + "&currLevel=" + req.body.level;
+                            return _context.abrupt("break", 29);
+
+                        case 26:
+                            requestUrl = url + req.body.organId;
+                            return _context.abrupt("break", 29);
+
+                        case 28:
+                            requestUrl = url + "?orgId=" + req.body.organId + "&currLevel=" + req.body.level;
+
+                        case 29:
                             (0, _request4.default)({
                                 mothod: "GET",
                                 url: requestUrl,
@@ -184,12 +208,24 @@ var InitFetch = function InitFetch(met, url, vali) {
                                 }
                             }).pipe(res);
 
-                        case 22:
+                        case 30:
+                            _context.next = 35;
+                            break;
+
+                        case 32:
+                            _context.prev = 32;
+                            _context.t1 = _context["catch"](0);
+
+                            if (_context.t1) {
+                                res.json(_configs2.default.reloadResponse);
+                            }
+
+                        case 35:
                         case "end":
                             return _context.stop();
                     }
                 }
-            }, _callee, this);
+            }, _callee, this, [[0, 32]]);
         }));
     };
 };
@@ -247,7 +283,7 @@ function listen(error) {
 function loadImg(req, res, next) {
     var pngNum = parseInt(Math.random() * 9000 + 1000);
     req.session.pngNum = pngNum;
-    var p = new _captchapng2.default(80, 30, parseInt(Math.random() * 9000 + 1000)); // width,height,numeric captcha 
+    var p = new _captchapng2.default(80, 30, parseInt(pngNum)); // width,height,numeric captcha 
     p.color(0, 0, 0, 0); // First color: background (red, green, blue, alpha) 
     p.color(80, 80, 80, 255); // Second color: paint (red, green, blue, alpha) 
 
@@ -257,7 +293,6 @@ function loadImg(req, res, next) {
         'Content-Type': 'image/png'
     });
     res.end(imgbase64);
-    next();
 }
 
 /**
@@ -275,6 +310,24 @@ function logout(req, res, next) {
     };
     res.json(result);
 }
+
+/**
+ * 下载接口
+ */
+function download(req, res) {
+    var type = req.body.type;
+    switch (type) {
+        case "byRosterId":
+            fetchUrl("get", "downloadChild")(req, res);break;
+        case "byVillageId":
+            fetchUrl("get", "downloadCountry")(req, res);break;
+        case "byOrgId":
+            fetchUrl("get", "downloadOrg")(req, res);break;
+        default:
+            res.json(_configs2.default.reloadResponse);
+    }
+}
+
 /**
  * export整合
  */
@@ -285,6 +338,7 @@ var funcs = {
     getChildDetails: fetchUrl("get", "getChildDetails"),
     shenhe: fetchUrl("post", "shenhe"),
     changePassword: fetchUrl("post", "changePassword"),
+    download: download,
     loginStart: loginStart,
     initFetch: InitFetch,
     loadAuth: loadAuth,

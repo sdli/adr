@@ -1,15 +1,16 @@
 {
   "private": true,
   "scripts": {
-    "start": "npm run build-api && npm run build && npm run start-all",
+    "start": "npm run install-pm2 && roadhog build && npm run build-api && pm2 start pm2.json --no-daemon",
     "dev": "set PORT=3000&&roadhog server",
-    "build": "roadhog build",
+    "build": "npm run install-pm2 && roadhog build && npm run build-api && pm2 start pm2.json --no-daemon",
     "lint": "eslint --ext .js src test",
+    "install-pm2":"npm install -g pm2",
     "build-api": "babel ./src/api/ -d ./src/api-build --source-maps",
     "start-all": "concurrently \"npm run start-api\" \"npm run start-server\"",
     "start-api": "nodemon ./src/api-build",
     "start-server": "nodemon server.js",
-    "start-pm2": "pm2 start ./src/api-build/index.js --name wbq-api && pm2 start server.js --name wbq-server",
+    "start-pm2": "pm2 start ./src/api-build/index.js --name api && pm2 start server.js --name server",
     "god-mode": "npm run build-api && npm run build && npm run start-pm2"
   },
   "engines": {

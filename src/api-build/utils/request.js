@@ -1,18 +1,26 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = request;
 
-var _fetch = require('dva/fetch');
+var _fetch = require("dva/fetch");
 
 var _fetch2 = _interopRequireDefault(_fetch);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function parseJSON(response) {
-  return response.json();
+  try {
+    var data = response.json();
+  } catch (err) {
+    if (err) {
+      throw new Error("not json");
+    } else {
+      return data;
+    }
+  }
 }
 
 function checkStatus(response) {

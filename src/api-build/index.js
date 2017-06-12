@@ -72,6 +72,9 @@ app.post("/changePassword", function (req, res, next) {
   });
 });
 
+// 下载excel
+app.post("/download", _lib2.default.download);
+
 // 加载验证码
 app.get('/img', _lib2.default.loadImg);
 

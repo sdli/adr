@@ -13,7 +13,6 @@ var port = config.apiPort;
  * @param {返回内容} res 
  */
 function loginStart(req, res,next) {
-    try{
             let sess = req.session;
             let { username, password ,code} = req.body;
             if(parseInt(code) != parseInt(sess.pngNum)){
@@ -31,26 +30,27 @@ function loginStart(req, res,next) {
                         "Content-type": "application/json;charset=UTF-8"
                     }
                 }, function(err, httpResponse, body) {
-                    let result = JSON.parse(body);
-                    if (result.code == "200") {
-                        sess.username = username;
-                        sess.password = password;
-                        sess.token = result.data.tokenInfo.token;
-                        sess.userInfo = result.data;
-                        sess.expire = Date.parse(new Date()) / 1000 + result.data.tokenInfo.token - 300;
-                        res.json(result);
-                    }else{
-                        res.json(config.reloadResponse);
+                    try{
+                        let result = JSON.parse(body);
+                        if (result.code == "200") {
+                            sess.username = username;
+                            sess.password = password;
+                            sess.token = result.data.tokenInfo.token;
+                            sess.userInfo = result.data;
+                            sess.expire = Date.parse(new Date()) / 1000 + result.data.tokenInfo.token - 300;
+                            res.json(result);
+                        }else{
+                            res.json(config.reloadResponse);
+                        }
+                    }catch(err){
+                        if(err){
+                            res.json(config.reloadResponse);
+                        }
                     }
                 });
             } else {
                 res.json(config.reloadResponse);
             }
-    }catch(err){
-        if(err){
-            res.json(config.reloadResponse);
-        }
-    }
 }
 
 
