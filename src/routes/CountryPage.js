@@ -12,6 +12,7 @@ function CountryPage({dispatch,data,loading,params,login}) {
       defaultValues={data.defaultVillageValues || null}
       defaultInput = {data.defaultVillageInput || null}
       villageReport = {data.villageReport || null}
+      visible = {data.modelVisible}
     />
   );
 }

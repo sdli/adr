@@ -1,4 +1,4 @@
-import { Icon,Button,Select,Cascader,Modal,Breadcrumb,Steps,Popover,Layout} from 'antd';
+import { Icon,Button,Select,Cascader,Modal,Breadcrumb,Steps,Popover,Layout,message} from 'antd';
 import styles from "./content.less";
 import IndexTable from "../tables/index.table";
 import DetailWells from "../well/details.well";
@@ -117,13 +117,20 @@ class DetailsContent extends React.Component{
             dispatch({type:"data/shenhe",action:action,applyId:applyId,remark:remark});
         }
     }
+    componentWillReceiveProps(nextProps){
+        if(nextProps.visible == false && this.state.visible == true){
+            this.setState({
+                visible: false
+            });
+            message.success("表格获取成功，请等待下载...");
+        }
+    }
     render(){
         const {childDetails,level,id} = this.props;
         const {villageStatus,townStatus,countyStatus,cityStatus} = childDetails;
         const step = this.getCurrentStep([villageStatus,townStatus,countyStatus,cityStatus]);
         const currentStatus = this.getCurrentStatus([villageStatus,townStatus,countyStatus,cityStatus],level);
         const descriptions = this.getStepStatus(childDetails);
-        console.log(step,level,"等级和步骤");
         return (
             <div>
                 <div className={styles.aboveFunctions} key="1">

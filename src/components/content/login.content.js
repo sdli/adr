@@ -136,7 +136,7 @@ class NormalLoginForm extends React.Component {
                     </Form>
                 </Spin>
 
-                <Alert message="用户名或密码不正确" type="error" showIcon style={{display:alert,marginBottom:"16px"}} />
+                <Alert message="登录失败，请检查验证码或用户信息！" type="error" showIcon style={{display:alert,marginBottom:"16px"}} />
             </div>
             <Instruction />
         </div>

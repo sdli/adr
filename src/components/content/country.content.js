@@ -1,4 +1,4 @@
-import { Icon,Button,Select,Cascader,Input,Modal } from 'antd';
+import { Icon,Button,Select,Cascader,Input,Modal,message } from 'antd';
 import styles from "./content.less";
 import CountryTable from "../tables/country.table";
 import QueueAnim from 'rc-queue-anim';
@@ -62,6 +62,14 @@ class countryContent extends React.Component{
     }
     handleOk=()=>{
         this.props.dispatch({type:"data/download",downloadType:"byVillageId",id:this.props.id});
+    }
+    componentWillReceiveProps(nextProps){
+        if(nextProps.visible == false && this.state.visible == true){
+            this.setState({
+                visible: false
+            });
+            message.success("表格获取成功，请等待下载...");
+        }
     }
     render(){
         const {defaultValues,options,defaultInput,villageReport,level} = this.props;

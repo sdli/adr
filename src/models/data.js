@@ -29,16 +29,15 @@ const dataFetch = {
               body:"organId="+orgId +"&level="+level,
               credentials: 'include'
           });
-        console.log(data,"获得村镇列表");
         return data.data.code == "200"?data:false;   
   },
-  villageReport: function*({orgId,level}){
+  villageReport: function*({orgId,level,id}){
         let data = yield request('/api/villageReport', {
               method: 'POST',
               headers: {
                   "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" 
               },
-              body:"organId="+orgId+"&currPage=1&pageSize=100&type=village&level="+level,
+              body:"organId="+orgId+"&currPage=1&pageSize=100&type=village&level="+level+"&loginUserId="+id,
               credentials: 'include'
           });
         console.log(data,"获得村镇列表");
@@ -129,7 +128,8 @@ export default {
         changePasswordMessageAlert:false,
         changePasswordMessageType: "",
         changePasswordMessageText: "",
-        downloadUrl: ""
+        downloadUrl: "",
+        modelVisible: true
     },
   reducers: {
     updateCountryList(state,{data}){
@@ -214,7 +214,8 @@ export default {
         console.log(downloadUrl,"更新 state");
         return {
             ...state,
-            downloadUrl: downloadUrl
+            downloadUrl: downloadUrl,
+            modelVisible: false
         }
     },
     closeDownload(state){
@@ -222,6 +223,12 @@ export default {
             ...state,
             downloadUrl: ""
         }
+    },
+    setModelVisible(state){
+        return {
+            ...state,
+            modelVisible:true
+        };
     }
   },
   effects: {
@@ -241,7 +248,8 @@ export default {
     },
     *getVillageReport({orgId},{put,call,select}){
         const level = yield select(state=>state.login.loginData.orgLevel);
-        const list = yield call(dataFetch.villageReport,{orgId,level});
+        const id = yield select(state=>state.login.loginData.id);
+        const list = yield call(dataFetch.villageReport,{orgId,level,id});
         console.log(list);
         yield put({type:"updateVillageReport",data:list.data.data});
     },
@@ -264,7 +272,6 @@ export default {
     *changePasswordEffect({passwordold,passwordnew1,passwordnew2},{select,put,call}){
         const userId = yield select(state=>state.login.loginData.id);
         const pwdInfo = {passwordold,passwordnew1,passwordnew2,userId};
-        console.log(pwdInfo,"修改密码");
         const changeResult = yield call(dataFetch.changePassword,pwdInfo);
         if(changeResult){
             yield put({type:"giveMessage",alertType:"changePassword",msgType:"success",msgText:"修改成功,请重新登录"});
@@ -273,10 +280,10 @@ export default {
         }
     },
     *download({downloadType,id},{select,put,call}){
+        yield put({type:"setModelVisible"});
         const level = yield select(state=>state.login.loginData.orgLevel);
         const data = yield call(dataFetch.download,{downloadType,id,level});
         const url = data?"http://"+data.data.data.url:null;
-        console.log(url);
         yield put({type:"downloadExcel",downloadUrl:url});
     }
   }

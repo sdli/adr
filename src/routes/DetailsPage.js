@@ -9,6 +9,7 @@ function DetailsPage({dispatch,data,loading,params,login}) {
       id={params.id}
       level={login.loginData.orgLevel}
       childDetails={data.childDetails || null}
+      visible = {data.modelVisible}
     />
   );
 }

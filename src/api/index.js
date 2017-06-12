@@ -53,10 +53,7 @@ app.post("/changePassword",function(req,res,next){
 });
 
 // 下载excel
-app.post("/download",function(req,res,next){
-      console.log(typeof apis.download);
-      apis.download(req,res);
-});
+app.post("/download",apis.download);
 
 // 加载验证码
 app.get('/img',apis.loadImg);

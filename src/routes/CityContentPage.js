@@ -11,6 +11,7 @@ function IndexContentPage({dispatch,data,loading,params}) {
       defaultValues={data.defaultAreaValues || null}
       defaultInput = {data.defaultAreaInput || null}
       countryReport = {data.countryReport || null}
+      visible = {data.modelVisible}
     />
   );
 }

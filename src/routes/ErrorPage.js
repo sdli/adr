@@ -15,6 +15,7 @@ const Content = function(){
                             type="error"
                             showIcon
                         />
+                    <p style={{textAlign:"center",margin:"16px auto"}}><a href="/">返回首页</a></p>
                 </div>
 
         </div>
@@ -23,7 +24,6 @@ const Content = function(){
 
 function ErrorPage({dispatch,login,loading}) {
 
-  console.log(loading);
   const handleSubmit = (values) => {
     dispatch({type:"login/login",loginInfo:values});
   }

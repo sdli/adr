@@ -1,5 +1,4 @@
 const countryList = function(obj){
-    console.log(typeof obj);
     if(typeof obj !== "object"){
         return false;
     }else{

@@ -28,6 +28,7 @@ const LoginFetch = {
         switch(parseInt(data.data.code)){
               case 200: return data;
               case 400: return false;
+              case -1: return false;
               default : return false;
         }
     },

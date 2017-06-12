@@ -1,4 +1,4 @@
-import { Icon,Button,Select,Cascader,Modal,Input } from 'antd';
+import { Icon,Button,Select,Cascader,Modal,Input,message } from 'antd';
 import styles from "./content.less";
 import IndexTable from "../tables/city.table";
 import QueueAnim from 'rc-queue-anim';
@@ -64,9 +64,16 @@ class indexContent extends React.Component{
         this.props.dispatch({type:"data/getCountryList",orgId:this.props.id});
         this.props.dispatch({type:"data/getCountryReport",orgId:this.props.id});
     }
+    componentWillReceiveProps(nextProps){
+        if(nextProps.visible == false && this.state.visible == true){
+            this.setState({
+                visible: false
+            });
+            message.success("表格获取成功，请等待下载...");
+        }
+    }
     render(){
         const {defaultValues,options,defaultInput,countryReport} = this.props;
-        console.log(options);
         return (
             <div>
                 <div className={styles.aboveFunctions} key="1">

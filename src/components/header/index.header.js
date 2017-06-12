@@ -5,7 +5,7 @@ import HeaderUserInfo from "./userInfo.header";
 
 const Statistic= function({obj}){
     let list = [{
-            title: "已通过",
+            title: "已提交",
             value: obj.inAuditCount
         },{
             title: "未提交",
@@ -24,7 +24,7 @@ const Statistic= function({obj}){
             <ul>
                 {list.map((val,index)=>{
                     return (
-                        <li>
+                        <li key={index}>
                             <p>{val.value}</p>
                             <p>{val.title}</p>
                         </li>

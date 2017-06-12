@@ -12,7 +12,6 @@ class RegistrationForm extends Component {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
       }
     });
   }
@@ -44,6 +43,9 @@ class RegistrationForm extends Component {
             this.props.dispatch({type:"data/changePasswordEffect",...values});
           }
         });
+      }
+      if(nextProps.clear){
+        this.props.form.resetFields();
       }
   }
 
@@ -107,8 +109,9 @@ class RegistrationForm extends Component {
             rules: [
               { required: true, message: '请输入密码', whitespace: true },
               { max:16,message:"最大不超过16位",whitespace: true},
-              { min:6,message:"最低不能少于8位"}            
+              { min:6,message:"最低不能少于6位"}            
             ],
+            initialValue: null
           })(
             <Input />
           )}
@@ -126,8 +129,9 @@ class RegistrationForm extends Component {
             rules: [
               { required: true, message: '请输入密码', whitespace: true },
               { max:16,message:"最大不超过16位",whitespace: true},
-              { min:6,message:"最低不能少于8位"}
+              { min:6,message:"最低不能少于6位"}
             ],
+            initialValue: null
           })(
             <Input type={"password"} />
           )}
@@ -145,10 +149,11 @@ class RegistrationForm extends Component {
             rules: [
               { required: true, message: '请输入密码', whitespace: true },
               { max:16,message:"最大不超过16位",whitespace: true},
-              { min:6,message:"最低不能少于8位"},
+              { min:6,message:"最低不能少于6位"},
               {validator:this.checkPassword}
             ],
-          })(
+            initialValue: null
+           })(
             <Input type={"password"}/>
           )}
         </FormItem>

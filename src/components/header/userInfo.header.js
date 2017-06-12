@@ -3,7 +3,7 @@ import React,{Component} from "react";
 import styles from "./header.less";
 import UserForm from "../forms/userInfo.form";
 
-const ExportModal = function({phone,visible,handleCancel,handleOk,changePassword,dispatch}){
+const ExportModal = function({phone,visible,handleCancel,handleOk,changePassword,dispatch,clear}){
     return(
         <Modal
           title="修改账户信息"
@@ -15,6 +15,7 @@ const ExportModal = function({phone,visible,handleCancel,handleOk,changePassword
                 phone={phone} 
                 changePassword={changePassword} 
                 dispatch={dispatch}
+                clear={clear}
             />
         </Modal>
     );
@@ -24,12 +25,14 @@ class UserInfo extends Component{
     constructor(props){
         super(props);
         this.state={
-            visible:false
+            visible:false,
+            clear: false
         };
     }
     modalHandler= ()=>{
         this.setState({
-            visible: true
+            visible: true,
+            clear: false
         });
     }
     handleOk = ()=>{
@@ -47,9 +50,11 @@ class UserInfo extends Component{
 
     handleCancel=()=>{
         this.setState({
-            visible:false
+            visible:false,
+            clear: true
         });
     }
+
     render(){
         const {userInfo,handleLogout,dispatch,changePassword,alertMsg} =this.props;
         const text="用户信息";
@@ -86,6 +91,7 @@ class UserInfo extends Component{
                     handleOk={this.handleOk}
                     changePassword={changePassword}
                     dispatch={dispatch}
+                    clear={this.state.clear}
                 />
                 <Popover placement="bottomRight" content={content} trigger="hover" overlayClassName={styles.userInfoOverlay}>
                     <span className={styles.userInfoSpan} >账户：{userInfo.phone}</span>

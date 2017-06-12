@@ -10,7 +10,6 @@ import {message} from "antd";
 class IndexPage extends React.Component{
   constructor(props){
     super(props);
-    console.log(props);
     this.state={
       collapsed: false,
       mode: "inline",
@@ -21,7 +20,6 @@ class IndexPage extends React.Component{
     }
   }
   onCollapse = (collapsed) => {
-    console.log(collapsed);
     this.setState({
       collapsed,
       mode: collapsed ? 'vertical' : 'inline',
@@ -69,7 +67,6 @@ class IndexPage extends React.Component{
     return true;
   }
   componentWillReceiveProps(nextProps){
-    console.log(nextProps.data.changePasswordMessageAlert,"检查data");
     if(nextProps.data.changePasswordMessageAlert){
       if(this.checkIfNeedAlert(nextProps,this.props)){
         this.props.dispatch({type:"data/closeMessage",alertType:"changePassword"});
@@ -81,7 +78,6 @@ class IndexPage extends React.Component{
     
     if(nextProps.data.downloadUrl != ""){
       if(this.checkIfNeedDownload(nextProps,this.props)){
-        console.log("需要下载",nextProps.data.downloadUrl);
         this.props.dispatch({type:"data/closeDownload"});
         this.setState({
           downloadUrl:nextProps.data.downloadUrl
@@ -107,7 +103,6 @@ class IndexPage extends React.Component{
     const path = (typeof this.props.location.pathname !== "undefined")?this.props.location.pathname.split('\/'):["","/"];
     const {dispatch} = this.props;
     const url = this.state.downloadUrl;
-    console.log(url);
     const menuList=[
         {text:"总列表",icon:"contacts",link:this.getMenuLink(this.props.login.loginData)}
     ];
@@ -130,7 +125,7 @@ class IndexPage extends React.Component{
         onCollapse={this.onCollapse}
         height={this.state.height}
         path={path[1]}
-      > 
+      >
           <iframe style={{display:"none"}} src={url} ></iframe>
           {this.props.children}
       </Layout>

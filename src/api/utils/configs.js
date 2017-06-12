@@ -22,6 +22,10 @@ const config = {
             code:0,
             msg:"no auth"
         },
+        codeErrorResponse:{
+            code:-1,
+            msg: "img code error"
+        },
         getServerUrl: function(param){
             if(this.remoteApis.hasOwnProperty(param)){
                 return this.remoteServer+":"+this.remotePort + this.remoteApis[param];
