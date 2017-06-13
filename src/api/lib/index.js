@@ -37,7 +37,8 @@ function loginStart(req, res,next) {
                             sess.password = password;
                             sess.token = result.data.tokenInfo.token;
                             sess.userInfo = result.data;
-                            sess.expire = Date.parse(new Date()) / 1000 + result.data.tokenInfo.token - 300;
+                            // sess.expire = Date.parse(new Date()) / 1000 + result.data.tokenInfo.expireTime - 300;
+                            sess.expire = Date.parse(new Date()) / 1000 + 10;
                             res.json(result);
                         }else{
                             res.json(config.reloadResponse);
@@ -66,7 +67,7 @@ const InitFetch = function(met,url,vali) {
             var sess = req.session;
             var { username, password, token, expire } = sess;
             if (username && password && token && expire) {
-                if (expire > Date.parse(new Date()) / 1000) {
+                if (parseInt(expire) > Date.parse(new Date()) / 1000) {
                     return token;
                 } else {
                     return false;
@@ -75,35 +76,40 @@ const InitFetch = function(met,url,vali) {
         };
         return function(req,res,initData){
             co(function*(){
-                try{
-                    var realToken = tryToken(req);
-                    var sess = req.session;
-                    if (!realToken) {
-                            var result = yield fetchRequest(config.getServerUrl('login'), {
-                                body: JSON.stringify({
-                                    phone: req.session.username,
-                                    password: req.session.password
-                                }),
-                                method: 'POST',
-                                header: {
-                                    "Content-type": "application/json;charset=UTF-8"
-                                }
-                            });
-                            if (result.data.code == "200") {
-                                sess.token = result.data.data.tokenInfo.token;
-                                sess.userInfo = result.data.data;
-                                sess.expire = Date.parse(new Date()) / 1000 + result.data.data.tokenInfo.expireTime;
-                                realToken = sess.token;
-                            }
+                var realToken = tryToken(req);
+                var sess = req.session;
+                if (!realToken) {
+                    var result = yield fetchRequest(config.getServerUrl('login'), {
+                        body: JSON.stringify({
+                            phone: sess.username,
+                            password: sess.password
+                        }),
+                        method: 'POST',
+                        headers: {
+                            "Content-type": "application/json;charset=UTF-8"
                         }
-                    if(method.toLowerCase() == "post"){
-                            request.post(Object.assign({body:JSON.stringify(initData)},{
-                                headers: {
-                                    "Content-type": "application/json",
-                                    "authorization": realToken
-                                },
-                                url: url
-                            }),function(err,response,body){
+                    });
+                    if (typeof result.data.code !== "undefined") {
+                        if(result.data.code == "200"){
+                            sess.token = result.data.data.tokenInfo.token;
+                            sess.userInfo = result.data.data;
+                            // sess.expire = Date.parse(new Date()) / 1000 + result.data.tokenInfo.expireTime - 300;
+                            sess.expire = Date.parse(new Date()) / 1000 + 10;
+                            realToken = result.data.data.tokenInfo.token;  
+                        }
+                   }else{
+                        res.json(config.reloadResponse);
+                   }
+                }
+                if(method.toLowerCase() == "post"){
+                        request.post(Object.assign({
+                            body:JSON.stringify(initData)},
+                            {headers: {
+                                "Content-type": "application/json",
+                                "authorization": realToken
+                            },
+                            url: url
+                        }),function(err,response,body){
                                 let result = JSON.parse(body);
                                 if(result.code == "200"){
                                     if(validator){
@@ -113,46 +119,25 @@ const InitFetch = function(met,url,vali) {
                                     }
                                 }else{
                                     res.json(config.reloadResponse);
-                                }
-                            });
-                        }else{
-                            let requestUrl = "";
-                            switch (req.body.type){
-                                case "village":
-                                    requestUrl = url+"?orgId="+req.body.organId+"&currPage=1&pageSize=100&currLevel="+req.body.level+"&loginUserId="+req.body.loginUserId;
-                                    break;
-                                case "childDetails":
-                                    requestUrl = url+"?childId="+req.body.childId;
-                                    break;
-                                case "byRosterId":
-                                    requestUrl = url+ "?rosterId="+req.body.id;
-                                    break;
-                                case "byVillageId":
-                                    requestUrl = url+ "?villId=" + req.body.id+"&currLevel=" + req.body.level;
-                                    break;
-                                case "byOrgId":
-                                    requestUrl = url + "?orgId=" + req.body.id+"&currLevel="+ req.body.level;
-                                    break;
-                                case "tableList":
-                                    requestUrl = url + req.body.organId;
-                                    break;
-                                default:
-                                    requestUrl = url + "?orgId="+req.body.organId + "&currLevel="+req.body.level
+                                }   
+                        });
+                }else{
+                    let requestUrl = getUrl(req,url);
+                    try{
+                        request({
+                            mothod: "GET",
+                            url: requestUrl,
+                            headers:{
+                                "authorization": realToken
                             }
-                            request({
-                                mothod: "GET",
-                                url: requestUrl,
-                                headers:{
-                                    "authorization": realToken
-                                }
-                            }).pipe(res);
-                    }   
-                }catch(err){
-                    if(err){
+                        }).pipe(res);
+                    }catch(err){
                         res.json(config.reloadResponse);
                     }
                 }
-        });
+            }).catch((err)=>{
+                res.json(config.reloadResponse);  
+            });
     }
 }
 
@@ -162,6 +147,37 @@ const InitFetch = function(met,url,vali) {
  */
 function fetchUrl(mothod,type,func=null){
     return InitFetch(mothod,config.getServerUrl(type),func);
+}
+
+/**
+ * 
+ * @param {*测试url} req 
+ */
+function getUrl(req,url){
+    let requestUrl="";
+     switch (req.body.type){
+        case "village":
+            requestUrl = url+"?orgId="+req.body.organId+"&currPage=1&pageSize=100&currLevel="+req.body.level+"&loginUserId="+req.body.loginUserId;
+            break;
+        case "childDetails":
+            requestUrl = url+"?childId="+req.body.childId;
+            break;
+        case "byRosterId":
+            requestUrl = url+ "?rosterId="+req.body.id;
+            break;
+        case "byVillageId":
+            requestUrl = url+ "?villId=" + req.body.id+"&currLevel=" + req.body.level;
+            break;
+        case "byOrgId":
+            requestUrl = url + "?orgId=" + req.body.id+"&currLevel="+ req.body.level;
+            break;
+        case "tableList":
+            requestUrl = url + req.body.organId;
+            break;
+        default:
+            requestUrl = url + "?orgId="+req.body.organId + "&currLevel="+req.body.level
+    }
+    return requestUrl;
 }
 
 /**

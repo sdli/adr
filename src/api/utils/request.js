@@ -1,15 +1,7 @@
 import fetch from 'dva/fetch';
 
 function parseJSON(response) {
-  try{
-    var data = response.json();
-  }catch(err){
-    if(err){
-      throw new Error("not json");
-    }else{
-      return data;
-    }
-  }
+  return response.json();
 }
 
 function checkStatus(response) {
