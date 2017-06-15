@@ -4,6 +4,7 @@ const config = {
         server:ServerConfig.server,
         apiPort: ServerConfig.apiPort,
         serverPort: ServerConfig.serverPort,
+        domain:ServerConfig.domain,
         remoteServer: "http://120.76.204.189",//http://192.168.1.129:9300/ http://183.234.63.50
         remotePort: "9900",
         remoteApis:{
