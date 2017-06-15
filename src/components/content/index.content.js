@@ -1,9 +1,9 @@
-import { Icon,Button,Select,Cascader,Modal,Input,message } from 'antd';
+import { Icon,Button,Select,Cascader,Modal,Input,message,Breadcrumb } from 'antd';
 import styles from "./content.less";
 import IndexTable from "../tables/index.table";
 import QueueAnim from 'rc-queue-anim';
 import React from "react";
-
+import {hashHistory} from "react-router";
 
 function onChange(value) {
 }
@@ -34,7 +34,7 @@ const ExportModal = function({handleOk,visible,handleCancel,confirmLoading}){
           onCancel={handleCancel}
           confirmLoading={confirmLoading}
         >
-          <p>您确认要到处当前地区的报表？</p>
+          <p>您确认要导出当前地区的报表？</p>
         </Modal>
     );
 };
@@ -72,11 +72,22 @@ class indexContent extends React.Component{
             message.success("表格获取成功，请等待下载...");
         }
     }
+    goBack=()=>{
+        hashHistory.goBack();
+    }
     render(){
-        const {defaultValues,options,defaultInput,countryReport} = this.props;
+        const {defaultValues,options,defaultInput,countryReport,level} = this.props;
         return (
             <div>
                 <div className={styles.aboveFunctions} key="1">
+                    {level<=2 && 
+                        <Breadcrumb style={{float:"left"}}>
+                            <Breadcrumb.Item onClick={this.goBack} style={{cursor:"pointer"}}>
+                                    <Icon type="left" />
+                                    <span>返回县/区列表 / </span>    
+                            </Breadcrumb.Item>
+                        </Breadcrumb>
+                    }
                     <span style={{float: "left"}}>当前乡镇/街道：</span>
                     {options && <CityPicker options={options} defaultValue={defaultValues} defaultAreaInput={defaultInput} />}
                     <div style={{float:"right"}}>

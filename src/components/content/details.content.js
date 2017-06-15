@@ -114,7 +114,11 @@ class DetailsContent extends React.Component{
         const applyId = this.props.id;
         const dispatch = this.props.dispatch;
         return function(remark){
-            dispatch({type:"data/shenhe",action:action,applyId:applyId,remark:remark});
+            if(action == 2 && remark == ""){
+                alert("驳回信息时，必须填写评语！");
+            }else{
+                dispatch({type:"data/shenhe",action:action,applyId:applyId,remark:remark});
+            }
         }
     }
     componentWillReceiveProps(nextProps){
@@ -134,15 +138,14 @@ class DetailsContent extends React.Component{
         return (
             <div>
                 <div className={styles.aboveFunctions} key="1">
-                    <span>当前地区：</span>
-                      <Breadcrumb style={{float:"left"}}>
+                    <Breadcrumb style={{float:"left"}}>
                         <Breadcrumb.Item onClick={this.goCountryPage} style={{cursor:"pointer"}}>
-                                <Icon type="home" />
-                                <span>困境儿童列表</span>    
+                                <Icon type="rollback" />
+                                <span>返回困境儿童列表</span>    
                         </Breadcrumb.Item>
-                        <Breadcrumb.Item href="">
+                        <Breadcrumb.Item>
                             <Icon type="user" />
-                            <span>人员详情</span>
+                            <span>当前儿童：{childDetails.childName}</span>
                         </Breadcrumb.Item>
                     </Breadcrumb>
                     <div style={{float:"right"}}>

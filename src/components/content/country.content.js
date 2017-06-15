@@ -1,9 +1,9 @@
-import { Icon,Button,Select,Cascader,Input,Modal,message } from 'antd';
+import { Icon,Button,Select,Cascader,Input,Modal,message,Breadcrumb} from 'antd';
 import styles from "./content.less";
 import CountryTable from "../tables/country.table";
 import QueueAnim from 'rc-queue-anim';
+import {hashHistory} from "react-router";
 import React from "react";
-
 
 const ExportModal = function({handleOk,visible,handleCancel,confirmLoading}){
     return(
@@ -71,13 +71,23 @@ class countryContent extends React.Component{
             message.success("表格获取成功，请等待下载...");
         }
     }
+    goBack=()=>{
+        hashHistory.goBack();
+    }
     render(){
         const {defaultValues,options,defaultInput,villageReport,level} = this.props;
         return (
             <div>
                 <div className={styles.aboveFunctions}>
+                    <Breadcrumb style={{float:"left"}}>
+                        <Breadcrumb.Item onClick={this.goBack} style={{cursor:"pointer"}}>
+                                <Icon type="left" />
+                                <span>返回乡镇列表 / </span>    
+                        </Breadcrumb.Item>
+                    </Breadcrumb>
                     <span style={{float:"left"}}>当前村/社区： </span>
-                    {options && <CityPicker options={options} defaultValue={defaultValues} defaultAreaInput={defaultInput} />}                    <div style={{float:"right"}}>
+                    {options && <CityPicker options={options} defaultValue={defaultValues} defaultAreaInput={defaultInput} />}                    
+                    <div style={{float:"right"}}>
                         <Button type="primary" icon="download" onClick={this.handleExport}>
                             导出表格
                         </Button>

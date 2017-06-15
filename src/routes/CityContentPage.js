@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'dva';
 import CountryList from "../components/content/city.content";
 
-function IndexContentPage({dispatch,data,loading,params}) {
+function IndexContentPage({dispatch,data,loading,params,login}) {
   return (
     <CountryList 
       dispatch={dispatch} 
@@ -12,10 +12,11 @@ function IndexContentPage({dispatch,data,loading,params}) {
       defaultInput = {data.defaultAreaInput || null}
       countryReport = {data.countryReport || null}
       visible = {data.modelVisible}
+      level={login.loginData.orgLevel}
     />
   );
 }
 
 IndexContentPage.propTypes = {};
 
-export default connect(({data,loading})=>{return {data,loading};})(IndexContentPage);
+export default connect(({data,loading,login})=>{return {login,data,loading};})(IndexContentPage);

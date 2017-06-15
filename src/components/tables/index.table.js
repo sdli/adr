@@ -122,6 +122,9 @@ const IndexTable = function({data}){
       showTotal:(total,range) => `当前${range[0]}-${range[1]} , 共计 ${total} 条数据`,
       defaultCurrent:1
     }}
+    locale={{
+      emptyText: '暂无提交数据' 
+    }}
     />
   );
 }

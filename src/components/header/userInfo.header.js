@@ -67,7 +67,7 @@ class UserInfo extends Component{
                             <span>
                                 <Icon type="solution" />
                             </span>
-                            <p>编辑资料</p>
+                            <p>修改密码</p>
                         </a>
                     </li>
                     <li key="userinfo3">
@@ -94,7 +94,7 @@ class UserInfo extends Component{
                     clear={this.state.clear}
                 />
                 <Popover placement="bottomRight" content={content} trigger="hover" overlayClassName={styles.userInfoOverlay}>
-                    <span className={styles.userInfoSpan} >账户：{userInfo.phone}</span>
+                    <span className={styles.userInfoSpan} >账户信息：{userInfo.phone}</span>
                 </Popover>
             </div>
         );

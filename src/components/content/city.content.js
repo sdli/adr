@@ -3,6 +3,7 @@ import styles from "./content.less";
 import IndexTable from "../tables/city.table";
 import QueueAnim from 'rc-queue-anim';
 import React from "react";
+import {hashHistory} from "react-router";
 
 
 function onChange(value) {
@@ -72,8 +73,11 @@ class indexContent extends React.Component{
             message.success("表格获取成功，请等待下载...");
         }
     }
+    goBack=()=>{
+        hashHistory.goBack();
+    }
     render(){
-        const {defaultValues,options,defaultInput,countryReport} = this.props;
+        const {defaultValues,options,defaultInput,countryReport,level} = this.props;
         return (
             <div>
                 <div className={styles.aboveFunctions} key="1">
