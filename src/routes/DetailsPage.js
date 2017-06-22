@@ -7,6 +7,7 @@ function DetailsPage({dispatch,data,loading,params,login}) {
     <ChildDetails
       dispatch={dispatch}
       id={params.id}
+      loading={loading.models.data}
       level={login.loginData.orgLevel}
       childDetails={data.childDetails || null}
       visible = {data.modelVisible}

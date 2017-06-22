@@ -289,7 +289,13 @@ export default {
         const level = yield select(state=>state.login.loginData.orgLevel);
         const id = yield select(state=>state.login.loginData.id);
         const list = yield call(dataFetch.villageReport,{orgId,level,id});
-        console.log(list);
+        yield put({type:"updateVillageReport",data:list.data.data});
+    },
+    *getVillageReportByUserId({},{put,call,select}){
+        const level = yield select(state=>state.login.loginData.orgLevel);
+        const id = yield select(state=>state.login.loginData.id);
+        const orgId = yield select(state=>state.login.loginData.orgId);
+        const list = yield call(dataFetch.villageReport,{orgId,level,id});
         yield put({type:"updateVillageReport",data:list.data.data});
     },
     *getChildDetails({childId},{put,call,select}){

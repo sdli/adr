@@ -1,5 +1,5 @@
 import React from 'react';
-import { Radio, Row, Col,Button } from 'antd';
+import {Spin, Radio, Row, Col,Button } from 'antd';
 import CountryTable from "../tables/country.table";
 
 const RadioButton = Radio.Button;
@@ -8,6 +8,7 @@ const RadioGroup = Radio.Group;
 class SearchContent extends React.Component{
     componentDidMount(){
         this.props.dispatch({type:"data/getSearchBar"});
+        this.props.dispatch({type:"data/getVillageReportByUserId"});
     }
     state={
         selected: 9999,
@@ -54,6 +55,7 @@ class SearchContent extends React.Component{
     }
     render(){
         const {dispatch,data,loading,params,login} = this.props;
+        console.log(loading);
         const villageReport = data.villageReport || null;
         return (
             <div>
@@ -212,9 +214,11 @@ class SearchContent extends React.Component{
                         <Button type="primary" icon="reload" onClick={this.handleSearch}>查询</Button>
                     </Col>
                 </Row>
+                <Spin spinning={loading.models.data}>
                 <div style={{padding:"16px 0"}} key="1">
                     <CountryTable data={villageReport} level={login.loginData.orgLevel}/>
                 </div>
+                </Spin>
             </div>
         );
     }

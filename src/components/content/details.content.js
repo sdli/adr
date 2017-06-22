@@ -1,4 +1,4 @@
-import { Icon,Button,Select,Cascader,Modal,Breadcrumb,Steps,Popover,Layout,message} from 'antd';
+import { Timeline,Icon,Button,Select,Cascader,Modal,Breadcrumb,Steps,Popover,Layout,message,Spin} from 'antd';
 import styles from "./content.less";
 import IndexTable from "../tables/index.table";
 import DetailWells from "../well/details.well";
@@ -130,44 +130,59 @@ class DetailsContent extends React.Component{
         }
     }
     render(){
-        const {childDetails,level,id} = this.props;
-        const {villageStatus,townStatus,countyStatus,cityStatus} = childDetails;
+        const {childDetails,level,id,loading} = this.props;
+        const {villageStatus,townStatus,countyStatus,cityStatus,auditRecords} = childDetails;
         const step = this.getCurrentStep([villageStatus,townStatus,countyStatus,cityStatus]);
         const currentStatus = this.getCurrentStatus([villageStatus,townStatus,countyStatus,cityStatus],level);
         const descriptions = this.getStepStatus(childDetails);
+                console.log(auditRecords);
         return (
             <div>
-                <div className={styles.aboveFunctions} key="1">
-                    <Breadcrumb style={{float:"left"}}>
-                        <Breadcrumb.Item onClick={this.goCountryPage} style={{cursor:"pointer"}}>
-                                <Icon type="rollback" />
-                                <span>返回困境儿童列表</span>    
-                        </Breadcrumb.Item>
-                        <Breadcrumb.Item>
-                            <Icon type="user" />
-                            <span>当前儿童：{childDetails.childName}</span>
-                        </Breadcrumb.Item>
-                    </Breadcrumb>
-                    <div style={{float:"right"}}>
-                        <Button type="primary" icon="download" onClick={this.handleExport}>
-                            导出信息
-                        </Button>
+                <Spin spinning={loading}>
+                    <div className={styles.aboveFunctions} key="1">
+                        <Breadcrumb style={{float:"left"}}>
+                            <Breadcrumb.Item onClick={this.goCountryPage} style={{cursor:"pointer"}}>
+                                    <Icon type="rollback" />
+                                    <span>返回困境儿童列表</span>    
+                            </Breadcrumb.Item>
+                            <Breadcrumb.Item>
+                                <Icon type="user" />
+                                <span>当前儿童：{childDetails.childName}</span>
+                            </Breadcrumb.Item>
+                        </Breadcrumb>
+                        <div style={{float:"right"}}>
+                            <Button type="primary" icon="download" onClick={this.handleExport}>
+                                导出信息
+                            </Button>
+                        </div>
                     </div>
-                </div>
-                <div style={{padding:"32px 20%"}}>
-                    <StepsDiv current={step}  descriptions={descriptions}/>
-                </div>
-                <QueueAnim delay={200}>
-                    <div style={{padding:"16px 15%"}} key="2">
-                        <DetailWells 
-                            {...childDetails}
-                        />
+                    <div style={{padding:"32px 20%"}}>
+                        <StepsDiv current={step}  descriptions={descriptions}/>
                     </div>
-                </QueueAnim>
-                <ExportModal  handleOk={this.handleOk} visible={this.state.visible} handleCancel={this.handleCancel}/>
-                {parseInt(currentStatus)==3 &&<Layout style={{width:"100%",marginTop:"36px",marginBottom:"64px",overflow:"hidden"}}>
-                    <FixedBottom key="1" shenheHandler={this.shenheHandler}/>    
-                </Layout>}
+                    <QueueAnim delay={200}>
+                        <div style={{padding:"16px 15%"}} key="2">
+                            <DetailWells 
+                                {...childDetails}
+                            />
+                        </div>
+                    </QueueAnim>
+                    <ExportModal  handleOk={this.handleOk} visible={this.state.visible} handleCancel={this.handleCancel}/>
+                    {parseInt(currentStatus)==3 &&<Layout style={{width:"100%",marginTop:"36px",marginBottom:"64px",overflow:"hidden"}}>
+                        <FixedBottom key="1" shenheHandler={this.shenheHandler}/>    
+                    </Layout>}
+                </Spin>
+                <div style={{width:"70%",margin:"32px auto"}}>
+                    <p style={{lineHeight:"44px"}}>操作记录：</p>
+                    <Timeline style={{border:"1px solid #f0f0f0",padding:"16px"}}>
+                        {auditRecords && auditRecords.length != 0 && auditRecords.map((val,index)=>{
+                            let dateTime = new Date(val.createTime);
+                            let getDate = dateTime.getDate();
+                            let year = dateTime.getFullYear();
+                            let month = dateTime.getMonth();
+                            return <Timeline.Item color={parseInt(val.type)==2?"green":"red"}>{year+"年"+month+"月"+getDate+"日"} {val.operatorName} 进行了：{parseInt(val.type)==1?"审核通过 ":"驳回 "}操作，备注：{val.description?val.description:"无"}</Timeline.Item>;
+                        })}
+                    </Timeline>
+                </div>
            </div>
         );
     }
