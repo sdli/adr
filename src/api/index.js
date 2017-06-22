@@ -1,4 +1,4 @@
-import "babel-polyfill";
+// import "babel-polyfill";
 import express from 'express';
 import bodyParser from "body-parser";
 import configs from "./utils/configs"; 
@@ -39,6 +39,9 @@ app.post("/villageReport",apis.villageReport);
 
 // 加载儿童详情
 app.post("/getChildDetails",apis.getChildDetails);
+
+// 查询接口
+app.post("/searchChildren",apis.searchChildren);
 
 // 修改密码
 app.post("/changePassword",function(req,res,next){

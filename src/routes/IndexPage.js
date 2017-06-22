@@ -104,7 +104,8 @@ class IndexPage extends React.Component{
     const {dispatch} = this.props;
     const url = this.state.downloadUrl;
     const menuList=[
-        {text:"总列表",icon:"contacts",link:this.getMenuLink(this.props.login.loginData)}
+        {text:"地区汇总表",icon:"contacts",link:this.getMenuLink(this.props.login.loginData),level:[1,2,3]},
+        {text:"花名册查询",icon:"solution",link:"/search",level:[1,2]}
     ];
     return (
       <Layout
@@ -119,7 +120,7 @@ class IndexPage extends React.Component{
           />
         }
         footer={<Footer />}
-        menuList={<MenuList menuList={menuList} mode={this.state.mode} collapsed={this.state.collapsed} />}
+        menuList={<MenuList menuList={menuList} mode={this.state.mode} collapsed={this.state.collapsed} level={this.props.login.loginData.orgLevel} />}
         mode={this.state.mode}
         collapsed={this.state.collapsed}
         onCollapse={this.onCollapse}

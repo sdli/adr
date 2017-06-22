@@ -13,45 +13,45 @@ var port = config.apiPort;
  * @param {返回内容} res 
  */
 function loginStart(req, res,next) {
-            let sess = req.session;
-            let { username, password ,code} = req.body;
-            if(parseInt(code) != parseInt(sess.pngNum)){
-                res.json(config.codeErrorResponse);
-                return true;
+    let sess = req.session;
+    let { username, password ,code} = req.body;
+    if(parseInt(code) != parseInt(sess.pngNum)){
+        res.json(config.codeErrorResponse);
+        return true;
+    }
+    if (username && password ) {
+        request.post({
+            url: config.getServerUrl('login'),
+            body: JSON.stringify({
+                phone: username,
+                password: password
+            }),
+            header: {
+                "Content-type": "application/json;charset=UTF-8"
             }
-            if (username && password ) {
-                request.post({
-                    url: config.getServerUrl('login'),
-                    body: JSON.stringify({
-                        phone: username,
-                        password: password
-                    }),
-                    header: {
-                        "Content-type": "application/json;charset=UTF-8"
-                    }
-                }, function(err, httpResponse, body) {
-                    try{
-                        let result = JSON.parse(body);
-                        if (result.code == "200") {
-                            sess.username = username;
-                            sess.password = password;
-                            sess.token = result.data.tokenInfo.token;
-                            sess.userInfo = result.data;
-                            // sess.expire = Date.parse(new Date()) / 1000 + result.data.tokenInfo.expireTime - 300;
-                            sess.expire = Date.parse(new Date()) / 1000 + 10;
-                            res.json(result);
-                        }else{
-                            res.json(config.reloadResponse);
-                        }
-                    }catch(err){
-                        if(err){
-                            res.json(config.reloadResponse);
-                        }
-                    }
-                });
-            } else {
-                res.json(config.reloadResponse);
+        }, function(err, httpResponse, body) {
+            try{
+                let result = JSON.parse(body);
+                if (result.code == "200") {
+                    sess.username = username;
+                    sess.password = password;
+                    sess.token = result.data.tokenInfo.token;
+                    sess.userInfo = result.data;
+                    // sess.expire = Date.parse(new Date()) / 1000 + result.data.tokenInfo.expireTime - 300;
+                    sess.expire = Date.parse(new Date()) / 1000 + 10;
+                    res.json(result);
+                }else{
+                    res.json(config.reloadResponse);
+                }
+            }catch(err){
+                if(err){
+                    res.json(config.reloadResponse);
+                }
             }
+        });
+    } else {
+        res.json(config.reloadResponse);
+    }
 }
 
 
@@ -174,9 +174,13 @@ function getUrl(req,url){
         case "tableList":
             requestUrl = url + req.body.organId;
             break;
+        case "searchChildren":
+            requestUrl = url + "?orgId=" + req.body.orgId + "&level="+ req.body.level+ "&currPage=1&pageSize=100&uid="+req.body.id
+            break;
         default:
             requestUrl = url + "?orgId="+req.body.organId + "&currLevel="+req.body.level
     }
+    console.log(requestUrl);
     return requestUrl;
 }
 
@@ -274,6 +278,7 @@ const funcs = {
     villageReport: fetchUrl("get","villageReport"),
     getChildDetails: fetchUrl("get","getChildDetails"),
     shenhe: fetchUrl("post","shenhe"),
+    searchChildren:fetchUrl("get","searchChildren"),
     changePassword: fetchUrl("post","changePassword"),
     download: download,
     loginStart: loginStart,

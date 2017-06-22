@@ -16,9 +16,20 @@ const dataFetch = {
               body:"type=tableList&organId="+organId,
               credentials: 'include'
           });
-        console.log(data,"拿到了城市列表");
         let list = countryList(data.data.data);
         return data.data.code == "200"?list:false;   
+  },
+  searchBarList: function*(organId){
+    console.log(organId);
+        let data = yield request('/api/countryList', {
+              method: 'POST',
+              headers: {
+                  "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" 
+              },
+              body:"type=tableList&organId="+organId,
+              credentials: 'include'
+          });
+        return data.data.code == "200"?data.data.data:false;   
   },
   countryReport: function*({orgId,level}){
         let data = yield request('/api/countryReport', {
@@ -40,7 +51,6 @@ const dataFetch = {
               body:"organId="+orgId+"&currPage=1&pageSize=100&type=village&level="+level+"&loginUserId="+id,
               credentials: 'include'
           });
-        console.log(data,"获得村镇列表");
         return data.data.code == "200"?data:false;   
   },
   getChildDetails: function*(childId){
@@ -52,7 +62,6 @@ const dataFetch = {
               body:"type=childDetails&childId="+childId,
               credentials: 'include'
           });
-        console.log(data,"获取儿童信息");
         return data.data.code == "200"?data:false;  
   },
   shenhe: function*({action,operatorId,applyId,remark,level}){
@@ -65,7 +74,6 @@ const dataFetch = {
             body:"action="+action+"&operatorId="+operatorId+"&applyId="+applyId+"&remark="+remark+"&level="+level,
             credentials: 'include'
         });
-        console.log(data,"获取审核信息");
         return data.data.code == "200"?true:false;  
   },
   changePassword: function*(pwdInfo){
@@ -77,14 +85,13 @@ const dataFetch = {
           body: objToQuery(pwdInfo),
           credentials: "include"
         });
-        console.log(data);
         switch(parseInt(data.data.code)){
             case 200: return true;
             case 0: return false;
             default: return false;
         }
     },
-    download: function*({downloadType,id,level}){
+  download: function*({downloadType,id,level}){
         console.log(downloadType,id);
         let data = yield request("/api/download",{
           method: "POST",
@@ -94,7 +101,21 @@ const dataFetch = {
           body: "type="+downloadType+"&id="+id+"&level="+level,
           credentials: "include"
         });
-        console.log(data,data.data.code);
+        switch(parseInt(data.data.code)){
+            case 200: return data;
+            case 0: return false;
+            default: return false;
+        }
+    },
+    searchChildren: function*({id,orgId,level}){
+        let data = yield request("/api/searchChildren",{
+          method: "POST",
+          headers:{
+                "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" 
+          },
+          body: "type=searchChildren&orgId="+orgId+"&id="+id+"&level="+level,
+          credentials: "include"
+        });
         switch(parseInt(data.data.code)){
             case 200: return data;
             case 0: return false;
@@ -129,6 +150,7 @@ export default {
         changePasswordMessageType: "",
         changePasswordMessageText: "",
         downloadUrl: "",
+        searchBarOptions:{},
         modelVisible: true
     },
   reducers: {
@@ -139,6 +161,12 @@ export default {
           defaultAreaValues:data.defaultValues,
           defaultAreaInput:data.defaultInput
       };
+    },
+    updateSearchBar(state,{data}){
+        return{
+            ...state,
+            searchBarOptions:data
+        }
     },
     updateCountryReport(state,{data}){
       return {
@@ -235,6 +263,17 @@ export default {
     *getCountryList({orgId},{put,call,select}){
         const list = yield call(dataFetch.countryList,orgId);
         yield put({type:"updateCountryList",data:list});
+    },
+    *getSearchBar({},{put,call,select}){
+        const orgId = yield select(state=>state.login.loginData.orgId);
+        const list = yield call(dataFetch.searchBarList,orgId);
+        yield put({type:"updateSearchBar",data:list});
+    },
+    *searchChildren({orgId},{put,call,select}){
+        const id = yield select(state=>state.login.loginData.id);
+        const level = yield select(state=>state.login.loginData.orgLevel);
+        const list = yield call(dataFetch.searchChildren,{orgId,level,id});
+        console.log(list);
     },
     *getCountryReport({orgId},{put,call,select}){
         const level = yield select(state=>state.login.loginData.orgLevel);

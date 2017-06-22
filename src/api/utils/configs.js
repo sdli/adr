@@ -17,7 +17,8 @@ const config = {
             changePassword:"/api/user/modifyPwd",
             downloadChild: "/api/export/rosterInfo",
             downloadCountry:"/api/export/rosterLsts",
-            downloadOrg: "/api/export/statistical"
+            downloadOrg: "/api/export/statistical",
+            searchChildren:"/api/roster/getLsts"
         },
         reloadResponse:{
             code:0,

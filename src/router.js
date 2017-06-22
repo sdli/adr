@@ -9,6 +9,7 @@ import IndexContent from "./routes/IndexContentPage";
 import DetailsContent from "./routes/DetailsPage";
 import AreaContent from "./routes/AreaContentPage";
 import CityContent from "./routes/CityContentPage";
+import SearchContent from "./routes/SearchContent";
 
 function RouterConfig({ history }) {
   return (
@@ -28,6 +29,9 @@ function RouterConfig({ history }) {
       </Router>
       <Router path="/details/:id" component={IndexPage}>
           <IndexRoute component={DetailsContent} />
+      </Router>
+      <Router path="/search" component={IndexPage}>
+          <IndexRoute component={SearchContent} />
       </Router>
       <Route path="/login" component={LoginPage} />
       <Route path="/error" component={ErrorPage} />
