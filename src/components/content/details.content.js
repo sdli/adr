@@ -135,7 +135,7 @@ class DetailsContent extends React.Component{
         const step = this.getCurrentStep([villageStatus,townStatus,countyStatus,cityStatus]);
         const currentStatus = this.getCurrentStatus([villageStatus,townStatus,countyStatus,cityStatus],level);
         const descriptions = this.getStepStatus(childDetails);
-                console.log(auditRecords);
+        console.log(auditRecords);
         return (
             <div>
                 <Spin spinning={loading}>
@@ -173,13 +173,14 @@ class DetailsContent extends React.Component{
                 </Spin>
                 <div style={{width:"70%",margin:"32px auto"}}>
                     <p style={{lineHeight:"44px"}}>操作记录：</p>
+                    
                     <Timeline style={{border:"1px solid #f0f0f0",padding:"16px"}}>
-                        {auditRecords && auditRecords.length != 0 && auditRecords.map((val,index)=>{
+                        {auditRecords && auditRecords.map((val,index)=>{
                             let dateTime = new Date(val.createTime);
                             let getDate = dateTime.getDate();
                             let year = dateTime.getFullYear();
                             let month = dateTime.getMonth();
-                            return <Timeline.Item color={parseInt(val.type)==2?"green":"red"}>{year+"年"+month+"月"+getDate+"日"} {val.operatorName} 进行了：{parseInt(val.type)==1?"审核通过 ":"驳回 "}操作，备注：{val.description?val.description:"无"}</Timeline.Item>;
+                            return <Timeline.Item color={parseInt(val.type)==1?"green":"red"}>{year+"年"+month+"月"+getDate+"日"} {val.operatorName} 进行了：{parseInt(val.type)==1?"审核通过 ":"驳回 "}操作，备注：{val.description?val.description:"无"}</Timeline.Item>;
                         })}
                     </Timeline>
                 </div>

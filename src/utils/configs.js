@@ -3,7 +3,7 @@ var config ={
     server:"http://localhost",
     apiPort: "3060",
     serverPort: "8000",
-    // domain: "shenhe.345pas.com.cn",
+    domain: "shenhe.345pas.com.cn",
     authException: ['/login','/help',"/error"],
     logoTitle: "漯河市困境儿童保障监管系统",
     footerTitle: "漯河市困境儿童保障监管系统",
@@ -23,4 +23,4 @@ var config1 ={
     footerSubtitle: "@CopyRight 2016~2018 深圳市前海云东家科技有限公司 备案号：[粤 ]",
     imageUrl: ""
 };
-module.exports = config1;
+module.exports = config;
