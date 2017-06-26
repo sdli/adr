@@ -23,4 +23,4 @@ var config1 ={
     footerSubtitle: "@CopyRight 2016~2018 深圳市前海云东家科技有限公司 备案号：[粤 ]",
     imageUrl: ""
 };
-module.exports = config;
+module.exports = config1;

@@ -65,6 +65,7 @@ class indexContent extends React.Component{
     }
     render(){
         const {defaultValues,options,defaultInput,countryCheckReport,level,loading} = this.props;
+        console.log(countryCheckReport,"检查是否为array");
         const month = this.getMonth();
         return (
             <div>

@@ -163,8 +163,9 @@ export default {
         changePasswordMessageText: "",
         downloadUrl: "",
         searchBarOptions:{},
-        countryCheckReport:{},
-        modelVisible: true
+        countryCheckReport:[],
+        modelVisible: true,
+        selectedMonth: ""
     },
   reducers: {
     updateCountryList(state,{data}){
@@ -187,10 +188,11 @@ export default {
           countryReport: data
       };
     },
-    updateCountryCheckReport(state,{data}){
+    updateCountryCheckReport(state,{data,month}){
         return {
             ...state,
-            countryCheckReport: data
+            countryCheckReport: data,
+            selectedMonth: month
         }
     },
     updateVillageList(state,{data}){
@@ -300,10 +302,11 @@ export default {
         yield put({type:"updateCountryReport",data:list.data.data});
     },
     *getCountryCheckReport({orgId,month},{put,call,select}){
-        const monthTime = getMonthTime(month);
-        const {beginTime,endTime} = monthTime;
+        const selectedMonth = yield select(state=>state.data.selectedMonth);
+        const monthTime = getMonthTime(month || selectedMonth);
+        const {beginTime,endTime,realMonth} = monthTime;
         const list = yield call(dataFetch.countryCheckReport,{orgId,beginTime,endTime});
-        yield put({type:"updateCountryCheckReport",data:list.data.data});
+        yield put({type:"updateCountryCheckReport",data:list.data.data,month:realMonth});
         console.log(list);
     },
     *getVillageList({orgId},{put,call,select}){

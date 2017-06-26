@@ -20,7 +20,7 @@ const getMonthTime = function(month){
     let dateStart = date(Date.parse(new Date(monthArr[0], parseInt(monthArr[1])-1, 1, 0, 0, 0)));
     let dateEnd = date(Date.parse(new Date(nextYear, parseInt(nextMonth)-1, 1, 0, 0, 0)));
     console.log(monthArr,{beginTime:dateStart,endTime:dateEnd});
-    return {beginTime:dateStart,endTime:dateEnd};
+    return {beginTime:dateStart,endTime:dateEnd,realMonth:monthArr.join("-")};
 }
 
 export default getMonthTime;
