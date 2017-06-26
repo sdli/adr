@@ -65,6 +65,17 @@ const dataFetch = {
           });
         return data.data.code == "200"?data:false;   
   },
+  villageCheckReport: function*({orgId,beginTime,endTime}){
+        let data = yield request('/api/villageCheckList', {
+              method: 'POST',
+              headers: {
+                  "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" 
+              },
+              body:"type=villageCheckList&organId="+orgId+"&beginTime="+beginTime+"&endTime="+endTime,
+              credentials: 'include'
+          });
+        return data.data.code == "200"?data:false;   
+  },
   getChildDetails: function*(childId){
         let data = yield request('/api/getChildDetails', {
               method: 'POST',
@@ -119,6 +130,22 @@ const dataFetch = {
             default: return false;
         }
     },
+    downloadCheck: function*({downloadType,id,beginTime,endTime}){
+        console.log(downloadType,id);
+        let data = yield request("/api/download",{
+          method: "POST",
+          headers:{
+                "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" 
+          },
+          body: "type="+downloadType+"&id="+id+"&beginTime="+beginTime+"&endTime="+endTime,
+          credentials: "include"
+        });
+        switch(parseInt(data.data.code)){
+            case 200: return data;
+            case 0: return false;
+            default: return false;
+        }
+    },
     searchChildren: function*({id,orgId,level}){
         let data = yield request("/api/searchChildren",{
           method: "POST",
@@ -165,7 +192,8 @@ export default {
         searchBarOptions:{},
         countryCheckReport:[],
         modelVisible: true,
-        selectedMonth: ""
+        selectedMonth: "",
+        villageCheckList:[]
     },
   reducers: {
     updateCountryList(state,{data}){
@@ -193,6 +221,12 @@ export default {
             ...state,
             countryCheckReport: data,
             selectedMonth: month
+        }
+    },
+    updateVillageCheckReport(state,{data}){
+        return {
+            ...state,
+            villageCheckList: data
         }
     },
     updateVillageList(state,{data}){
@@ -309,6 +343,13 @@ export default {
         yield put({type:"updateCountryCheckReport",data:list.data.data,month:realMonth});
         console.log(list);
     },
+    *getVillageCheckList({orgId},{put,call,select}){
+        const selectedMonth = yield select(state=>state.data.selectedMonth);
+        const monthTime = getMonthTime(selectedMonth);
+        const {beginTime,endTime,realMonth} = monthTime;
+        const list = yield call(dataFetch.villageCheckReport,{orgId,beginTime,endTime});
+        yield put({type:"updateVillageCheckReport",data:list.data.data});
+    },
     *getVillageList({orgId},{put,call,select}){
         const list = yield call(dataFetch.countryList,orgId);
         console.log(list,"村级别");
@@ -358,6 +399,16 @@ export default {
         const level = yield select(state=>state.login.loginData.orgLevel);
         const data = yield call(dataFetch.download,{downloadType,id,level});
         const url = data?"http://"+data.data.data.url:null;
+        yield put({type:"downloadExcel",downloadUrl:url});
+    },
+    *downloadCheck({downloadType,id},{select,put,call}){
+        yield put({type:"setModelVisible"});
+        const selectedMonth = yield select(state=>state.data.selectedMonth);
+        const monthTime = getMonthTime(selectedMonth);
+        const {beginTime,endTime} = monthTime;
+        const data = yield call(dataFetch.downloadCheck,{downloadType,id,beginTime,endTime});
+        const url = data?"http://"+data.data.data.url:null;
+        console.log("下载地址为："+url);
         yield put({type:"downloadExcel",downloadUrl:url});
     }
   }

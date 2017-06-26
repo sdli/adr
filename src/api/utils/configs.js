@@ -19,7 +19,10 @@ const config = {
             downloadCountry:"/api/export/rosterLsts",
             downloadOrg: "/api/export/statistical",
             searchChildren:"/api/roster/getLsts",
-            countryCheckReport:"/api/safeguard/count"
+            countryCheckReport:"/api/safeguard/count",
+            villageCheckList:"/api/safeguard/list",
+            downloadOrgForCheck:"/api/export/exportSafeguardReports",
+            downloadCountryForCheck:"/api/export/exportSafeguardLists"
         },
         reloadResponse:{
             code:0,

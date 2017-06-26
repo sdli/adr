@@ -43,7 +43,6 @@ class SearchContent extends React.Component{
         });
     }
     handleSearch=()=>{
-        console.log(this.state.orgId);
         this.props.dispatch({type:"data/getVillageReport",orgId:this.state.orgId});
     }
     componentWillReceiveProps(nextProps){
@@ -55,7 +54,6 @@ class SearchContent extends React.Component{
     }
     render(){
         const {dispatch,data,loading,params,login} = this.props;
-        console.log(loading);
         const villageReport = data.villageReport || null;
         return (
             <div>

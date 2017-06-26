@@ -14,6 +14,7 @@ function IndexContentPage({dispatch,data,loading,params,login}) {
       visible = {data.modelVisible}
       level={login.loginData.orgLevel}
       loading={loading.models.data}
+      selectedMonth={data.selectedMonth}
     />
   );
 }

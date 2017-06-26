@@ -135,7 +135,6 @@ class DetailsContent extends React.Component{
         const step = this.getCurrentStep([villageStatus,townStatus,countyStatus,cityStatus]);
         const currentStatus = this.getCurrentStatus([villageStatus,townStatus,countyStatus,cityStatus],level);
         const descriptions = this.getStepStatus(childDetails);
-        console.log(auditRecords);
         return (
             <div>
                 <Spin spinning={loading}>

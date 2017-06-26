@@ -106,7 +106,6 @@ class IndexPage extends React.Component{
         {text: "资料审核",link:this.props.login.originalLink},
         {text: "保障评估",link:this.props.login.originalCheckLink}
     ];
-    console.log(path[1]);
     return (
       <Layout
         type="leftSider"

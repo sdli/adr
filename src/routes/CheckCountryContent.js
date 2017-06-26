@@ -10,9 +10,10 @@ function IndexContentPage({dispatch,data,loading,params,login}) {
       options={data.areaOptions || null} 
       defaultValues={data.defaultAreaValues || null}
       defaultInput = {data.defaultAreaInput || null}
-      countryCheckReport = {data.countryCheckReport || null}
+      countryCheckReport = {data.villageCheckList || null}
       visible = {data.modelVisible}
       level={login.loginData.orgLevel}
+      selectedMonth={data.selectedMonth}
     />
   );
 }

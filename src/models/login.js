@@ -80,7 +80,6 @@ export default {
     },
   reducers: {
     loginOK(state,{loginData,originalLink,originalCheckLink}) {
-      console.log(originalLink);
       return {...state,status:true,alert:"none",loginData:loginData,originalLink:originalLink,originalCheckLink:originalCheckLink};
     },
     loginFail(state){

@@ -1,4 +1,4 @@
-import {Tooltip,Button} from "antd";
+import {Tooltip,Button,Icon} from "antd";
 import { hashHistory } from 'react-router';
 
 const getButtonType=function(status){
@@ -14,15 +14,15 @@ const getButtonType=function(status){
 export default {
     filterWithClassName:function(arr,className,buttonOptions,level=null){
         return arr.map((val,index)=>{
-            if(val.key!="code" && val.key!="status"){
+            if(val.key!="code" && val.key!="status"&&val.key!="townStatus"){
                 val.className = className.column;
                 if(typeof val.children !== "undefined"){
                     this.filterWithClassName(val.children,className.column);
                 }else{
                     val.render = function(text, record, index) {
                         return (
-                            <Tooltip title={text} placement="topLeft">
-                                <span className={val.className}>{text}</span>
+                            <Tooltip title={text||"暂无"} placement="topLeft">
+                                <span className={val.className}>{text===0?0:text || "—"}</span>
                             </Tooltip>
                         );
                     };
@@ -53,6 +53,14 @@ export default {
                                 {textChange}
                             </Button>
                         );
+                    }
+                }
+                if(val.key=="townStatus"){
+                    val.className= className.func;
+                    const succ = <span><Icon type="check-circle" style={{color:"green"}}/> 评估已核查！</span>;
+                    const fail = <span><Icon type="frown-o" style={{color:"red"}} /> 未核查！</span>;
+                    val.render = function(text,record,index){
+                        return parseInt(text)==1?succ:fail;
                     }
                 }
             }

@@ -1,4 +1,4 @@
-// import "babel-polyfill";
+import "babel-polyfill";
 import express from 'express';
 import bodyParser from "body-parser";
 import configs from "./utils/configs"; 
@@ -45,6 +45,9 @@ app.post("/searchChildren",apis.searchChildren);
 
 // 加载镇级别保障评估报告
 app.post("/countryCheckReport",apis.countryCheckReport);
+
+// 加载村级别评估报告
+app.post("/villageCheckList",apis.villageCheckList);
 
 // 修改密码
 app.post("/changePassword",function(req,res,next){

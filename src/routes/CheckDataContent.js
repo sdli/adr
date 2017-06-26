@@ -13,6 +13,7 @@ function IndexContentPage({dispatch,data,loading,params,login}) {
       countryCheckReport = {data.countryCheckReport || null}
       visible = {data.modelVisible}
       level={login.loginData.orgLevel}
+      selectedMonth={data.selectedMonth}
     />
   );
 }

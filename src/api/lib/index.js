@@ -180,10 +180,18 @@ function getUrl(req,url){
         case "checkReport":
             requestUrl = url + "?orgId=" + req.body.organId + "&beginTime=" + req.body.beginTime + "&endTime=" + req.body.endTime;
             break;
+        case "villageCheckList":
+            requestUrl = url + "?orgId=" + req.body.organId + "&beginTime=" + req.body.beginTime + "&endTime=" + req.body.endTime;
+            break;
+        case "byOrgIdForCheck":
+            requestUrl = url + "?orgId=" + req.body.id+"&beginTime="+ req.body.beginTime+"&endTime="+req.body.endTime;
+            break;
+        case "byVillageIdForCheck":
+            requestUrl = url + "?orgId=" + req.body.id+"&beginTime="+ req.body.beginTime+"&endTime="+req.body.endTime;
+            break;
         default:
             requestUrl = url + "?orgId="+req.body.organId + "&currLevel="+req.body.level
     }
-    console.log(requestUrl);
     return requestUrl;
 }
 
@@ -268,6 +276,8 @@ function download(req,res){
         case "byRosterId":  fetchUrl("get","downloadChild")(req,res) ;break;
         case "byVillageId":  fetchUrl("get","downloadCountry")(req,res); break;
         case "byOrgId":  fetchUrl("get","downloadOrg")(req,res);break;
+        case "byOrgIdForCheck": fetchUrl("get","downloadOrgForCheck")(req,res);break;
+        case "byVillageIdForCheck": fetchUrl("get","downloadCountryForCheck")(req,res);break;
         default:  res.json(config.reloadResponse);
     }
 }
@@ -285,6 +295,7 @@ const funcs = {
     changePassword: fetchUrl("post","changePassword"),
     countryCheckReport: fetchUrl("get","countryCheckReport"),
     download: download,
+    villageCheckList: fetchUrl("get","villageCheckList"),
     loginStart: loginStart,
     initFetch: InitFetch,
     loadAuth: loadAuth,
