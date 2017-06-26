@@ -10,28 +10,25 @@ import DetailsContent from "./routes/DetailsPage";
 import AreaContent from "./routes/AreaContentPage";
 import CityContent from "./routes/CityContentPage";
 import SearchContent from "./routes/SearchContent";
+import CheckCity from "./routes/CheckCityContent";
+import CheckArea from "./routes/CheckAreaContent";
+import CheckData from "./routes/CheckDataContent";
+import CheckCountry from "./routes/CheckCountryContent";
 
 function RouterConfig({ history }) {
   return (
     <Router history={history}>
-      <Router path="/" />
-      <Router path="/city/:id" component={IndexPage}>
-            <IndexRoute component={CityContent} />
-      </Router>
-      <Router path="/area/:id" component={IndexPage}>
-            <IndexRoute component={AreaContent} />
-      </Router>
-      <Router path="/data/:id" component={IndexPage}>
-          <IndexRoute component={IndexContent} />
-      </Router>
-      <Router path="/country/:id" component={IndexPage}>
-          <IndexRoute component={CountryContent} />
-      </Router>
-      <Router path="/details/:id" component={IndexPage}>
-          <IndexRoute component={DetailsContent} />
-      </Router>
-      <Router path="/search" component={IndexPage}>
-          <IndexRoute component={SearchContent} />
+      <Router path="/" component={IndexPage}>
+         <Route path ="/city/:id" component={CityContent} />
+         <Route path ="/area/:id" component={AreaContent} />
+         <Route path ="/data/:id" component={IndexContent} />
+         <Route path ="/country/:id" component={CountryContent} />
+         <Route path ="/details/:id" component={DetailsContent} />
+         <Route path ="/search" component={SearchContent} />   
+         <Route path ="/checkCity/:id" component={CheckCity} />
+         <Route path ="/checkArea/:id" component={CheckArea} />
+         <Route path ="/checkData/:id" component={CheckData} />
+         <Route path ="/checkCountry/:id" component={CheckCountry} />
       </Router>
       <Route path="/login" component={LoginPage} />
       <Route path="/error" component={ErrorPage} />

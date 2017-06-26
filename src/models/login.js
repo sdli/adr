@@ -3,6 +3,24 @@ import request from "../utils/request";
 import objToQuery from '../utils/objToQuery';
 import configs from "../utils/configs";
 
+const getOriginalLink = function(data){
+  let originalLink = "";
+  let originalCheckLink= "";
+  switch (data.orgLevel){
+    case 1:
+      originalLink = '/city/'+data.orgId;
+      originalCheckLink = '/checkCity/'+data.orgId;break;
+    case 2: 
+      originalLink = '/area/'+data.orgId;
+      originalCheckLink = '/checkArea/'+data.orgId;break;
+    case 3: 
+      originalLink = '/data/'+data.orgId;
+      originalCheckLink = '/checkData/'+data.orgId;break;
+    default: return null;
+  }
+  return {originalLink,originalCheckLink};
+};
+
 const LoginFetch = {
   check: function*(){
         let data = yield request('/api/loadAuth', {
@@ -56,11 +74,14 @@ export default {
       alert: 'none',
       loading: false,
       status: false,
-      loginData:{}
+      loginData:{},
+      originalLink:"",
+      originalCheckLink:""
     },
   reducers: {
-    loginOK(state,{loginData}) {
-      return {...state,status:true,alert:"none",loginData:loginData};
+    loginOK(state,{loginData,originalLink,originalCheckLink}) {
+      console.log(originalLink);
+      return {...state,status:true,alert:"none",loginData:loginData,originalLink:originalLink,originalCheckLink:originalCheckLink};
     },
     loginFail(state){
       return {...state,alert: 'block'};
@@ -73,13 +94,9 @@ export default {
     *login({loginInfo},{put,call}){
         const data = yield call(LoginFetch.login,loginInfo);
         if(data){
-           yield put({type: 'loginOK',loginData:data.data.data});
-           switch (data.data.data.orgLevel){
-             case 1: yield put(routerRedux.push('/city/'+data.data.data.orgId));break;
-             case 2: yield put(routerRedux.push('/area/'+data.data.data.orgId));break;
-             case 3: yield put(routerRedux.push('/data/'+data.data.data.orgId));break;
-             default: return null;
-           }
+           let link = getOriginalLink(data.data.data);
+           yield put({type:"loginOK",loginData:data.data.data,originalLink:link.originalLink,originalCheckLink:link.originalCheckLink});
+           yield put(routerRedux.push(link.originalLink));
         }else{
            yield put({ type: 'loginFail'});
         }
@@ -89,7 +106,8 @@ export default {
           const auth = yield call(LoginFetch.check);
           if(!auth){yield put(routerRedux.push("/login"));}
           else{
-            yield put({type:"loginOK",loginData:auth});
+            let link = getOriginalLink(auth);
+            yield put({type:"loginOK",loginData:auth,originalLink:link.originalLink,originalCheckLink:link.originalCheckLink});
             if(pathname === "/"){
               yield put(routerRedux.push("/data/"+ auth.orgId));
             }

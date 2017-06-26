@@ -18,7 +18,8 @@ const config = {
             downloadChild: "/api/export/rosterInfo",
             downloadCountry:"/api/export/rosterLsts",
             downloadOrg: "/api/export/statistical",
-            searchChildren:"/api/roster/getLsts"
+            searchChildren:"/api/roster/getLsts",
+            countryCheckReport:"/api/safeguard/count"
         },
         reloadResponse:{
             code:0,

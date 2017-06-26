@@ -2,6 +2,7 @@ import {Menu} from "antd";
 import styles from "./header.less";
 import configs from "../../utils/configs";
 import HeaderUserInfo from "./userInfo.header";
+import {Link} from "react-router";
 
 const Statistic= function({obj}){
     let list = [{
@@ -49,7 +50,7 @@ const Header = function({navList,userInfo,handleLogout,dispatch,changePassword,a
             >
                 {navList.map((val,index)=>{
                     return (
-                        <Menu.Item key={index+1} className="navBar">{val}</Menu.Item>
+                        <Menu.Item key={index+1} className="navBar"><Link to={val.link}>{val.text}</Link></Menu.Item>
                     );
                 })}
             </Menu>

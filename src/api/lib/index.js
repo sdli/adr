@@ -177,6 +177,9 @@ function getUrl(req,url){
         case "searchChildren":
             requestUrl = url + "?orgId=" + req.body.orgId + "&level="+ req.body.level+ "&currPage=1&pageSize=100&uid="+req.body.id
             break;
+        case "checkReport":
+            requestUrl = url + "?orgId=" + req.body.organId + "&beginTime=" + req.body.beginTime + "&endTime=" + req.body.endTime;
+            break;
         default:
             requestUrl = url + "?orgId="+req.body.organId + "&currLevel="+req.body.level
     }
@@ -280,6 +283,7 @@ const funcs = {
     shenhe: fetchUrl("post","shenhe"),
     searchChildren:fetchUrl("get","searchChildren"),
     changePassword: fetchUrl("post","changePassword"),
+    countryCheckReport: fetchUrl("get","countryCheckReport"),
     download: download,
     loginStart: loginStart,
     initFetch: InitFetch,

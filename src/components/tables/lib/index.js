@@ -22,7 +22,7 @@ export default {
                     val.render = function(text, record, index) {
                         return (
                             <Tooltip title={text} placement="topLeft">
-                                <span>{text}</span>
+                                <span className={val.className}>{text}</span>
                             </Tooltip>
                         );
                     };

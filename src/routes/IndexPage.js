@@ -14,7 +14,6 @@ class IndexPage extends React.Component{
       collapsed: false,
       mode: "inline",
       height: 640,
-      navList:["资料审核"],
       downloadUrl: "",
       alert:""
     }
@@ -89,29 +88,30 @@ class IndexPage extends React.Component{
     return true;
   }
 
-  getMenuLink = (loginData)=>{
-    switch(loginData.orgLevel){
-      case 1: return "/city/"+loginData.orgId;
-      case 2: return "/area/"+loginData.orgId;
-      case 3: return "/data/"+loginData.orgId;
-      default: return "/";
-    }
-  }
   
   render(){
     if(this.props.login.status === false) return null;
     const path = (typeof this.props.location.pathname !== "undefined")?this.props.location.pathname.split('\/'):["","/"];
     const {dispatch} = this.props;
     const url = this.state.downloadUrl;
-    const menuList=[
-        {text:"地区汇总表",icon:"contacts",link:this.getMenuLink(this.props.login.loginData),level:[1,2,3]},
-        {text:"花名册查询",icon:"solution",link:"/search",level:[1,2]}
+    const menuSet = {search:1,data:1,city:1,area:1,details:1,country:1,checkCity:2,checkArea:2,checkData:2};
+    const menuList1=[
+        {text:"地区汇总表",icon:"contacts",link:this.props.login.originalLink,level:[1,2,3],menu:1},
+        {text:"花名册查询",icon:"solution",link:"/search",level:[1,2],menu:1}
     ];
+    const menuList2=[
+        {text:"保障评估",icon:"smile-o",link:this.props.login.originalCheckLink,level:[1,2,3],menu:2}
+    ];
+    const navList = [
+        {text: "资料审核",link:this.props.login.originalLink},
+        {text: "保障评估",link:this.props.login.originalCheckLink}
+    ];
+    console.log(path[1]);
     return (
       <Layout
         type="leftSider"
         header={<Header 
-          navList={this.state.navList} 
+          navList={navList} 
           userInfo={this.props.login.loginData} 
           handleLogout={this.onLogout} 
           dispatch={dispatch}
@@ -120,7 +120,7 @@ class IndexPage extends React.Component{
           />
         }
         footer={<Footer />}
-        menuList={<MenuList menuList={menuList} mode={this.state.mode} collapsed={this.state.collapsed} level={this.props.login.loginData.orgLevel} />}
+        menuList={<MenuList menuList={menuSet[path[1]]==1?menuList1:menuList2} mode={this.state.mode} collapsed={this.state.collapsed} level={this.props.login.loginData.orgLevel} />}
         mode={this.state.mode}
         collapsed={this.state.collapsed}
         onCollapse={this.onCollapse}

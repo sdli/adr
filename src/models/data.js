@@ -4,6 +4,7 @@ import objToQuery from '../utils/objToQuery';
 import configs from "../utils/configs";
 import countryList from "./lib/countryList";
 import {message} from "antd";
+import getMonthTime from "./lib/getMonthTime";
 
 const dataFetch = {
   countryList: function*(organId){
@@ -38,6 +39,17 @@ const dataFetch = {
                   "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" 
               },
               body:"organId="+orgId +"&level="+level,
+              credentials: 'include'
+          });
+        return data.data.code == "200"?data:false;   
+  },
+  countryCheckReport: function*({orgId,beginTime,endTime}){
+        let data = yield request('/api/countryCheckReport', {
+              method: 'POST',
+              headers: {
+                  "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" 
+              },
+              body:"type=checkReport&organId="+orgId+"&beginTime="+beginTime+"&endTime="+endTime,
               credentials: 'include'
           });
         return data.data.code == "200"?data:false;   
@@ -151,6 +163,7 @@ export default {
         changePasswordMessageText: "",
         downloadUrl: "",
         searchBarOptions:{},
+        countryCheckReport:{},
         modelVisible: true
     },
   reducers: {
@@ -173,6 +186,12 @@ export default {
           ...state,
           countryReport: data
       };
+    },
+    updateCountryCheckReport(state,{data}){
+        return {
+            ...state,
+            countryCheckReport: data
+        }
     },
     updateVillageList(state,{data}){
       return{
@@ -279,6 +298,13 @@ export default {
         const level = yield select(state=>state.login.loginData.orgLevel);
         const list = yield call(dataFetch.countryReport,{orgId,level});
         yield put({type:"updateCountryReport",data:list.data.data});
+    },
+    *getCountryCheckReport({orgId,month},{put,call,select}){
+        const monthTime = getMonthTime(month);
+        const {beginTime,endTime} = monthTime;
+        const list = yield call(dataFetch.countryCheckReport,{orgId,beginTime,endTime});
+        yield put({type:"updateCountryCheckReport",data:list.data.data});
+        console.log(list);
     },
     *getVillageList({orgId},{put,call,select}){
         const list = yield call(dataFetch.countryList,orgId);
