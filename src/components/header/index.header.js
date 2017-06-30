@@ -6,11 +6,11 @@ import {Link} from "react-router";
 
 const Statistic= function({obj}){
     let list = [{
-            title: "已提交",
-            value: obj.inAuditCount
+            title: "审核中",
+            value: obj.notAuditCount
         },{
             title: "未提交",
-            value: obj.notAuditCount
+            value: obj.inAuditCount
         },
         {
             title:"已通过",

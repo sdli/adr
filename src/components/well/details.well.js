@@ -105,7 +105,7 @@ const CollapseInfos = function(props){
                                 <p className={styles.detailsSpan}><span>家庭原因：</span>{data.familyReason || "无"}</p>
                             </Col>
                             <Col span={24}>
-                                <p className={styles.detailsSpan}><span>监护缺少：</span>{data.guaHappening || "无"}</p>
+                                <p className={styles.detailsSpan}><span>监护缺少：</span>{data.guaHappeningDesc || "无"}</p>
                             </Col>
                         </Row>
                     </Col>

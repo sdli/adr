@@ -76,6 +76,7 @@ class indexContent extends React.Component{
     }
     getReport(reports){
         return reports.map((val,index)=>{
+            console.log(val);
             return {
                 ...val.childRoster,
                 ...val

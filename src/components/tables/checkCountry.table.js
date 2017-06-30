@@ -11,24 +11,74 @@ const columns = [{
   key: 'childSex'
 },{
   title: '生活保障落实',
-  dataIndex: 'lifeHappeningDesc',
-  key: 'lifeHappeningDesc',
+  children:[
+    {
+      title:"类型",
+      dataIndex: 'basicLifeHappeningTitle',
+      key: 'basicLifeHappeningTitle',
+    },
+    {
+      title:"落实情况",
+      dataIndex: 'lifeHappeningDesc',
+      key: 'lifeHappeningDesc', 
+    }
+  ]
 },{
   title: '教育保障',
-  dataIndex: 'educationHappeningDesc',
-  key: 'educationHappeningDesc'
+  children:[
+    {
+      title:"类型",
+      dataIndex: 'educationHappeningTitle',
+      key: 'educationHappeningTitle',
+    },
+    {
+      title:"落实情况",
+      dataIndex: 'educationHappeningDesc',
+      key: 'educationHappeningDesc'
+    }
+  ]
 },{
   title: '医疗保障',
-  dataIndex: 'medicalHappeningDesc',
-  key: 'medicalHappeningDesc',
+  children:[
+    {
+      title:"类型",
+      dataIndex: 'medicalHappeningTitle',
+      key: 'medicalHappeningTitle',
+    },
+    {
+      title:"落实情况",
+      dataIndex: 'medicalHappeningDesc',
+      key: 'medicalHappeningDesc',
+    }
+  ]
 },{
   title: '监护保障',
-  dataIndex: 'guardHappeningDesc',
-  key: 'guardHappeningDesc',
+    children:[
+    {
+      title:"类型",
+      dataIndex: 'guaHappeningTitle',
+      key: 'guaHappeningTitle',
+    },
+    {
+      title:"落实情况",
+      dataIndex: 'guardHappeningDesc',
+      key: 'guardHappeningDesc'
+    }
+  ]
 },{
-  title: '困境儿童福利落实',
-  dataIndex: 'welfareHappeningDesc',
-  key: 'welfareHappeningDesc',
+  title: '残疾儿童福利落实',
+  children:[
+    {
+      title:"类型",
+      dataIndex: "welfareHappening",
+      key:"welfareHappening"
+    },
+    {
+      title:"落实情况",
+      dataIndex: 'welfareHappeningDesc',
+      key: 'welfareHappeningDesc',
+    }
+  ]
 },{
   title: '出生年月',
   dataIndex: 'childBornTime',

@@ -17,7 +17,7 @@ export default {
             if(val.key!="code" && val.key!="status"&&val.key!="townStatus"){
                 val.className = className.column;
                 if(typeof val.children !== "undefined"){
-                    this.filterWithClassName(val.children,className.column);
+                    this.filterWithClassName(val.children,className);
                 }else{
                     val.render = function(text, record, index) {
                         return (
