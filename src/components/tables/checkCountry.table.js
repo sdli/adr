@@ -19,8 +19,8 @@ const columns = [{
     },
     {
       title:"落实情况",
-      dataIndex: 'lifeHappeningDesc',
-      key: 'lifeHappeningDesc', 
+      dataIndex: 'lifeHappening',
+      key: 'lifeHappening', 
     }
   ]
 },{
@@ -33,8 +33,8 @@ const columns = [{
     },
     {
       title:"落实情况",
-      dataIndex: 'educationHappeningDesc',
-      key: 'educationHappeningDesc'
+      dataIndex: 'educationHappening',
+      key: 'educationHappening'
     }
   ]
 },{
@@ -47,8 +47,8 @@ const columns = [{
     },
     {
       title:"落实情况",
-      dataIndex: 'medicalHappeningDesc',
-      key: 'medicalHappeningDesc',
+      dataIndex: 'medicalHappening',
+      key: 'medicalHappening',
     }
   ]
 },{
@@ -61,8 +61,8 @@ const columns = [{
     },
     {
       title:"落实情况",
-      dataIndex: 'guardHappeningDesc',
-      key: 'guardHappeningDesc'
+      dataIndex: 'guardHappening',
+      key: 'guardHappening'
     }
   ]
 },{
@@ -70,13 +70,13 @@ const columns = [{
   children:[
     {
       title:"类型",
-      dataIndex: "welfareHappening",
-      key:"welfareHappening"
+      dataIndex: "welfareHappeningTitle",
+      key:"welfareHappeningTitle"
     },
     {
       title:"落实情况",
-      dataIndex: 'welfareHappeningDesc',
-      key: 'welfareHappeningDesc',
+      dataIndex: 'welfareHappening',
+      key: 'welfareHappening',
     }
   ]
 },{

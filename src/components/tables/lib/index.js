@@ -13,19 +13,35 @@ const getButtonType=function(status){
 }
 export default {
     filterWithClassName:function(arr,className,buttonOptions,level=null){
+        let tempArr = ["guardHappening","medicalHappening","educationHappening","lifeHappening","welfareHappening"];
         return arr.map((val,index)=>{
             if(val.key!="code" && val.key!="status"&&val.key!="townStatus"){
                 val.className = className.column;
                 if(typeof val.children !== "undefined"){
                     this.filterWithClassName(val.children,className);
                 }else{
-                    val.render = function(text, record, index) {
-                        return (
-                            <Tooltip title={text||"暂无"} placement="topLeft">
-                                <span className={val.className}>{text===0?0:text || "—"}</span>
-                            </Tooltip>
-                        );
-                    };
+                    if(tempArr.some(function(value,index){
+                        if(value == val.key){
+                            return true;
+                        }else{
+                            return false;
+                        }
+                    })){
+                        val.render = function(text, record, index) {
+                            return (
+                                <span className={val.className}>{parseInt(text)==1?"已落实":"未落实"}</span>
+                            );
+                        };
+                    }else{
+                        val.render = function(text, record, index) {
+                            return (
+                                <Tooltip title={text||"暂无"} placement="topLeft">
+                                    <span className={val.className}>{text===0?0:text || "—"}</span>
+                                </Tooltip>
+                            );
+                        };
+                    }
+
                 }
             }else{
                 if(val.key=="status"){

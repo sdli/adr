@@ -79,7 +79,12 @@ class indexContent extends React.Component{
             console.log(val);
             return {
                 ...val.childRoster,
-                ...val
+                ...val,
+                welfareHappeningTitle: val.childRoster.welfareHappening,
+                guaHappeningTitle: val.childRoster.guaHappening,
+                medicalHappeningTitle: val.childRoster.medicalHappening,
+                educationHappeningTitle: val.childRoster.educationHappening,
+                basicLifeHappeningTitle: val.childRoster.basicLifeHappeningTitle
             }
         });
     }
