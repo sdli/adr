@@ -8,7 +8,6 @@ import getMonthTime from "./lib/getMonthTime";
 
 const dataFetch = {
   countryList: function*(organId){
-    console.log(organId);
         let data = yield request('/api/countryList', {
               method: 'POST',
               headers: {
@@ -21,7 +20,6 @@ const dataFetch = {
         return data.data.code == "200"?list:false;   
   },
   searchBarList: function*(organId){
-    console.log(organId);
         let data = yield request('/api/countryList', {
               method: 'POST',
               headers: {
@@ -88,7 +86,6 @@ const dataFetch = {
         return data.data.code == "200"?data:false;  
   },
   shenhe: function*({action,operatorId,applyId,remark,level}){
-      console.log("action="+action+"&operatorId="+operatorId+"&applyId"+applyId+"&remark="+remark);
         let data = yield request('/api/shenhe', {
             method: 'POST',
             headers: {
@@ -115,7 +112,6 @@ const dataFetch = {
         }
     },
   download: function*({downloadType,id,level}){
-        console.log(downloadType,id);
         let data = yield request("/api/download",{
           method: "POST",
           headers:{
@@ -131,7 +127,6 @@ const dataFetch = {
         }
     },
     downloadCheck: function*({downloadType,id,beginTime,endTime}){
-        console.log(downloadType,id);
         let data = yield request("/api/download",{
           method: "POST",
           headers:{
@@ -294,7 +289,6 @@ export default {
         }
     },
     downloadExcel(state,{downloadUrl}){
-        console.log(downloadUrl,"更新 state");
         return {
             ...state,
             downloadUrl: downloadUrl,
@@ -328,7 +322,6 @@ export default {
         const id = yield select(state=>state.login.loginData.id);
         const level = yield select(state=>state.login.loginData.orgLevel);
         const list = yield call(dataFetch.searchChildren,{orgId,level,id});
-        console.log(list);
     },
     *getCountryReport({orgId},{put,call,select}){
         const level = yield select(state=>state.login.loginData.orgLevel);
@@ -341,7 +334,6 @@ export default {
         const {beginTime,endTime,realMonth} = monthTime;
         const list = yield call(dataFetch.countryCheckReport,{orgId,beginTime,endTime});
         yield put({type:"updateCountryCheckReport",data:list.data.data,month:realMonth});
-        console.log(list);
     },
     *getVillageCheckList({orgId},{put,call,select}){
         const selectedMonth = yield select(state=>state.data.selectedMonth);
@@ -352,7 +344,6 @@ export default {
     },
     *getVillageList({orgId},{put,call,select}){
         const list = yield call(dataFetch.countryList,orgId);
-        console.log(list,"村级别");
         yield put({type:"updateVillageList",data:list});
     },
     *getVillageReport({orgId},{put,call,select}){
@@ -408,7 +399,6 @@ export default {
         const {beginTime,endTime} = monthTime;
         const data = yield call(dataFetch.downloadCheck,{downloadType,id,beginTime,endTime});
         const url = data?"http://"+data.data.data.url:null;
-        console.log("下载地址为："+url);
         yield put({type:"downloadExcel",downloadUrl:url});
     }
   }
