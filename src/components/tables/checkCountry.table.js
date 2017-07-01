@@ -91,12 +91,7 @@ const columns = [{
   title: '住所',
   dataIndex: 'address',
   key: 'address',
-},{
-  title: '乡镇审核状态',
-  dataIndex: 'townStatus',
-  key: 'townStatus',
-}
-];
+}];
 const buttonOptions = {
    href:"/checkDetails",
    icon:"file",

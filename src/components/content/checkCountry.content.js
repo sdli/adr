@@ -80,10 +80,10 @@ class indexContent extends React.Component{
             return {
                 ...val.childRoster,
                 ...val,
-                welfareHappeningTitle: val.childRoster.welfareHappening,
-                guaHappeningTitle: val.childRoster.guaHappening,
-                medicalHappeningTitle: val.childRoster.medicalHappening,
-                educationHappeningTitle: val.childRoster.educationHappening,
+                welfareHappeningTitle: val.childRoster.welfareHappeningTitle,
+                guaHappeningTitle: val.childRoster.guaHappeningTitle,
+                medicalHappeningTitle: val.childRoster.medicalHappeningTitle,
+                educationHappeningTitle: val.childRoster.educationHappeningTitle,
                 basicLifeHappeningTitle: val.childRoster.basicLifeHappeningTitle
             }
         });

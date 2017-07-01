@@ -29,7 +29,7 @@ export default {
                     })){
                         val.render = function(text, record, index) {
                             return (
-                                <span className={val.className}>{parseInt(text)==1?"已落实":"未落实"}</span>
+                                <span className={val.className}>{parseInt(text)==1?"已落实":""}{parseInt(text)==2?"未落实":""}{!text?"——":""}</span>
                             );
                         };
                     }else{
