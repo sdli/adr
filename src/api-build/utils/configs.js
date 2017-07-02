@@ -14,6 +14,7 @@ var config = {
     server: _configs2.default.server,
     apiPort: _configs2.default.apiPort,
     serverPort: _configs2.default.serverPort,
+    domain: _configs2.default.domain,
     remoteServer: "http://120.76.204.189", //http://192.168.1.129:9300/ http://183.234.63.50
     remotePort: "9900",
     remoteApis: {
@@ -26,7 +27,12 @@ var config = {
         changePassword: "/api/user/modifyPwd",
         downloadChild: "/api/export/rosterInfo",
         downloadCountry: "/api/export/rosterLsts",
-        downloadOrg: "/api/export/statistical"
+        downloadOrg: "/api/export/statistical",
+        searchChildren: "/api/roster/getLsts",
+        countryCheckReport: "/api/safeguard/count",
+        villageCheckList: "/api/safeguard/list",
+        downloadOrgForCheck: "/api/export/exportSafeguardReports",
+        downloadCountryForCheck: "/api/export/exportSafeguardLists"
     },
     reloadResponse: {
         code: 0,

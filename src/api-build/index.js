@@ -62,6 +62,15 @@ app.post("/villageReport", _lib2.default.villageReport);
 // 加载儿童详情
 app.post("/getChildDetails", _lib2.default.getChildDetails);
 
+// 查询接口
+app.post("/searchChildren", _lib2.default.searchChildren);
+
+// 加载镇级别保障评估报告
+app.post("/countryCheckReport", _lib2.default.countryCheckReport);
+
+// 加载村级别评估报告
+app.post("/villageCheckList", _lib2.default.villageCheckList);
+
 // 修改密码
 app.post("/changePassword", function (req, res, next) {
   _lib2.default.changePassword(req, res, {

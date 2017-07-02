@@ -62,7 +62,8 @@ function loginStart(req, res, next) {
                     sess.password = password;
                     sess.token = result.data.tokenInfo.token;
                     sess.userInfo = result.data;
-                    sess.expire = Date.parse(new Date()) / 1000 + result.data.tokenInfo.token - 300;
+                    // sess.expire = Date.parse(new Date()) / 1000 + result.data.tokenInfo.expireTime - 300;
+                    sess.expire = Date.parse(new Date()) / 1000 + 10;
                     res.json(result);
                 } else {
                     res.json(_configs2.default.reloadResponse);
@@ -94,7 +95,7 @@ var InitFetch = function InitFetch(met, url, vali) {
             expire = sess.expire;
 
         if (username && password && token && expire) {
-            if (expire > Date.parse(new Date()) / 1000) {
+            if (parseInt(expire) > Date.parse(new Date()) / 1000) {
                 return token;
             } else {
                 return false;
@@ -108,125 +109,86 @@ var InitFetch = function InitFetch(met, url, vali) {
                 while (1) {
                     switch (_context.prev = _context.next) {
                         case 0:
-                            _context.prev = 0;
                             realToken = tryToken(req);
                             sess = req.session;
 
                             if (realToken) {
-                                _context.next = 8;
+                                _context.next = 7;
                                 break;
                             }
 
-                            _context.next = 6;
+                            _context.next = 5;
                             return (0, _request2.default)(_configs2.default.getServerUrl('login'), {
                                 body: JSON.stringify({
-                                    phone: req.session.username,
-                                    password: req.session.password
+                                    phone: sess.username,
+                                    password: sess.password
                                 }),
                                 method: 'POST',
-                                header: {
+                                headers: {
                                     "Content-type": "application/json;charset=UTF-8"
                                 }
                             });
 
-                        case 6:
+                        case 5:
                             result = _context.sent;
 
-                            if (result.data.code == "200") {
-                                sess.token = result.data.data.tokenInfo.token;
-                                sess.userInfo = result.data.data;
-                                sess.expire = Date.parse(new Date()) / 1000 + result.data.data.tokenInfo.expireTime;
-                                realToken = sess.token;
-                            }
-
-                        case 8:
-                            if (!(method.toLowerCase() == "post")) {
-                                _context.next = 12;
-                                break;
-                            }
-
-                            _request4.default.post(Object.assign({ body: JSON.stringify(initData) }, {
-                                headers: {
-                                    "Content-type": "application/json",
-                                    "authorization": realToken
-                                },
-                                url: url
-                            }), function (err, response, body) {
-                                var result = JSON.parse(body);
-                                if (result.code == "200") {
-                                    if (validator) {
-                                        validator(result, req, res);
-                                    } else {
-                                        res.json(result);
-                                    }
-                                } else {
-                                    res.json(_configs2.default.reloadResponse);
+                            if (typeof result.data.code !== "undefined") {
+                                if (result.data.code == "200") {
+                                    sess.token = result.data.data.tokenInfo.token;
+                                    sess.userInfo = result.data.data;
+                                    // sess.expire = Date.parse(new Date()) / 1000 + result.data.tokenInfo.expireTime - 300;
+                                    sess.expire = Date.parse(new Date()) / 1000 + 10;
+                                    realToken = result.data.data.tokenInfo.token;
                                 }
-                            });
-                            _context.next = 30;
-                            break;
-
-                        case 12:
-                            requestUrl = "";
-                            _context.t0 = req.body.type;
-                            _context.next = _context.t0 === "village" ? 16 : _context.t0 === "childDetails" ? 18 : _context.t0 === "byRosterId" ? 20 : _context.t0 === "byVillageId" ? 22 : _context.t0 === "byOrgId" ? 24 : _context.t0 === "tableList" ? 26 : 28;
-                            break;
-
-                        case 16:
-                            requestUrl = url + "?orgId=" + req.body.organId + "&currPage=1&pageSize=100&currLevel=" + req.body.level + "&loginUserId=" + req.body.loginUserId;
-                            return _context.abrupt("break", 29);
-
-                        case 18:
-                            requestUrl = url + "?childId=" + req.body.childId;
-                            return _context.abrupt("break", 29);
-
-                        case 20:
-                            requestUrl = url + "?rosterId=" + req.body.id;
-                            return _context.abrupt("break", 29);
-
-                        case 22:
-                            requestUrl = url + "?villId=" + req.body.id + "&currLevel=" + req.body.level;
-                            return _context.abrupt("break", 29);
-
-                        case 24:
-                            requestUrl = url + "?orgId=" + req.body.id + "&currLevel=" + req.body.level;
-                            return _context.abrupt("break", 29);
-
-                        case 26:
-                            requestUrl = url + req.body.organId;
-                            return _context.abrupt("break", 29);
-
-                        case 28:
-                            requestUrl = url + "?orgId=" + req.body.organId + "&currLevel=" + req.body.level;
-
-                        case 29:
-                            (0, _request4.default)({
-                                mothod: "GET",
-                                url: requestUrl,
-                                headers: {
-                                    "authorization": realToken
-                                }
-                            }).pipe(res);
-
-                        case 30:
-                            _context.next = 35;
-                            break;
-
-                        case 32:
-                            _context.prev = 32;
-                            _context.t1 = _context["catch"](0);
-
-                            if (_context.t1) {
+                            } else {
                                 res.json(_configs2.default.reloadResponse);
                             }
 
-                        case 35:
+                        case 7:
+                            if (method.toLowerCase() == "post") {
+                                _request4.default.post(Object.assign({
+                                    body: JSON.stringify(initData) }, { headers: {
+                                        "Content-type": "application/json",
+                                        "authorization": realToken
+                                    },
+                                    url: url
+                                }), function (err, response, body) {
+                                    var result = JSON.parse(body);
+                                    if (result.code == "200") {
+                                        if (validator) {
+                                            validator(result, req, res);
+                                        } else {
+                                            res.json(result);
+                                        }
+                                    } else {
+                                        res.json(_configs2.default.reloadResponse);
+                                    }
+                                });
+                            } else {
+                                requestUrl = getUrl(req, url);
+
+                                try {
+                                    (0, _request4.default)({
+                                        mothod: "GET",
+                                        url: requestUrl,
+                                        headers: {
+                                            "authorization": realToken
+                                        }
+                                    }).pipe(res);
+                                } catch (err) {
+                                    res.json(_configs2.default.reloadResponse);
+                                }
+                            }
+
+                        case 8:
                         case "end":
                             return _context.stop();
                     }
                 }
-            }, _callee, this, [[0, 32]]);
-        }));
+            }, _callee, this);
+        })).catch(function (err) {
+            res.json(_configs2.default.reloadResponse);
+        });
     };
 };
 
@@ -238,6 +200,52 @@ function fetchUrl(mothod, type) {
     var func = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
 
     return InitFetch(mothod, _configs2.default.getServerUrl(type), func);
+}
+
+/**
+ * 
+ * @param {*测试url} req 
+ */
+function getUrl(req, url) {
+    var requestUrl = "";
+    switch (req.body.type) {
+        case "village":
+            requestUrl = url + "?orgId=" + req.body.organId + "&currPage=1&pageSize=100&currLevel=" + req.body.level + "&loginUserId=" + req.body.loginUserId;
+            break;
+        case "childDetails":
+            requestUrl = url + "?childId=" + req.body.childId;
+            break;
+        case "byRosterId":
+            requestUrl = url + "?rosterId=" + req.body.id;
+            break;
+        case "byVillageId":
+            requestUrl = url + "?villId=" + req.body.id + "&currLevel=" + req.body.level;
+            break;
+        case "byOrgId":
+            requestUrl = url + "?orgId=" + req.body.id + "&currLevel=" + req.body.level;
+            break;
+        case "tableList":
+            requestUrl = url + req.body.organId;
+            break;
+        case "searchChildren":
+            requestUrl = url + "?orgId=" + req.body.orgId + "&level=" + req.body.level + "&currPage=1&pageSize=100&uid=" + req.body.id;
+            break;
+        case "checkReport":
+            requestUrl = url + "?orgId=" + req.body.organId + "&beginTime=" + req.body.beginTime + "&endTime=" + req.body.endTime;
+            break;
+        case "villageCheckList":
+            requestUrl = url + "?orgId=" + req.body.organId + "&beginTime=" + req.body.beginTime + "&endTime=" + req.body.endTime;
+            break;
+        case "byOrgIdForCheck":
+            requestUrl = url + "?orgId=" + req.body.id + "&beginTime=" + req.body.beginTime + "&endTime=" + req.body.endTime;
+            break;
+        case "byVillageIdForCheck":
+            requestUrl = url + "?orgId=" + req.body.id + "&beginTime=" + req.body.beginTime + "&endTime=" + req.body.endTime;
+            break;
+        default:
+            requestUrl = url + "?orgId=" + req.body.organId + "&currLevel=" + req.body.level;
+    }
+    return requestUrl;
 }
 
 /**
@@ -323,6 +331,10 @@ function download(req, res) {
             fetchUrl("get", "downloadCountry")(req, res);break;
         case "byOrgId":
             fetchUrl("get", "downloadOrg")(req, res);break;
+        case "byOrgIdForCheck":
+            fetchUrl("get", "downloadOrgForCheck")(req, res);break;
+        case "byVillageIdForCheck":
+            fetchUrl("get", "downloadCountryForCheck")(req, res);break;
         default:
             res.json(_configs2.default.reloadResponse);
     }
@@ -337,8 +349,11 @@ var funcs = {
     villageReport: fetchUrl("get", "villageReport"),
     getChildDetails: fetchUrl("get", "getChildDetails"),
     shenhe: fetchUrl("post", "shenhe"),
+    searchChildren: fetchUrl("get", "searchChildren"),
     changePassword: fetchUrl("post", "changePassword"),
+    countryCheckReport: fetchUrl("get", "countryCheckReport"),
     download: download,
+    villageCheckList: fetchUrl("get", "villageCheckList"),
     loginStart: loginStart,
     initFetch: InitFetch,
     loadAuth: loadAuth,

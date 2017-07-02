@@ -91,6 +91,11 @@ const columns = [{
   title: '住所',
   dataIndex: 'address',
   key: 'address',
+},
+{
+  title: "困境类型",
+  dataIndex: "dilemmaCategoryTitle",
+  key: "dilemmaCategoryTitle"
 }];
 const buttonOptions = {
    href:"/checkDetails",
